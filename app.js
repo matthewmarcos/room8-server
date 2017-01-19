@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
 const api = require('./config/apiRoutes');
+const auth = require('./controllers/AuthController');
 const assets = require('./config/assetRoutes');
 
 const app = express();
@@ -18,6 +19,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 
 app.use('/api', api);
+app.use('/auth', auth);
 app.use('/assets', assets);
 
 // catch 404 and forward to error handler
