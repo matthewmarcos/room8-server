@@ -1,15 +1,15 @@
-const express = require('express');
-const path = require('path');
-const favicon = require('serve-favicon');
-const logger = require('morgan');
-const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
+import express from 'express';
+import path from 'path';
+import favicon from 'serve-favicon';
+import logger from 'morgan';
+import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser';
 
-const api = require('./config/apiRoutes');
-const auth = require('./controllers/AuthController');
-const assets = require('./config/assetRoutes');
+import api from './config/apiRoutes';
+import auth from './controllers/AuthController';
+import assets from './config/assetRoutes';
 
-const app = express();
+export const app = express();
 
 // uncomment after placing your favicon in /public
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -41,4 +41,3 @@ app.use(function (err, req, res, next) {
     res.sendStatus(err.status || 500);
 });
 
-module.exports = app;

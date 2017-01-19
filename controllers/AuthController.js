@@ -1,4 +1,5 @@
-const express = require('express');
+import express from 'express';
+
 const router = express.Router();
 
 // This route logs the user in 
@@ -16,4 +17,4 @@ router.post('/profile', function(req, res, next) {
     res.send({something: '!Working profile!'});
 });
 
-module.exports = router;
+export default router;
