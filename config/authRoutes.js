@@ -8,9 +8,7 @@ const router = express.Router();
 router.post('/login', auth.login);
 
 // This route creates a new account
-router.post('/register', (req, res, next) =>  {
-    res.send({something: '!Working register!'});
-});
+router.post('/register', auth.register);
 
 // This route asks checks if user is logged in 
 router.get('/profile', (req, res, next) =>  {
