@@ -13,6 +13,8 @@ import auth from './config/authRoutes';
 import assets from './config/assetRoutes';
 import config from './config/config';
 
+import mysql from './models/mysql';
+
 export const app = express();
 
 // Config all middleware
