@@ -1,20 +1,12 @@
-import express from 'express';
+// AuthControllers:
+    // - login
+    // - register
+    // - profile
 
-const router = express.Router();
+import _ from 'lodash';
 
-// This route logs the user in 
-router.post('/login', function(req, res, next) {
-    res.send({something: '!Working login!'});
-});
-
-// This route creates a new account
-router.post('/register', function(req, res, next) {
-    res.send({something: '!Working register!'});
-});
-
-// This route asks checks if user is logged in 
-router.post('/profile', function(req, res, next) {
-    res.send({something: '!Working profile!'});
-});
-
-export default router;
+export const login = (req, res, next) => {
+    res.status(200).send({
+        something: 'hello'
+    });
+};
