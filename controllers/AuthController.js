@@ -6,6 +6,7 @@
 import _ from 'lodash';
 import getConnection from '../models/mysql.js';
 import v4 from 'uuid-v4';
+import mysql from 'anytv-node-mysql';
 
 
 export const login = (req, res, next) => {
@@ -17,28 +18,43 @@ export const login = (req, res, next) => {
 
 export const register = (req, res, next) =>  {
 
-    getConnection((err, conn) => {
-        if(err) {
-            console.error(err);
-            throw err;
-        }
+    const start = () => {
+
         const user = {
             id: v4(),
             username: `SampleUser ${v4()}`.slice(0, 21),
             password: 'password'
         };
 
-        conn.query('INSERT INTO user SET ?', user, (err, data, fields) => {
-            if(err) {
-                throw err;
-            }
+        mysql.use('master')
+            .query(
+                'INSERT INTO user SET ?',
+                user,
+                sendData
+            )
+            .end();
+    };
 
-            conn.release();
-            res.send({ data });
-        });
-    });
 
-}
+    const sendData = (err, data, args, lastQuery) => {
+        console.log('err', err);
+
+        if(err) {
+            console.error(err);
+            throw err;
+        }
+
+        console.log('data', data);
+        console.log('args', args);
+        console.log('lastQuery', lastQuery);
+
+        res.send({data});
+    };
+
+
+    start();
+
+};
 
 
 export const profile = (req, res, next) => {
@@ -46,3 +62,4 @@ export const profile = (req, res, next) => {
         something: 'profile'
     });
 };
+

@@ -14,6 +14,7 @@ import assets from './config/assetRoutes';
 import config from './config/config';
 
 import mysql from './models/mysql';
+import mysql2 from 'anytv-node-mysql';
 
 export const app = express();
 
@@ -51,3 +52,6 @@ if (app.get('env') === 'development') {
         res.sendStatus(err.status || 500);
     });
 }
+
+// Other configuration
+mysql2.add('master', config.MYSQL);
