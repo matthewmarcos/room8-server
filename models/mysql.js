@@ -12,25 +12,6 @@ const getConnection = (callback) => {
     });
 };
 
-// getConnection((err, conn) => {
-    // if(err) {
-        // console.error(err);
-        // throw err;
-    // }
-    // const user = {
-        // id: v4(),
-        // username: `SampleUser ${v4()}`.slice(0, 21),
-        // password: 'password'
-    // };
-
-    // conn.query('INSERT INTO user SET ?', user, (err, data, fields) => {
-        // if(err) {
-            // throw err;
-        // }
-
-        // console.log(data, fields);
-        // conn.release();
-    // });
-// });
+console.log('mysql is here');
 
 export default getConnection;

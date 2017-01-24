@@ -1,6 +1,6 @@
 import express from 'express';
 import path from 'path';
-import logger from 'morgan';
+import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 
@@ -13,13 +13,12 @@ import auth from './config/authRoutes';
 import assets from './config/assetRoutes';
 import config from './config/config';
 
-import mysql from './models/mysql';
-import mysql2 from 'anytv-node-mysql';
+import mysql from 'anytv-node-mysql';
 
 export const app = express();
 
 // Config all middleware
-app.use(logger('dev'));
+app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
@@ -49,9 +48,11 @@ app.use(function (err, req, res, next) {
 
 if (app.get('env') === 'development') {
     app.use(function (err, req, res, next) {
+        console.error(err);
         res.sendStatus(err.status || 500);
     });
 }
 
-// Other configuration
-mysql2.add('master', config.MYSQL);
+// Extra Database Configuration!
+mysql.add('master', config.MYSQL);
+

@@ -4,7 +4,6 @@
     // - profile
 
 import _ from 'lodash';
-import getConnection from '../models/mysql.js';
 import v4 from 'uuid-v4';
 import mysql from 'anytv-node-mysql';
 
@@ -23,6 +22,8 @@ export const register = (req, res, next) =>  {
         const user = {
             id: v4(),
             username: `SampleUser ${v4()}`.slice(0, 21),
+            email: `yeah@yeah.com`,
+            nickname: `nickname`,
             password: 'password'
         };
 
