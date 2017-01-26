@@ -19,8 +19,8 @@ DROP TABLE IF EXISTS `user_profile`;
 CREATE TABLE user_profile (
     `id` VARCHAR(128) NOT NULL UNIQUE,
     `full_name` VARCHAR(64),
-    `status` VARCHAR(128) NOT NULL,
-    `cleanliness` VARCHAR(32), -- match with preferences
+    `status` ENUM('I am looking for a room', 'I have a room'),
+    `cleanliness` TINYINT, -- match with preferences
     `sex` ENUM('Male', 'Female', 'Do not care'), -- match with preferences
     `smoker` BOOL, -- match with preferences
     `has_org` BOOL, -- match with preferences

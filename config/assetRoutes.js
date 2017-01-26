@@ -1,3 +1,10 @@
+/*
+ * Asset Routes
+ * Prefixed with assets
+ * Format:
+ *  /assets/:filename
+ */
+
 import express from 'express';
 import path from 'path';
 import fs from 'fs';
@@ -6,28 +13,17 @@ const router = express.Router();
 
 router.get('*', (req, res, next) => {
 
-    console.log('Original Url: ', req.originalUrl);
-
+    // https://expressjs.com/en/api.html#res.sendFile
     const filePath = path.normalize(path.join(__dirname, '../public', req.originalUrl));
+    const options = {
+        dotfiles: 'deny'
+    };
 
-    console.log('filepath: ', filePath);
+    res.sendFile(filePath, options, (err) => {
 
-    fs.open(filePath, 'r', (err, fd) => {
-
-        if (err) {
-            if (err.code === "ENOENT") {
-                return res.sendStatus(404);
-            }
-            else {
-                // throw err;
-                return res.sendStatus(404);
-            }
-        }
-        else {
-            res.send({fd});
-        }
-
+        next(err.status);
     });
+
 });
 
 export default router;
