@@ -6,7 +6,8 @@
 import _ from 'lodash';
 import v4 from 'uuid-v4';
 import mysql from 'anytv-node-mysql';
-
+import { hashSync, compareSync } from 'bcrypt-nodejs';
+import { getData } from '../helpers/utils'
 
 export const login = (req, res, next) => {
     res.status(200).send({
@@ -17,12 +18,24 @@ export const login = (req, res, next) => {
 
 export const register = (req, res, next) =>  {
 
+    const form = getData(next, {
+            username: '',
+            password: '',
+            email: '',
+            nickname: ''
+        })
+        .from(req.body);
+
     const start = () => {
+
+        if (form instanceof Error) {
+            return next({ status: 422 });
+        }
 
         const user = {
             id: v4(),
             username: `SampleUser ${v4()}`.slice(0, 21),
-            email: `yeah@yeah.com`,
+            email: `yeah@yeah.com ${v4().slice(0,10)}`,
             nickname: `nickname`,
             password: 'password'
         };
@@ -38,18 +51,12 @@ export const register = (req, res, next) =>  {
 
 
     const sendData = (err, data, args, lastQuery) => {
-        console.log('err', err);
 
         if(err) {
-            console.error(err);
             next(err);
         }
 
-        console.log('data', data);
-        console.log('args', args);
-        console.log('lastQuery', lastQuery);
-
-        res.send({data});
+        res.send({ message: form });
     };
 
 

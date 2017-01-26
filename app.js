@@ -43,6 +43,7 @@ app.use(function (req, res, next) {
 });
 
 app.use(function (err, req, res, next) {
+    console.error(err);
     res.sendStatus(err.status || 500);
 });
 
