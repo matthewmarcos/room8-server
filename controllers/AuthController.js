@@ -17,8 +17,7 @@ export const login = (req, res, next) => {
 
 
 export const register = (req, res, next) =>  {
-
-    const form = getData(next, {
+    const form = getData({
             username: '',
             password: '',
             email: '',
@@ -32,31 +31,63 @@ export const register = (req, res, next) =>  {
             return next({ status: 422 });
         }
 
+        const {
+             username,
+             email,
+             nickname,
+             password
+         } = form;
+
+
         const user = {
             id: v4(),
-            username: `SampleUser ${v4()}`.slice(0, 21),
-            email: `yeah@yeah.com ${v4().slice(0,10)}`,
-            nickname: `nickname`,
-            password: 'password'
+            username,
+            email,
+            nickname,
+            password
         };
+
+
+        mysql.use('master')
+            .args(user)
+            .query(
+                `SELECT COUNT(*) AS count FROM user WHERE
+                username = ? OR email = ? OR nickname = ?`,
+                [username, email, nickname],
+                createAccount
+            )
+            .end();
+    };
+
+
+    const createAccount = (err, result, args, lastQuery) => {
+
+        // console.log('result: ', typeof result[0].count);
+        // console.log('args: ', args);
+        // console.log('lastQuery: ', lastQuery);
+
+        if(result[0].count > 0) {
+            return next({ status: 409, message: 'Duplicate entries' });
+        }
 
         mysql.use('master')
             .query(
                 'INSERT INTO user SET ?',
-                user,
+                args[0],
                 sendData
             )
             .end();
     };
 
 
-    const sendData = (err, data, args, lastQuery) => {
+    const sendData = (err, result, args, lastQuery) => {
 
         if(err) {
-            next(err);
+            next({ status: 409 });
         }
-
-        res.send({ message: form });
+        else {
+            res.send({ message: form });
+        }
     };
 
 

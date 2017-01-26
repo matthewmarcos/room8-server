@@ -43,14 +43,12 @@ app.use(function (req, res, next) {
 });
 
 app.use(function (err, req, res, next) {
-    console.error(err);
-    res.sendStatus(err.status || 500);
+    res.status(err.status || 500).send(err);
 });
 
 if (app.get('env') === 'development') {
     app.use(function (err, req, res, next) {
-        console.error(err);
-        res.sendStatus(err.status || 500);
+        res.status(err.status || 500).send(err);;
     });
 }
 

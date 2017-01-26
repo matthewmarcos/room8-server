@@ -13,7 +13,7 @@ const _checkType = (key, fieldType) => {
 };
 
 
-const _getData = (src, fields, next) => {
+const _getData = (src, fields) => {
     const tempSrc = clone(src);
     const error = new Error('not found!');
     let finalData = clone(fields),
@@ -46,9 +46,9 @@ export const clone = (obj) =>  {
 };
 
 
-export const getData = (next, fields) => {
+export const getData = (fields) => {
     const from = (source) => {
-        return _getData(source, fields, next);
+        return _getData(source, fields);
     };
 
     return { from };
