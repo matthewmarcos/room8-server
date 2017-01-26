@@ -20,8 +20,9 @@ router.get('*', (req, res, next) => {
     };
 
     res.sendFile(filePath, options, (err) => {
-
-        next(err.status);
+        if(err) {
+            next(err.status);
+        }
     });
 
 });

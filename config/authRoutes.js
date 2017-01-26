@@ -5,6 +5,7 @@ import * as auth from '../controllers/AuthController';
 
 const router = express.Router();
 
+// Logs the user in if they exist
 router.post('/login', auth.login);
 
 // This route creates a new account

@@ -10,7 +10,7 @@ import mysql from 'anytv-node-mysql';
 
 export const login = (req, res, next) => {
     res.status(200).send({
-        something: 'hello'
+        route: '/login'
     });
 };
 
@@ -42,7 +42,7 @@ export const register = (req, res, next) =>  {
 
         if(err) {
             console.error(err);
-            throw err;
+            next(err);
         }
 
         console.log('data', data);
@@ -60,7 +60,7 @@ export const register = (req, res, next) =>  {
 
 export const profile = (req, res, next) => {
     res.status(200).send({
-        something: 'profile'
+        route: '/profile'
     });
 };
 

@@ -25,4 +25,7 @@ node_modules
 
 # Debug log from npm
 npm-debug.log
+
+# Custom
 *.swp
+config/config.js

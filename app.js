@@ -4,7 +4,7 @@ import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 
-import passport from 'passport';
+import passport from './config/passportConfig';
 import session from 'express-session';
 import connectRedis from 'connect-redis';
 

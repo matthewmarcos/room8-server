@@ -1,3 +1,4 @@
+// Put all the configuration stuff here
 import _ from 'lodash';
 
 
