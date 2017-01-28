@@ -9,47 +9,12 @@ import mysql from 'anytv-node-mysql';
 import { hashSync, compareSync, hash, compare } from 'bcrypt-nodejs';
 import { getData } from '../helpers/utils'
 
-export const login = (req, res, next) => {
-    const form = getData({
-            username: '',
-            password: ''
-        })
-        .from(req.body);
 
-    const start = () => {
-        const { username, password } = form;
-
-        mysql.use('master')
-            .args(compare, password)
-            .query(
-                `SELECT id, username, password FROM user WHERE username = ?`,
-                [username],
-                checkLogin
-            )
-            .end();
-    };
-
-
-    const checkLogin = (err, result, args, lastQuery) => {
-        if(result.length !== 1) {
-            next({ status: 422, message: 'Could not log in' });
-        }
-
-        console.log(result);
-
-        args[0](args[1], result[0].password, sendResponse);
-    };
-
-
-    const sendResponse = (err, isValidPassword) => {
-        res.status(200).send({
-            route: '/login',
-            isValidPassword
-        });
-    };
-
-
-    start();
+export const loginCb = (req, res, next) => {
+    console.log('user2: ', req.user);
+    res.send({
+        user: req.user
+    });
 };
 
 

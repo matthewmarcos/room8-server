@@ -19,6 +19,9 @@ import assets from './config/assetRoutes';
 import { clearDatabase } from './controllers/DatabaseControllers';
 
 
+// Database Configuration!
+mysql.add('master', config.MYSQL);
+
 export const app = express();
 
 // Config all middleware
@@ -42,7 +45,7 @@ app.use(extendRes());
 app.use('/api', api);
 app.use('/auth', auth);
 app.use('/assets', assets);
-app.all('/clear', clearDatabase);
+app.post('/clear', clearDatabase); // Delete all elements in all tables
 
 // Error handling
 app.use(function (req, res, next) {
@@ -64,7 +67,4 @@ if (app.get('env') === 'development') {
         }
     });
 }
-
-// Extra Database Configuration!
-mysql.add('master', config.MYSQL);
 
