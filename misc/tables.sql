@@ -4,12 +4,14 @@
 -- Host: localhost
 
 -- user table
-DROP TABLE IF EXISTS `user`; CREATE TABLE user (
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE user (
     `id` VARCHAR(128) NOT NULL UNIQUE,
     `username` VARCHAR(32) NOT NULL UNIQUE,
     `password` VARCHAR(128) NOT NULL,
     `email` VARCHAR(256) NOT NULL UNIQUE,
     `nickname` VARCHAR(12) NOT NULL,
+    `time_registered` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(`id`)
 );
 
@@ -18,11 +20,11 @@ DROP TABLE IF EXISTS `user_profile`;
 CREATE TABLE user_profile (
     `id` VARCHAR(128) NOT NULL UNIQUE,
     `full_name` VARCHAR(64),
-    `status` ENUM('I am looking for a room', 'I have a room'),
-    `cleanliness` TINYINT, -- match with preferences
-    `sex` ENUM('Male', 'Female', 'Do not care'), -- match with preferences
-    `smoker` BOOL, -- match with preferences
-    `has_org` BOOL, -- match with preferences
+    `status` ENUM('I am looking for a room', 'I have a room') DEFAULT 'I am looking for a room',
+    `cleanliness` TINYINT DEFAULT 0, -- match with preferences
+    `sex` ENUM('Male', 'Female', 'Do not know') DEFAULT 'Do not know', -- match with preferences
+    `smoker` BOOL DEFAULT 1, -- match with preferences
+    `has_org` BOOL DEFAULT 0, -- match with preferences
     `gender` VARCHAR(64),
     `course` VARCHAR(64),
     `batch` VARCHAR(4),
@@ -58,7 +60,7 @@ DROP TABLE IF EXISTS `user_preferences_when`;
 CREATE TABLE user_preferences_when (
     `id` VARCHAR(128) NOT NULL UNIQUE,
     `start_date` DATE,
-    `duration` ENUM('End of semester', 'Indefinitely'),
+    `duration` ENUM('End of semester', 'Indefinitely') DEFAULT 'Indefinitely',
     FOREIGN KEY(`id`) REFERENCES user(`id`)
 );
 
@@ -66,15 +68,15 @@ CREATE TABLE user_preferences_when (
 DROP TABLE IF EXISTS `user_preferences_utilities`;
 CREATE TABLE user_preferences_utilities (
     `id` VARCHAR(128) NOT NULL UNIQUE,
-    `airconditioning` ENUM('Yes', 'No', 'Do not care'),
-    `laundry` ENUM('Yes', 'No', 'Do not care'),
-    `cooking` ENUM('Yes', 'No', 'Do not care'),
-    `gas_stove` BOOL,
-    `electric_stove` BOOL,
-    `microwave` BOOL,
-    `water_kettle` BOOL,
-    `internet` ENUM('Yes', 'No', 'Do not care'),
-    `torrent` ENUM('Yes', 'No', 'Do not care'),
+    `airconditioning` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
+    `laundry` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
+    `cooking` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
+    `gas_stove` BOOL DEFAULT 0,
+    `electric_stove` BOOL DEFAULT 0,
+    `microwave` BOOL DEFAULT 0,
+    `water_kettle` BOOL DEFAULT 0,
+    `internet` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
+    `torrent` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
     `speed_requirement` DECIMAL(5,2),
     FOREIGN KEY(`id`) REFERENCES user(`id`)
 );
@@ -82,21 +84,21 @@ CREATE TABLE user_preferences_utilities (
 DROP TABLE IF EXISTS `user_preferences_lifestyle`;
 CREATE TABLE user_preferences_lifestyle (
     `id` VARCHAR(128) NOT NULL UNIQUE,
-    `alcohol` ENUM('Yes', 'No', 'Do not care'),
+    `alcohol` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
     `cleanliness` TINYINT,
-    `smokers` ENUM('Yes', 'No', 'Do not care'),
-    `study_time` ENUM('Morning', 'Evening', 'Both', 'Do not care'),
-    `guests_in_room` ENUM('Yes', 'No', 'Do not care'),
-    `guests_study_area` ENUM('Yes', 'No', 'Do not care'),
-    `pets` ENUM('Yes', 'No', 'Do not care'),
-    `org` ENUM('Yes', 'No', 'Do not care'),
+    `smokers` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
+    `study_time` ENUM('Morning', 'Evening', 'Both', 'Do not care') DEFAULT 'Do not care',
+    `guests_in_room` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
+    `guests_study_area` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
+    `pets` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
+    `org` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
     FOREIGN KEY(`id`) REFERENCES user(`id`)
 );
 
 DROP TABLE IF EXISTS `user_preferences_location`;
 CREATE TABLE user_preferences_location (
     `id` VARCHAR(128) NOT NULL UNIQUE,
-    `nearby_restaurants` ENUM('Yes', 'No', 'Do not care'),
+    `nearby_restaurants` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
     `travel_time_to_uplb` INTEGER,
     `general_location` VARCHAR(128),
     FOREIGN KEY(`id`) REFERENCES user(`id`)
@@ -105,7 +107,7 @@ CREATE TABLE user_preferences_location (
 DROP TABLE IF EXISTS `user_preferences_misc`;
 CREATE TABLE user_preferences_misc (
     `id` VARCHAR(128) NOT NULL UNIQUE,
-    `curfew` ENUM('Yes', 'No', 'Do not care'),
+    `curfew` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
     `curflew_time` TIME,
     `message` VARCHAR(256),
     FOREIGN KEY(`id`) REFERENCES user(`id`)
@@ -115,7 +117,7 @@ CREATE TABLE user_preferences_misc (
 DROP TABLE IF EXISTS `user_preferences_sex`;
 CREATE TABLE user_preferences_sex (
     `id` VARCHAR(128) NOT NULL,
-    `sex` ENUM('Male' ,'Female' , 'Do not care'),
+    `sex` ENUM('Male' ,'Female' , 'Do not care') DEFAULT 'Do not care',
     FOREIGN KEY(`id`) REFERENCES user(`id`)
 );
 

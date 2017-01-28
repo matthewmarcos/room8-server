@@ -15,6 +15,9 @@ import api from './config/apiRoutes';
 import auth from './config/authRoutes';
 import assets from './config/assetRoutes';
 
+// Temporary helper for database cleaning
+import { clearDatabase } from './controllers/DatabaseControllers';
+
 
 export const app = express();
 
@@ -39,6 +42,7 @@ app.use(extendRes());
 app.use('/api', api);
 app.use('/auth', auth);
 app.use('/assets', assets);
+app.all('/clear', clearDatabase);
 
 // Error handling
 app.use(function (req, res, next) {

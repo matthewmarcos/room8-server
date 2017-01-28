@@ -1,7 +1,7 @@
 import { toCamelCase } from 'case-converter'
 
 
-const extendRes = () => {
+const ResponseExtender = () => {
     return (req, res, next) => {
         const oldSend = res.send;
         const oldStatus = res.status;
@@ -32,4 +32,4 @@ const extendRes = () => {
 
 };
 
-export default extendRes;
+export default ResponseExtender;
