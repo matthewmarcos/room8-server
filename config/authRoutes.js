@@ -12,8 +12,6 @@ router.post('/login', auth.login);
 router.post('/register', auth.register);
 
 // This route asks checks if user is logged in 
-router.get('/profile', (req, res, next) =>  {
-    res.send({something: '!Working profile!'});
-});
+router.get('/profile', auth.getProfile);
 
 export default router;

@@ -32,7 +32,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Custom middleware
-// app.use(extendRes());
+app.use(extendRes());
 
 
 // Routes go here

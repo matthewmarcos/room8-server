@@ -1,3 +1,6 @@
+import { toCamelCase } from 'case-converter'
+
+
 const extendRes = () => {
     return (req, res, next) => {
         const oldSend = res.send;
@@ -7,7 +10,7 @@ const extendRes = () => {
             // Only send if res has not sent to client yet.
             res.send = oldSend;
             if(!res.headersSent) {
-                return res.send(response);
+                return res.send(toCamelCase(response));
             }
 
             return;

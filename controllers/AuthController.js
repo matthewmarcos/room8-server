@@ -27,7 +27,7 @@ export const register = (req, res, next) =>  {
 
     const start = () => {
 
-        if (form instanceof Error) {
+        if(form instanceof Error) {
             return next({ status: 422, message: 'Unprocessable Entity'});
         }
 
@@ -140,15 +140,17 @@ export const register = (req, res, next) =>  {
 
 
     const sendData = (err, result, args, lastQuery) => {
-
         if(err) {
             next({ status: 409, message: 'Duplicate entries' });
         }
         else {
+            // Delete password field from form
+            delete form.password;
+
             res.send({ 
                 result,
                 form,
-                message: 'successfully created account',
+                message: 'successfully created account'
             });
         }
     };
@@ -158,7 +160,7 @@ export const register = (req, res, next) =>  {
 };
 
 
-export const profile = (req, res, next) => {
+export const getProfile = (req, res, next) => {
     res.status(200).send({
         route: '/profile'
     });
