@@ -4,8 +4,7 @@
 -- Host: localhost
 
 -- user table
-DROP TABLE IF EXISTS `user`;
-CREATE TABLE user (
+DROP TABLE IF EXISTS `user`; CREATE TABLE user (
     `id` VARCHAR(128) NOT NULL UNIQUE,
     `username` VARCHAR(32) NOT NULL UNIQUE,
     `password` VARCHAR(128) NOT NULL,

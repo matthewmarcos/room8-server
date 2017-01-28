@@ -14,7 +14,6 @@ const _checkType = (key, fieldType) => {
 
 
 const _getData = (src, fields) => {
-    const tempSrc = clone(src);
     const error = new Error('not found!');
     let finalData = clone(fields),
         checkArray = [],
@@ -55,7 +54,7 @@ export const getData = (fields) => {
 };
 
 
-export const is_email = (email) => {
+export const isEmail = (email) => {
     return /^[a-z0-9._%+-]+@[a-z0-9-]+\.[a-z]{2,3}$/.test(email.toLowerCase());
 };
 

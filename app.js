@@ -3,17 +3,18 @@ import path from 'path';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
-
-import passport from './config/passportConfig';
 import session from 'express-session';
 import connectRedis from 'connect-redis';
+import mysql from 'anytv-node-mysql';
+
+import config from './config/config';
+import passport from './config/passportConfig';
+import extendRes from './helpers/resExtend';
 
 import api from './config/apiRoutes';
 import auth from './config/authRoutes';
 import assets from './config/assetRoutes';
-import config from './config/config';
 
-import mysql from 'anytv-node-mysql';
 
 export const app = express();
 
@@ -30,6 +31,10 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Custom middleware
+// app.use(extendRes());
+
+
 // Routes go here
 app.use('/api', api);
 app.use('/auth', auth);
@@ -43,12 +48,16 @@ app.use(function (req, res, next) {
 });
 
 app.use(function (err, req, res, next) {
-    res.status(err.status || 500).send(err);
+    if(!res.headersSent) {
+        return res.status(err.status || 500).send(err);;
+    }
 });
 
 if (app.get('env') === 'development') {
     app.use(function (err, req, res, next) {
-        res.status(err.status || 500).send(err);;
+        if(!res.headersSent) {
+            return res.status(err.status || 500).send(err);;
+        }
     });
 }
 

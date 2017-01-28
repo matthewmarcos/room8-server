@@ -2,7 +2,7 @@ import express from 'express';
 
 const router = express.Router();
 
-/* GET home page. */
+/* GET index */
 router.get('/', (req, res, next) => {
     res.send({something: '!Working root!'});
 });
