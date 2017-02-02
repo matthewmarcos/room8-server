@@ -11,7 +11,6 @@ import { getData } from '../helpers/utils'
 
 
 export const loginCb = (req, res, next) => {
-    console.log('user2: ', req.user);
     res.send({
         user: req.user
     });
@@ -65,71 +64,24 @@ export const register = (req, res, next) =>  {
 
         mysql.use('master')
             .transaction()
-            .query('INSERT INTO user SET ?', user, checkUser)
-            .query('INSERT INTO user_preferences_lifestyle SET ?', { id }, checkPreferencesLifestyle)
-            .query('INSERT INTO user_preferences_location SET ?', { id }, checkPreferencesLocation)
-            .query('INSERT INTO user_preferences_misc SET ?', { id }, checkPreferencesMisc)
-            .query('INSERT INTO user_preferences_sex SET ?', { id }, checkPreferencesSex)
-            .query('INSERT INTO user_preferences_utilities SET ?', { id }, checkPreferencesUtilities)
-            .query('INSERT INTO user_preferences_when SET ?', { id }, checkPreferencesWhen)
-            .query('INSERT INTO user_profile SET ?', { id }, checkUserProfile)
+            .query('INSERT INTO user SET ?', user, checkErrors('user'))
+            .query('INSERT INTO user_preferences_lifestyle SET ?', { id }, checkErrors('user preferences lifestyle'))
+            .query('INSERT INTO user_preferences_location SET ?', { id }, checkErrors('user preferences location'))
+            .query('INSERT INTO user_preferences_misc SET ?', { id }, checkErrors('user preferences misc'))
+            .query('INSERT INTO user_preferences_sex SET ?', { id }, checkErrors('user preferences sex'))
+            .query('INSERT INTO user_preferences_utilities SET ?', { id }, checkErrors('user preferences utilities'))
+            .query('INSERT INTO user_preferences_when SET ?', { id }, checkErrors('user preferences when'))
+            .query('INSERT INTO user_profile SET ?', { id }, checkErrors('user profile'))
             .commit(sendData);
     };
 
 
-    const checkUser = (err, res, args, lastQuery) => {
-        if(err) {
-            return next({ status: 500, message: 'unable to insert user' });
-        }
-    };
-
-
-    const checkPreferencesLifestyle = (err, res, args, lastQuery) => {
-        if(err) {
-            return next({ status: 500, message: 'unable to insert user preferences lifestyle' });
-        }
-    }
-
-
-    const checkPreferencesLocation = (err, res, args, lastQuery) => {
-        if(err) {
-            return next({ status: 500, message: 'unable to insert user preferences location' });
-        }
-    }
-
-
-    const checkPreferencesMisc = (err, res, args, lastQuery) => {
-        if(err) {
-            return next({ status: 500, message: 'unable to insert user preferences misc' });
-        }
-    }
-
-
-    const checkPreferencesSex = (err, res, args, lastQuery) => {
-        if(err) {
-            return next({ status: 500, message: 'unable to insert user preferences sex' });
-        }
-    }
-
-
-    const checkPreferencesUtilities = (err, res, args, lastQuery) => {
-        if(err) {
-            return next({ status: 500, message: 'unable to insert user preferences utilities' });
-        }
-    }
-
-
-    const checkPreferencesWhen = (err, res, args, lastQuery) => {
-        if(err) {
-            return next({ status: 500, message: 'unable to insert user preferences when' });
-        }
-    }
-
-
-    const checkUserProfile = (err, res, args, lastQuery) => {
-        if(err) {
-            return next({ status: 500, message: 'unable to insert user profile' });
-        }
+    const checkErrors = (type = 'user') => {
+        return (err, res, args, lastQuery) => {
+            if(err) {
+                return next({ status: 500, message: `unable to insert ${ type }` });
+            }
+        };
     }
 
 
@@ -141,7 +93,7 @@ export const register = (req, res, next) =>  {
             // Delete password field from form
             delete form.password;
 
-            res.send({ 
+            res.send({
                 result,
                 form,
                 message: 'successfully created account'
@@ -156,7 +108,17 @@ export const register = (req, res, next) =>  {
 
 export const getProfile = (req, res, next) => {
     res.status(200).send({
-        route: 'GET from /profile'
+        route: 'GET from /profile',
+        user: req.user
     });
+};
+
+export const loggedIn = (req, res, next) => {
+    if(req.user) {
+        return next();
+    }
+    else {
+        return next(401);
+    }
 };
 

@@ -44,9 +44,6 @@ passport.use(new LocalStrategy(
                 username: userData.username
             };
 
-            console.log('user: ', user);
-            console.log('isValidPassword: ', isValidPassword);
-
             if(isValidPassword) {
                 return done(null, user);
             }
