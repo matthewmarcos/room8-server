@@ -4,20 +4,25 @@ import * as pref from '../controllers/PreferencesController';
 
 const router = express.Router();
 
-router.get('/preferences', auth.loggedIn, pref.getAll);
-router.get('/preferences/when', auth.loggedIn, pref.getWhen);
-router.get('/preferences/utilities', auth.loggedIn, pref.getUtilities);
-router.get('/preferences/lifestyle', auth.loggedIn, pref.getLifestyle);
-router.get('/preferences/location', auth.loggedIn, pref.getLocation);
-router.get('/preferences/misc', auth.loggedIn, pref.getMisc);
-router.get('/preferences/cost', auth.loggedIn, pref.getCost);
+// GET Preferences
+router.get('/preferences', auth.loggedIn, pref.get());
 
+router.get('/preferences/when', auth.loggedIn, pref.get('when'));
+router.put('/preferences/when', auth.loggedIn, pref.put('when'));
 
-router.put('/preferences/when', auth.loggedIn, pref.editWhen);
-router.put('/preferences/utilities', auth.loggedIn, pref.editUtilities);
-router.put('/preferences/lifestyle', auth.loggedIn, pref.editLifestyle);
-router.put('/preferences/location', auth.loggedIn, pref.editLocation);
-router.put('/preferences/misc', auth.loggedIn, pref.editMisc);
-router.put('/preferences/cost', auth.loggedIn, pref.editCost);
+router.get('/preferences/utilities', auth.loggedIn, pref.get('utilities'));
+router.put('/preferences/utilities', auth.loggedIn, pref.put('utilities'));
+
+router.get('/preferences/lifestyle', auth.loggedIn, pref.get('lifestyle'));
+router.put('/preferences/lifestyle', auth.loggedIn, pref.put('lifestyle'));
+
+router.get('/preferences/location', auth.loggedIn, pref.get('location'));
+router.put('/preferences/location', auth.loggedIn, pref.put('location'));
+
+router.get('/preferences/misc', auth.loggedIn, pref.get('misc'));
+router.put('/preferences/misc', auth.loggedIn, pref.put('misc'));
+
+router.get('/preferences/cost', auth.loggedIn, pref.get('cost'));
+router.put('/preferences/cost', auth.loggedIn, pref.put('cost'));
 
 export default router;
