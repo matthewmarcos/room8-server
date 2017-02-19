@@ -12,6 +12,4 @@ const getConnection = (callback) => {
     });
 };
 
-console.log('mysql is here');
-
 export default getConnection;

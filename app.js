@@ -45,7 +45,10 @@ app.use(extendRes());
 app.use('/api', api);
 app.use('/auth', auth);
 app.use('/assets', assets);
-app.post('/clear', clearDatabase); // Delete all elements in all tables
+
+if (app.get('env') === 'development') {
+    app.post('/clear', clearDatabase); // Delete all elements in all tables
+}
 
 // Error handling
 app.use(function (req, res, next) {

@@ -108,7 +108,7 @@ DROP TABLE IF EXISTS `user_preferences_misc`;
 CREATE TABLE user_preferences_misc (
     `id` VARCHAR(128) NOT NULL UNIQUE,
     `curfew` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
-    `curflew_time` TIME,
+    `curfew_time` TIME,
     `message` VARCHAR(256),
     FOREIGN KEY(`id`) REFERENCES user(`id`)
 );
