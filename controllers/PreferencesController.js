@@ -1,3 +1,4 @@
+import mysql from 'anytv-node-mysql';
 import { getData } from '../helpers/utils'
 
 
@@ -5,12 +6,25 @@ const _getData = (query) => {
     return (req, res, next) => {
         const { id } = req.user;
 
-        res.send({
-            method: req.method,
-            tableName,
-            query,
-            id
-        });
+        const start = () => {
+            mysql.use('master')
+                .query(
+                    query, [id], sendResponse
+                )
+                .end();
+        };
+
+        const sendResponse = (err, result, args, lastQuery) => {
+            res.send({
+                // method: req.method,
+                result: result[0],
+                lastQuery,
+                id
+            });
+        };
+
+        start();
+
     };
 
 };

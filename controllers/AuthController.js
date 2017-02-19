@@ -115,6 +115,7 @@ export const getProfile = (req, res, next) => {
 
 export const loggedIn = (req, res, next) => {
     if(req.user) {
+        console.log(`${ req.user.username } is logged in with id ${ req.user.id }`);
         return next();
     }
     else {
