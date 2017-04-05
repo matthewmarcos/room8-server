@@ -2,6 +2,48 @@ import mysql from 'anytv-node-mysql';
 import { getData } from '../helpers/utils'
 
 
+const formFields = {
+
+    when: {
+        startDate: '',
+        duration: ''
+    },
+
+    utilities: {
+        airconditioning: '',
+        laundry: '',
+        cooking: '',
+        gasStove: '',
+        electricStove: '',
+        microwave: '',
+        waterKettle: '',
+        internet: '',
+        torrent: '',
+        speedRequirement: ''
+    },
+
+    lifestyle: {
+        alcohol: '',
+        cleanliness: '',
+        smokers: '',
+        studyTime: '',
+        guestsInRoom: '',
+        guestsStudyArea: '',
+        pets: '',
+        org: '',
+    },
+
+    location: {
+    },
+
+    misc: {
+    },
+
+    cost: {
+    }
+};
+
+
 const _getData = (query) => {
     return (req, res, next) => {
         const { id } = req.user;
