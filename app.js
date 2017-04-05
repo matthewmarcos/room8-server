@@ -6,6 +6,7 @@ import bodyParser from 'body-parser';
 import session from 'express-session';
 import connectRedis from 'connect-redis';
 import mysql from 'anytv-node-mysql';
+import cors from 'cors';
 
 import config from './config/config';
 import passport from './config/passportConfig';
@@ -25,6 +26,7 @@ mysql.add('master', config.MYSQL);
 export const app = express();
 
 // Config all middleware
+app.use(cors());
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -45,6 +47,9 @@ app.use(extendRes());
 app.use('/api', api);
 app.use('/auth', auth);
 app.use('/assets', assets);
+app.get('/get', (req, res) => { res.send({ 'status': 'success', 'body': req.body })});
+app.post('/post', (req, res) => { res.send({ 'status': 'success', 'body': req.body })});
+app.put('/put', (req, res) => { res.send({ 'status': 'success', 'body': req.body })});
 
 if (app.get('env') === 'development') {
     app.post('/clear', clearDatabase); // Delete all elements in all tables
