@@ -1,8 +1,11 @@
-import express from 'express';
-import path from 'path';
 import fs from 'fs';
-import * as auth from '../controllers/AuthController';
+import path from 'path';
+import express from 'express';
 import passport from 'passport';
+
+import * as parameterTypes from '../helpers/parameterTypes';
+import { validate } from '../helpers/validator';
+import * as auth from '../controllers/AuthController';
 
 const router = express.Router();
 
@@ -19,9 +22,12 @@ router.post('/logout', auth.loggedIn, (req, res, next) => {
 });
 
 // This route creates a new account
-router.post('/register', auth.register);
+router.post('/register',
+    validate(parameterTypes.register, 'body'),
+    auth.register
+);
 
-// This route asks checks if user is logged in 
+// This route asks checks if user is logged in
 router.get('/profile', auth.loggedIn, auth.getProfile);
 
 export default router;

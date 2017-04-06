@@ -11,6 +11,11 @@ export const missingFields = (result) => {
     };
 };
 
+export const duplicateError = {
+    status: 409,
+    message: 'Conflict error when inserting to database'
+};
+
 export const validationError = {
     status: 422,
     message: 'Validation error, input may not be valid'
@@ -26,4 +31,11 @@ export const invalidCredentials = (info) => {
 export const resourceNotFound = {
     status: 404,
     message: 'Resource not found'
+};
+
+export const tableInsertionError = (tableName) => {
+    return {
+        status: 500,
+        message: `unable to insert ${ type }`
+    }
 };

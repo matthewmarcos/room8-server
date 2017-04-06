@@ -7,6 +7,10 @@ import _ from 'lodash';
 import v4 from 'uuid-v4';
 import mysql from 'anytv-node-mysql';
 import { hashSync, compareSync, hash, compare } from 'bcrypt-nodejs';
+
+import * as errorType from '../helpers/errorTypes';
+
+//@TODO: Remove this
 import { getData } from '../helpers/utils'
 
 
@@ -18,29 +22,16 @@ export const loginCb = (req, res, next) => {
 
 
 export const register = (req, res, next) =>  {
-    const form = getData({
-            username: '',
-            password: '',
-            email: '',
-            nickname: ''
-        })
-        .from(req.body);
-
+    const { username, password, email, nickname } = req.body;
     const id = v4();
- 
+
     const start = () => {
-
-        if(form instanceof Error) {
-            return next({ status: 422, message: 'Unprocessable Entity'});
-        }
-
-        const { username, email, nickname, password } = form;
         const user = { id, username, email, nickname, password };
 
         mysql.use('master')
             .args(user)
             .query(
-                `SELECT COUNT(*) AS count FROM user 
+                `SELECT COUNT(*) AS count FROM user
                 WHERE username = ? OR email = ? OR nickname = ?`,
                 [username, email, nickname],
                 hashPassword
@@ -54,12 +45,11 @@ export const register = (req, res, next) =>  {
             return next({ status: 409, message: 'credentials taken' });
         }
 
-        hash(form.password, null, null, createAccount);
+        hash(password, null, null, createAccount);
     };
 
 
     const createAccount  = (err, hash) => {
-        const { username, email, nickname } = form;
         const user = { id, username, email, nickname, password: hash };
 
         mysql.use('master')
@@ -71,6 +61,7 @@ export const register = (req, res, next) =>  {
             .query('INSERT INTO user_preferences_sex SET ?', { id }, checkErrors('user preferences sex'))
             .query('INSERT INTO user_preferences_utilities SET ?', { id }, checkErrors('user preferences utilities'))
             .query('INSERT INTO user_preferences_when SET ?', { id }, checkErrors('user preferences when'))
+            .query('INSERT INTO user_preferences_cost SET ?', { id }, checkErrors('user preferences cost'))
             .query('INSERT INTO user_profile SET ?', { id }, checkErrors('user profile'))
             .commit(sendData);
     };
@@ -79,7 +70,7 @@ export const register = (req, res, next) =>  {
     const checkErrors = (type = 'user') => {
         return (err, res, args, lastQuery) => {
             if(err) {
-                return next({ status: 500, message: `unable to insert ${ type }` });
+                return next(errorType.tableInsertionError(type));
             }
         };
     }
@@ -87,15 +78,12 @@ export const register = (req, res, next) =>  {
 
     const sendData = (err, result, args, lastQuery) => {
         if(err) {
-            next({ status: 409, message: 'Duplicate entries' });
+            next(errorType.duplicateError);
         }
         else {
-            // Delete password field from form
-            delete form.password;
-
             res.send({
                 result,
-                form,
+                body: { username, email, nickname },
                 message: 'successfully created account'
             });
         }
