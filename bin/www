@@ -12,7 +12,8 @@ const debug = debugModule('room8-server:server');
 /**
  * Get port from environment and store in Express.
  */
-const port = normalizePort(process.env.PORT || '3001');
+// const port = normalizePort(process.env.PORT || '5001');
+const port = normalizePort('5001');
 app.set('port', port);
 
 /**
@@ -82,4 +83,6 @@ function onListening() {
         ? 'pipe ' + addr
         : 'port ' + addr.port;
     debug('Listening on ' + bind);
+
+    console.log('Listening on: ', bind);
 }

@@ -16,7 +16,6 @@ const ResponseExtender = () => {
             return;
         }
 
-
         res.status = (statusCode) => {
             // Only send if res has not sent to client yet.
             res.status = oldStatus;

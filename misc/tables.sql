@@ -24,7 +24,7 @@ CREATE TABLE user_profile (
     `cleanliness` TINYINT DEFAULT 0, -- match with preferences
     `sex` ENUM('Male', 'Female', 'Do not know') DEFAULT 'Do not know', -- match with preferences
     `smoker` BOOL DEFAULT 1, -- match with preferences
-    `has_org` BOOL DEFAULT 0, -- match with preferences
+    `has_org` BOOL DEFAULT 0, -- match with preferences? -> Please check if you can just do a join instead
     `gender` VARCHAR(64),
     `course` VARCHAR(64),
     `batch` VARCHAR(4),
@@ -64,6 +64,27 @@ CREATE TABLE user_preferences_when (
     FOREIGN KEY(`id`) REFERENCES user(`id`)
 );
 
+-- Cost Preference
+DROP TABLE IF EXISTS `user_preferences_cost`;
+CREATE TABLE user_preferences_cost (
+    `id` VARCHAR(128) NOT NULL UNIQUE,
+    `rent_price_range_start` INTEGER DEFAULT 0,
+    `rent_price_range_end` INTEGER DEFAULT 0,
+    `should_include_utilities` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
+    `utilities_price_range_start` INTEGER DEFAULT 0,
+    `utilities_price_range_end` INTEGER DEFAULT 0,
+    FOREIGN KEY(`id`) REFERENCES user(`id`)
+);
+
+-- Location Preferences
+DROP TABLE IF EXISTS `user_preferences_location`;
+CREATE TABLE user_preferences_location (
+    `id` VARCHAR(128) NOT NULL UNIQUE,
+    `nearby_restaurants` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
+    `travel_time_to_uplb` INTEGER,
+    `general_location` VARCHAR(128),
+    FOREIGN KEY(`id`) REFERENCES user(`id`)
+);
 -- Utilities preferences
 DROP TABLE IF EXISTS `user_preferences_utilities`;
 CREATE TABLE user_preferences_utilities (
@@ -92,15 +113,6 @@ CREATE TABLE user_preferences_lifestyle (
     `guests_study_area` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
     `pets` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
     `org` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
-    FOREIGN KEY(`id`) REFERENCES user(`id`)
-);
-
-DROP TABLE IF EXISTS `user_preferences_location`;
-CREATE TABLE user_preferences_location (
-    `id` VARCHAR(128) NOT NULL UNIQUE,
-    `nearby_restaurants` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
-    `travel_time_to_uplb` INTEGER,
-    `general_location` VARCHAR(128),
     FOREIGN KEY(`id`) REFERENCES user(`id`)
 );
 

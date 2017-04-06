@@ -1,5 +1,47 @@
 import mysql from 'anytv-node-mysql';
 import { getData } from '../helpers/utils'
+import errorTypes from '../helpers/errorTypes';
+
+const formFields = {
+
+    when: {
+        startDate: '',
+        duration: ''
+    },
+
+    utilities: {
+        airconditioning: '',
+        laundry: '',
+        cooking: '',
+        gasStove: '',
+        electricStove: '',
+        microwave: '',
+        waterKettle: '',
+        internet: '',
+        torrent: '',
+        speedRequirement: ''
+    },
+
+    lifestyle: {
+        alcohol: '',
+        cleanliness: '',
+        smokers: '',
+        studyTime: '',
+        guestsInRoom: '',
+        guestsStudyArea: '',
+        pets: '',
+        org: '',
+    },
+
+    location: {
+    },
+
+    misc: {
+    },
+
+    cost: {
+    }
+};
 
 
 const _getData = (query) => {
@@ -29,21 +71,6 @@ const _getData = (query) => {
 
 };
 
-
-const _putData = (query) => {
-    return (req, res, next) => {
-        const { id } = req.user;
-
-        res.send({
-            method: req.method,
-            tableName,
-            query,
-            id
-        });
-    };
-};
-
-
 export const get = (tableName) => {
 /*
  * tableName comes from the application and not the user so there is no need to check for malicious stuff
@@ -62,21 +89,9 @@ export const get = (tableName) => {
     return _getData(query);
 };
 
-
 export const put = (tableName) => {
-    if(!tableName) {
-        return (req, res, next) => {
-            next(500);
-        };
-    }
-    else {
-        const query = `
-            UPDATE user_preferences_${ tableName }
-                SET ?
-            WHERE id=?;
-        `;
-
-        return _putData(query);
+    return function(req, res, next) {
+        res.send(errorTypes.genericSuccessMessage('Successfully putting something'))
     }
 };
 
