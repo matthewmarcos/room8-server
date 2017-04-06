@@ -7,6 +7,7 @@ import session from 'express-session';
 import connectRedis from 'connect-redis';
 import mysql from 'anytv-node-mysql';
 import cors from 'cors';
+import expressValidator from 'express-validator';
 
 import config from './config/config';
 import passport from './config/passportConfig';
@@ -18,6 +19,7 @@ import assets from './config/assetRoutes';
 
 // Temporary helper for database cleaning
 import { clearDatabase } from './controllers/DatabaseControllers';
+import { validate } from './helpers/validator';
 
 
 // Database Configuration!
@@ -26,7 +28,7 @@ mysql.add('master', config.MYSQL);
 export const app = express();
 
 // Config all middleware
-app.use(cors());
+// app.use(cors());
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -36,11 +38,12 @@ app.use(session({
     resave: false,
     saveUninitialized: true
 }));
+app.use(expressValidator());
 app.use(passport.initialize());
 app.use(passport.session());
 
 // Custom middleware
-app.use(extendRes());
+// app.use(extendRes());
 
 
 // Routes go here
@@ -48,7 +51,13 @@ app.use('/api', api);
 app.use('/auth', auth);
 app.use('/assets', assets);
 app.get('/get', (req, res) => { res.send({ 'status': 'success', 'body': req.body })});
-app.post('/post', (req, res) => { res.send({ 'status': 'success', 'body': req.body })});
+app.post('/post',
+    validate([
+        'field1',
+        'field2',
+        'field3'
+    ], 'body'),
+    (req, res) => { res.send({ 'status': 'success', 'body': req.body })});
 app.put('/put', (req, res) => { res.send({ 'status': 'success', 'body': req.body })});
 
 if (app.get('env') === 'development') {
