@@ -1,6 +1,8 @@
 import express from 'express';
+
 import * as auth from '../controllers/AuthController';
 import * as pref from '../controllers/PreferencesController';
+import { validate } from '../helpers/validator';
 
 const router = express.Router();
 
