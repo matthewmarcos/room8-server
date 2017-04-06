@@ -17,7 +17,8 @@ router.post('/logout', auth.loggedIn, (req, res, next) => {
 
     req.logout();
     res.send({
-        message: 'Successfully Logged out'
+        status: 200,
+        message: `${username} successfully logged out`
     });
 });
 

@@ -2,6 +2,8 @@ import mysql from 'anytv-node-mysql';
 import passport from 'passport';
 import { compare } from 'bcrypt-nodejs';
 
+import errorTypes from '../helpers/errorTypes';
+
 
 const LocalStrategy = require('passport-local').Strategy;
 
@@ -25,7 +27,7 @@ passport.use(new LocalStrategy(
             }
 
             if(result.length !== 1) {
-                done(null, false, { status: 422, message: 'Could not log in' });
+                done(null, false, errorTypes.validationError);
             }
             else {
                 compare(args[0], result[0].password, sendResponse.bind(this, result[0]));

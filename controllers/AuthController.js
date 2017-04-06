@@ -16,6 +16,7 @@ import { getData } from '../helpers/utils'
 
 export const loginCb = (req, res, next) => {
     res.send({
+        status: 200,
         user: req.user
     });
 };
@@ -96,7 +97,6 @@ export const register = (req, res, next) =>  {
 
 export const getProfile = (req, res, next) => {
     res.status(200).send({
-        route: 'GET from /profile',
         user: req.user
     });
 };
