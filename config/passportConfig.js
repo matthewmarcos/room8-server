@@ -2,7 +2,7 @@ import mysql from 'anytv-node-mysql';
 import passport from 'passport';
 import { compare } from 'bcrypt-nodejs';
 
-import errorTypes from '../helpers/errorTypes';
+import * as errorTypes from '../helpers/errorTypes';
 
 
 const LocalStrategy = require('passport-local').Strategy;

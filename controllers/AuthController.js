@@ -53,6 +53,7 @@ export const register = (req, res, next) =>  {
     const createAccount  = (err, hash) => {
         const user = { id, username, email, nickname, password: hash };
 
+        console.log('About to insert to database new user');
         mysql.use('master')
             .transaction()
             .query('INSERT INTO user SET ?', user, checkErrors('user'))
@@ -69,8 +70,9 @@ export const register = (req, res, next) =>  {
 
 
     const checkErrors = (type = 'user') => {
-        return (err, res, args, lastQuery) => {
+        return function(err, res, args, lastQuery) {
             if(err) {
+                console.log(`checkErrors type: ${type}`);
                 return next(errorType.tableInsertionError(type));
             }
         };
@@ -78,12 +80,12 @@ export const register = (req, res, next) =>  {
 
 
     const sendData = (err, result, args, lastQuery) => {
+        console.log('Finished register, now sending data')
         if(err) {
             next(errorType.duplicateError);
         }
         else {
             res.send({
-                result,
                 body: { username, email, nickname },
                 message: 'successfully created account'
             });
@@ -96,10 +98,24 @@ export const register = (req, res, next) =>  {
 
 
 export const getProfile = (req, res, next) => {
-    res.status(200).send({
-        user: req.user
-    });
+    if(req.user) {
+        console.log('id: ', req.user.id);
+        console.log('username: ', req.user.username);
+        res.status(200).send({
+            isLoggedIn: true,
+            user: req.user
+        });
+    }
+    else {
+        res.status(200).send({
+            isLoggedIn: false,
+            user: null
+        });
+    }
+
+    console.log('isLoggedIn: ', !!req.user);
 };
+
 
 export const loggedIn = (req, res, next) => {
     if(req.user) {

@@ -29,6 +29,6 @@ router.post('/register',
 );
 
 // This route asks checks if user is logged in
-router.get('/profile', auth.loggedIn, auth.getProfile);
+router.get('/profile', auth.getProfile);
 
 export default router;
