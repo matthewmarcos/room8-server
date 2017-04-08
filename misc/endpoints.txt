@@ -1,0 +1,9 @@
+> These are the endpoints that we will use in the application
+
+=====AUTH ROUTES=====
+
+
+
+=====API ROUTES=====
+
+=====ASSET ROUTES=====
