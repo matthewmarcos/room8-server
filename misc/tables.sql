@@ -8,8 +8,8 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE user (
     `id` VARCHAR(128) NOT NULL UNIQUE,
     `username` VARCHAR(32) NOT NULL UNIQUE,
-    `password` VARCHAR(128) NOT NULL,
     `email` VARCHAR(256) NOT NULL UNIQUE,
+    `password` VARCHAR(128) NOT NULL,
     `nickname` VARCHAR(12) NOT NULL,
     `time_registered` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(`id`)
@@ -23,8 +23,8 @@ CREATE TABLE user_profile (
     `status` ENUM('I am looking for a room', 'I have a room') DEFAULT 'I am looking for a room',
     `cleanliness` TINYINT DEFAULT 0, -- match with preferences
     `sex` ENUM('Male', 'Female', 'Do not know') DEFAULT 'Do not know', -- match with preferences
-    `smoker` BOOL DEFAULT 1, -- match with preferences
-    `has_org` BOOL DEFAULT 0, -- match with preferences? -> Please check if you can just do a join instead
+    `smoker` ENUM('Yes', 'No') DEFAULT 'Yes', -- match with preferences
+    `has_org` ENUM('Yes', 'No') DEFAULT 'Yes', -- match with preferences? -> Please check if you can just do a join instead
     `gender` VARCHAR(64),
     `course` VARCHAR(64),
     `batch` VARCHAR(4),
@@ -81,7 +81,7 @@ DROP TABLE IF EXISTS `user_preferences_location`;
 CREATE TABLE user_preferences_location (
     `id` VARCHAR(128) NOT NULL UNIQUE,
     `nearby_restaurants` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
-    `travel_time_to_uplb` INTEGER,
+    `travel_time_to_uplb` INTEGER DEFAULT 120,
     `general_location` VARCHAR(128),
     FOREIGN KEY(`id`) REFERENCES user(`id`)
 );
@@ -92,13 +92,13 @@ CREATE TABLE user_preferences_utilities (
     `airconditioning` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
     `laundry` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
     `cooking` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
-    `gas_stove` BOOL DEFAULT 0,
-    `electric_stove` BOOL DEFAULT 0,
-    `microwave` BOOL DEFAULT 0,
-    `water_kettle` BOOL DEFAULT 0,
+    `gas_stove` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
+    `electric_stove` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
+    `microwave` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
+    `water_kettle` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
     `internet` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
     `torrent` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
-    `speed_requirement` DECIMAL(5,2),
+    `speed_requirement` DECIMAL(5,2) DEFAULT 1.0,
     FOREIGN KEY(`id`) REFERENCES user(`id`)
 );
 
