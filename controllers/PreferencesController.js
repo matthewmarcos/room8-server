@@ -2,79 +2,114 @@ import mysql from 'anytv-node-mysql';
 import { getData } from '../helpers/utils'
 import errorTypes from '../helpers/errorTypes';
 
-const formFields = {
 
-    when: {
-        startDate: '',
-        duration: ''
-    },
+export function prefWhen (req, res, next) {
+    const { user } = req;
 
-    utilities: {
-        airconditioning: '',
-        laundry: '',
-        cooking: '',
-        gasStove: '',
-        electricStove: '',
-        microwave: '',
-        waterKettle: '',
-        internet: '',
-        torrent: '',
-        speedRequirement: ''
-    },
-
-    lifestyle: {
-        alcohol: '',
-        cleanliness: '',
-        smokers: '',
-        studyTime: '',
-        guestsInRoom: '',
-        guestsStudyArea: '',
-        pets: '',
-        org: '',
-    },
-
-    location: {
-    },
-
-    misc: {
-    },
-
-    cost: {
-    }
-};
+    res.status(200)
+        .send({
+            status: 200,
+            message: 'Ang gwapo mo talaga',
+            path: req.path,
+            user
+        });
+}
 
 
-const _getData = (query) => {
-    return (req, res, next) => {
-        const { id } = req.user;
+export function prefUtilities (req, res, next) {
+    const { user } = req;
 
-        const start = () => {
-            mysql.use('master')
-                .query(
-                    query, [id], sendResponse
-                )
-                .end();
-        };
+    res.status(200)
+        .send({
+            status: 200,
+            message: 'Ang gwapo mo talaga',
+            path: req.path,
+            user
+        });
+}
 
-        const sendResponse = (err, result, args, lastQuery) => {
-            res.send({
-                // method: req.method,
-                result: result[0],
-                lastQuery,
-                id
-            });
-        };
 
-        start();
+export function prefLifestyle (req, res, next) {
+    const { user } = req;
 
-    };
+    res.status(200)
+        .send({
+            status: 200,
+            message: 'Ang gwapo mo talaga',
+            path: req.path,
+            user
+        });
+}
 
-};
 
-export const get = (tableName) => {
+export function prefLocation (req, res, next) {
+    const { user } = req;
+
+    res.status(200)
+        .send({
+            status: 200,
+            message: 'Ang gwapo mo talaga',
+            path: req.path,
+            user
+        });
+}
+
+
+export function prefMisc (req, res, next) {
+    const { user } = req;
+
+    res.status(200)
+        .send({
+            status: 200,
+            message: 'Ang gwapo mo talaga',
+            path: req.path,
+            user
+        });
+}
+
+
+export function prefCost (req, res, next) {
+    const { user } = req;
+
+    res.status(200)
+        .send({
+            status: 200,
+            message: 'Ang gwapo mo talaga',
+            path: req.path,
+            user
+        });
+}
+
+
 /*
  * tableName comes from the application and not the user so there is no need to check for malicious stuff
  */
+export const get = (tableName) => {
+    const _getData = (query) => {
+        return (req, res, next) => {
+            const { id } = req.user;
+
+            const start = () => {
+                mysql.use('master')
+                    .query(
+                        query, [id], sendResponse
+                    )
+                    .end();
+            };
+
+            const sendResponse = (err, result, args, lastQuery) => {
+                res.send({
+                    // method: req.method,
+                    result: result[0],
+                    lastQuery,
+                    id
+                });
+            };
+
+            start();
+        };
+    };
+
     const query = tableName ?
         `SELECT * from user_preferences_${ tableName } WHERE id = ?;`:
         `SELECT * from user
@@ -88,10 +123,3 @@ export const get = (tableName) => {
         `;
     return _getData(query);
 };
-
-export const put = (tableName) => {
-    return function(req, res, next) {
-        res.send(errorTypes.genericSuccessMessage('Successfully putting something'))
-    }
-};
-

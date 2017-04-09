@@ -2,6 +2,7 @@ import express from 'express';
 
 import * as auth from '../controllers/AuthController';
 import * as pref from '../controllers/PreferencesController';
+import * as paramType from '../helpers/parameterTypes'
 import { validate } from '../helpers/validator';
 
 const router = express.Router();
@@ -10,24 +11,46 @@ const router = express.Router();
 router.get('/preferences', auth.loggedIn, pref.get());
 
 router.get('/preferences/when', auth.loggedIn, pref.get('when'));
-router.put('/preferences/when', auth.loggedIn, pref.put('when'));
+router.put('/preferences/when',
+    auth.loggedIn,
+    validate(paramType.prefWhen, 'body'),
+    pref.prefWhen
+);
 
 router.get('/preferences/utilities', auth.loggedIn, pref.get('utilities'));
-router.put('/preferences/utilities', auth.loggedIn, pref.put('utilities'));
+router.put('/preferences/utilities',
+    auth.loggedIn,
+    validate(paramType.prefUtilities, 'body'),
+    pref.prefUtilities
+);
 
 router.get('/preferences/lifestyle', auth.loggedIn, pref.get('lifestyle'));
-router.put('/preferences/lifestyle', auth.loggedIn, pref.put('lifestyle'));
+router.put('/preferences/lifestyle',
+    auth.loggedIn,
+    validate(paramType.prefLifestyle, 'body'),
+    pref.prefLifestyle
+);
 
 router.get('/preferences/location', auth.loggedIn, pref.get('location'));
-router.put('/preferences/location', auth.loggedIn, pref.put('location'));
+router.put('/preferences/location',
+    auth.loggedIn,
+    validate(paramType.prefLocation, 'body'),
+    pref.prefLocation
+);
 
 router.get('/preferences/misc', auth.loggedIn, pref.get('misc'));
-router.put('/preferences/misc', auth.loggedIn, pref.put('misc'));
+router.put('/preferences/misc',
+    auth.loggedIn,
+    validate(paramType.prefMisc, 'body'),
+    pref.prefMisc
+);
 
 router.get('/preferences/cost', auth.loggedIn, pref.get('cost'));
-router.put('/preferences/cost', auth.loggedIn, pref.put('cost'));
+router.put('/preferences/cost',
+    auth.loggedIn,
+    validate(paramType.prefCost, 'body'),
+    pref.prefCost
+);
 
-/*
-*/
 
 export default router;

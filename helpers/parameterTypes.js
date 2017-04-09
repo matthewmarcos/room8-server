@@ -11,7 +11,20 @@ export const register = ['username', 'password', 'email', 'nickname'];
 export const login = ['username', 'password'];
 
 // PUT /user/profile
-export const editProfile = ['fullName', 'status', 'cleanliness', 'sex', 'smoker', 'hasOrg', 'gender', 'course', 'batch', 'birthday', 'contactNumber', 'bio'];
+export const editProfile = [
+    'fullName',
+    'status',
+    'cleanliness',
+    'sex',
+    'smoker',
+    'hasOrg',
+    'gender',
+    'course',
+    'batch',
+    'birthday',
+    'contactNumber',
+    'bio'
+];
 
 //PUT /user/hobbies
 export const editHobbies = ['hobbies']; // Array of strings
@@ -20,16 +33,26 @@ export const editHobbies = ['hobbies']; // Array of strings
 export const editOrganizations = ['organizations']; // Array of strings
 
 //PUT /user/interests
-export const editOrganizations = ['interests']; // Array of strings
+export const editInterests = ['interests']; // Array of strings
 
 //PUT /preferences/when
 export const prefWhen = ['startDate', 'duration'];
 
 //PUT /preferences/cost
-export const prefCost = ['rentPriceRangeStart', 'rentPriceRangeEnd', 'shouldIncludeUtilities', 'utilitiesPriceRangeStart', 'utilitiesPriceRangeEnd'];
+export const prefCost = [
+    'rentPriceRangeStart',
+    'rentPriceRangeEnd',
+    'shouldIncludeUtilities',
+    'utilitiesPriceRangeStart',
+    'utilitiesPriceRangeEnd'
+];
 
 //PUT /preferences/location
-export const prefLocation = ['nearbyRestaurants', 'travelTimeToUplb', 'generalLocation'];
+export const prefLocation = [
+    'nearbyRestaurants',
+    'travelTimeToUplb',
+    'generalLocation'
+];
 
 //PUT /preferences/utilities
 export const prefUtilities = [
@@ -62,12 +85,3 @@ export const prefMisc = ['curfew', 'curfewTime', 'message'];
 
 //PUT /preferences/sex
 export const prefSex = ['sex'];
-
-
-
-// export const register = [];
-// export const register = [];
-// export const register = [];
-// export const register = [];
-
-
