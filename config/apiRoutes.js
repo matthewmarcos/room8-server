@@ -27,4 +27,7 @@ router.put('/preferences/misc', auth.loggedIn, pref.put('misc'));
 router.get('/preferences/cost', auth.loggedIn, pref.get('cost'));
 router.put('/preferences/cost', auth.loggedIn, pref.put('cost'));
 
+/*
+*/
+
 export default router;

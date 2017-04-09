@@ -58,12 +58,12 @@ export const register = (req, res, next) =>  {
             .transaction()
             .query('INSERT INTO user SET ?', user, checkErrors('user'))
             .query('INSERT INTO user_preferences_lifestyle SET ?', { id }, checkErrors('user preferences lifestyle'))
+            .query('INSERT INTO user_preferences_utilities SET ?', { id }, checkErrors('user preferences utilities'))
             .query('INSERT INTO user_preferences_location SET ?', { id }, checkErrors('user preferences location'))
             .query('INSERT INTO user_preferences_misc SET ?', { id }, checkErrors('user preferences misc'))
-            .query('INSERT INTO user_preferences_sex SET ?', { id }, checkErrors('user preferences sex'))
-            .query('INSERT INTO user_preferences_utilities SET ?', { id }, checkErrors('user preferences utilities'))
             .query('INSERT INTO user_preferences_when SET ?', { id }, checkErrors('user preferences when'))
             .query('INSERT INTO user_preferences_cost SET ?', { id }, checkErrors('user preferences cost'))
+            .query('INSERT INTO user_preferences_sex SET ?', { id }, checkErrors('user preferences sex'))
             .query('INSERT INTO user_profile SET ?', { id }, checkErrors('user profile'))
             .commit(sendData);
     };

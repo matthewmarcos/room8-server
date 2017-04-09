@@ -9,7 +9,11 @@ import * as auth from '../controllers/AuthController';
 
 const router = express.Router();
 
-// Logs the user in if they exist
+/*
+    Logs the user in if they exist
+    - username: String
+    - password: String
+*/
 router.post('/login', passport.authenticate('local'), auth.loginCb);
 
 router.post('/logout', auth.loggedIn, (req, res, next) => {
@@ -22,7 +26,13 @@ router.post('/logout', auth.loggedIn, (req, res, next) => {
     });
 });
 
-// This route creates a new account
+/*
+    This route creates a new account
+    username: String
+    password: String
+    email: String
+    nickname: String
+*/
 router.post('/register',
     validate(parameterTypes.register, 'body'),
     auth.register
