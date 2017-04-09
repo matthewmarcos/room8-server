@@ -1,34 +1,15 @@
 import { toCamelCase } from 'case-converter'
 
-
 const ResponseExtender = () => {
     return (req, res, next) => {
         const oldSend = res.send;
-        const oldStatus = res.status;
-
-        res.send = (response) => {
-            // Only send if res has not sent to client yet.
+        res.send = function(response) {
+            // Convert everything res.send will send into camelcase
             res.send = oldSend;
-            if(!res.headersSent) {
-                return res.send(toCamelCase(response));
-            }
-
-            return;
+            return res.send(toCamelCase(response));
         }
-
-        res.status = (statusCode) => {
-            // Only send if res has not sent to client yet.
-            res.status = oldStatus;
-            if(!res.headersSent) {
-                return res.status(statusCode);
-            }
-
-            return res;
-        }
-
         next();
     };
-
 };
 
 export default ResponseExtender;
