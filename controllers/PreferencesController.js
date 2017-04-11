@@ -29,13 +29,13 @@ export function prefWhen (req, res, next) {
 
     const sendData = (err, result, args, lastQuery) => {
         if(err) {
-            next(err)
+            return next(errorTypes.validationError)
         }
 
         res.status(200)
             .send({
                 status: 200,
-                message: 'Successfully updated data',
+                message: 'Successfully when preferences',
                 path: req.path,
                 user
             });
@@ -46,15 +46,34 @@ export function prefWhen (req, res, next) {
 
 
 export function prefUtilities (req, res, next) {
-    const { user } = req;
+    const { user, body } = req;
 
-    res.status(200)
-        .send({
-            status: 200,
-            message: 'Ang gwapo mo talaga',
-            path: req.path,
-            user
-        });
+    const start = () => {
+        const insertData = toSnakeCase(body);
+        mysql.use('master')
+            .query(
+                `UPDATE user_preferences_utilities SET ? WHERE id=?`,
+                [ insertData, user.id ],
+                sendData
+            )
+            .end();
+    }
+
+    const sendData = (err, result, args, lastQuery) => {
+        if(err) {
+            next(err)
+        }
+
+        res.status(200)
+            .send({
+                status: 200,
+                message: 'Successfully updated utility preferences',
+                path: req.path,
+                user
+            });
+    }
+
+    start();
 }
 
 
