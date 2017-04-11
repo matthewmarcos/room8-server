@@ -61,7 +61,7 @@ export function prefUtilities (req, res, next) {
 
     const sendData = (err, result, args, lastQuery) => {
         if(err) {
-            next(err)
+            return next(errorTypes.validationError);
         }
 
         res.status(200)
@@ -147,9 +147,7 @@ export const get = (tableName) => {
 
             const sendResponse = (err, result, args, lastQuery) => {
                 res.send({
-                    // method: req.method,
                     result: result[0],
-                    lastQuery,
                     id
                 });
             };
