@@ -10,11 +10,17 @@ import { hashSync, compareSync, hash, compare } from 'bcrypt-nodejs';
 
 import * as errorType from '../helpers/errorTypes';
 
-//@TODO: Remove this
-import { getData } from '../helpers/utils'
-
-
-export const loginCb = (req, res, next) => {
+export const login = (req, res, next) => {
+/*
+    Response:
+    {
+        status: Number,
+        user: {
+            id: String,
+            username: String
+        }
+    }
+*/
     res.send({
         status: 200,
         user: req.user
@@ -23,6 +29,17 @@ export const loginCb = (req, res, next) => {
 
 
 export const register = (req, res, next) =>  {
+/*
+    Response:
+    {
+        body: {
+            username: String,
+            username: email,
+            nickname: String
+        },
+        message: String
+    }
+*/
     const { username, password, email, nickname } = req.body;
     const id = v4();
 
@@ -39,7 +56,6 @@ export const register = (req, res, next) =>  {
             )
             .end();
     };
-
 
     const hashPassword = (err, result, args, lastQuery) => {
         if(result[0].count > 0) {
@@ -68,7 +84,6 @@ export const register = (req, res, next) =>  {
             .commit(sendData);
     };
 
-
     const checkErrors = (type = 'user') => {
         return function(err, res, args, lastQuery) {
             if(err) {
@@ -77,7 +92,6 @@ export const register = (req, res, next) =>  {
             }
         };
     }
-
 
     const sendData = (err, result, args, lastQuery) => {
         console.log('Finished register, now sending data')
@@ -92,12 +106,23 @@ export const register = (req, res, next) =>  {
         }
     };
 
-
     start();
 };
 
 
 export const getProfile = (req, res, next) => {
+/*
+    Response:
+    {
+        isLoggedIn: Boolean,
+        user: {
+            id: String,
+            username: String
+        }
+    }
+
+    Response.user is null if user is not logged in
+*/
     if(req.user) {
         console.log('id: ', req.user.id);
         console.log('username: ', req.user.username);
@@ -118,6 +143,9 @@ export const getProfile = (req, res, next) => {
 
 
 export const loggedIn = (req, res, next) => {
+/*
+    Pass request to next middleware if user is logged in
+*/
     if(req.user) {
         return next();
     }
@@ -125,4 +153,3 @@ export const loggedIn = (req, res, next) => {
         return next(errorType.forbidden);
     }
 };
-

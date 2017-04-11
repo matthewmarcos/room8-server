@@ -14,7 +14,7 @@ const router = express.Router();
     - username: String
     - password: String
 */
-router.post('/login', passport.authenticate('local'), auth.loginCb);
+router.post('/login', passport.authenticate('local'), auth.login);
 
 router.post('/logout', auth.loggedIn, (req, res, next) => {
     const { username } = req.user;
