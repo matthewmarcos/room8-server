@@ -1,5 +1,5 @@
 import mysql from 'anytv-node-mysql';
-import errorTypes from '../helpers/errorTypes';
+import * as errorTypes from '../helpers/errorTypes';
 import { toSnakeCase } from 'case-converter'
 
 
@@ -7,32 +7,35 @@ export function prefWhen (req, res, next) {
     const { user, body } = req;
 
     const start = () => {
-        console.log('Preferences When START_EDIT');
-
-        const start_date = new Date(body.startDate);
+        let start_date = Date.parse(body.startDate);
         const duration = body.duration;
-        const insertData = { start_date, duration };
 
-        mysql.use('master')
-            .query(
-                `UPDATE user_preferences_when SET ? WHERE id=?`,
-                [ insertData, user.id ],
-                sendData
-            )
-            .end();
+        if(isNaN(start_date)) {
+            return next(errorTypes.validationError);
+        }
+        else {
+            start_date = new Date(body.startDate);
+            const insertData = { start_date, duration };
+
+            mysql.use('master')
+                .query(
+                    `UPDATE user_preferences_when SET ? WHERE id=?`,
+                    [ insertData, user.id ],
+                    sendData
+                )
+                .end();
+        }
     }
 
     const sendData = (err, result, args, lastQuery) => {
-        console.log('Preferences When Finished Query');
         if(err) {
-            console.log('Error updating in database');
-            console.error(err);
+            next(err)
         }
 
         res.status(200)
             .send({
                 status: 200,
-                message: 'Ang gwapo mo talaga',
+                message: 'Successfully updated data',
                 path: req.path,
                 user
             });
