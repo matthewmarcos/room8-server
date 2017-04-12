@@ -68,7 +68,6 @@ export function prefUtilities (req, res, next) {
             .send({
                 status: 200,
                 message: 'Successfully updated utility preferences',
-                path: req.path,
                 user
             });
     }
@@ -78,16 +77,40 @@ export function prefUtilities (req, res, next) {
 
 
 export function prefLifestyle (req, res, next) {
-    const { user } = req;
+       const { user, body } = req;
 
-    res.status(200)
-        .send({
-            status: 200,
-            message: 'Ang gwapo mo talaga',
-            path: req.path,
-            user
-        });
-}
+    const start = () => {
+        let insertData = toSnakeCase(body);
+
+        /*
+            Cannot send a type Number with insomnia. This is the workaround.
+            Please keep it as a Number in the database for easier computation
+        */
+        insertData.cleanliness = Number(insertData.cleanliness);
+
+        mysql.use('master')
+            .query(
+                `UPDATE user_preferences_lifestyle SET ? WHERE id = ?`,
+                [ insertData, user.id ],
+                sendData
+            )
+            .end();
+    }
+
+    const sendData = (err, result, args, lastQuery) => {
+        if(err) {
+            return next(errorTypes.validationError);
+        }
+
+        res.status(200)
+            .send({
+                status: 200,
+                message: 'Successfully updated utility lifestyle',
+                user
+            });
+    }
+
+    start();}
 
 
 export function prefLocation (req, res, next) {
