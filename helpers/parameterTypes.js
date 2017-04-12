@@ -10,6 +10,10 @@ export const register = ['username', 'password', 'email', 'nickname'];
 // POST /auth/login
 export const login = ['username', 'password'];
 
+/*
+ * API ROUTES
+ * Always prepend with /api =)
+ */
 // PUT /user/profile
 export const editProfile = [
     'fullName',
