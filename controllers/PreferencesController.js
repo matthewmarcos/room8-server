@@ -188,7 +188,7 @@ export function prefMisc (req, res, next) {
         res.status(200)
             .send({
                 status: 200,
-                message: 'Successfully when preferences',
+                message: 'Successfully misc preferences',
                 path: req.path,
                 user
             });
