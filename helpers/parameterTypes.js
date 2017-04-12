@@ -85,3 +85,6 @@ export const prefMisc = ['curfew', 'curfewTime', 'message'];
 
 //PUT /preferences/sex
 export const prefSex = ['sex'];
+
+//PUT /preferences/sex
+export const userHobbies = ['hobbies'];

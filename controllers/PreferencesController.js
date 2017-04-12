@@ -1,6 +1,7 @@
 import mysql from 'anytv-node-mysql';
 import * as errorTypes from '../helpers/errorTypes';
-import { toSnakeCase } from 'case-converter'
+import { toSnakeCase } from 'case-converter';
+import _ from 'lodash';
 
 
 export function prefWhen (req, res, next) {
@@ -296,3 +297,84 @@ export const get = (tableName) => {
         `;
     return _getData(query);
 };
+
+
+export const getHobbies = (req, res, next) => {
+    const { id } = req.user;
+    const { hobbies } = req.body
+
+    const start = () => {
+        console.log('Here niga');
+        mysql.use('master')
+            .query(
+                'SELECT * FROM user_hobby WHERE id = ?',
+                [ id ],
+                sendData
+            )
+            .end();
+    };
+
+    const sendData = (err, result, args, lastQuery) => {
+        if(err) {
+            return next(errorTypes.validationError);
+        }
+
+        const myResult = result.map(x => x.hobby);
+
+        res.status(200)
+            .send({
+                status: 200,
+                user: req.user,
+                result: myResult
+            });
+    };
+
+    start();
+};
+
+
+export const setHobbies = (req, res, next) => {
+    const { id } = req.user;
+    const { hobbies } = req.body
+
+    const start = () => {
+        const insertData = hobbies.map((hobby) => {
+            return [ id, hobby ];
+        });
+
+        mysql.use('master')
+            .transaction()
+            .query('DELETE FROM user_hobby WHERE id = ?', [ id ], checkErrors('Deleting existing hobbies'))
+            .query(
+                'INSERT INTO user_hobby (id, hobby) VALUES ?',
+                [ insertData ],
+                checkErrors('Updating New Hobbies')
+            )
+            .commit(sendData);
+    };
+
+    const checkErrors = (type = 'delete') => {
+        return function(err, res, args, lastQuery) {
+            if(err) {
+                return next(errorTypes.tableInsertionError(type));
+            }
+        };
+    }
+
+    const sendData = (err, result, args, lastQuery) => {
+        if(err) {
+            return next(errorTypes.validationError);
+        }
+
+        res.status(200)
+            .send({
+                status: 200,
+                message: 'Successfully set hobbies',
+                user: req.user,
+                hobbies
+            });
+    };
+
+    start();
+};
+

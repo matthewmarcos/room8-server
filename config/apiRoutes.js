@@ -53,4 +53,21 @@ router.put('/preferences/cost',
 );
 
 
+router.get('/preferences/hobbies', auth.loggedIn, pref.getHobbies);
+router.put('/preferences/hobbies',
+    auth.loggedIn,
+    validate(paramType.userHobbies, 'body'),
+    pref.setHobbies
+);
+
+
+// router.get('/preferences/cost', auth.loggedIn, pref.get('cost'));
+// router.put('/preferences/cost',
+    // auth.loggedIn,
+    // validate(paramType.prefCost, 'body'),
+    // pref.prefCost
+// );
+
+
 export default router;
+
