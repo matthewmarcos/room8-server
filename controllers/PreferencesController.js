@@ -199,15 +199,59 @@ export function prefMisc (req, res, next) {
 
 
 export function prefCost (req, res, next) {
-    const { user } = req;
+    const { user, body } = req;
 
-    res.status(200)
-        .send({
-            status: 200,
-            message: 'Ang gwapo mo talaga',
-            path: req.path,
-            user
-        });
+    const start = () => {
+        let insertData = body;
+
+        /*
+            Cannot send a type Number with insomnia. This is the workaround.
+            Please keep it as a Number in the database for easier computation
+        */
+        insertData.rentPriceRangeStart = Number(insertData.rentPriceRangeStart);
+        insertData.rentPriceRangeEnd = Number(insertData.rentPriceRangeEnd);
+        insertData.utilitiesPriceRangeStart = Number(insertData.utilitiesPriceRangeStart);
+        insertData.utilitiesPriceRangeEnd = Number(insertData.utilitiesPriceRangeEnd);
+
+        if(!isValidInput(insertData)) {
+            return next(errorTypes.validationError);
+        }
+        else {
+            insertData = toSnakeCase(insertData);
+            mysql.use('master')
+                .query(
+                    `UPDATE user_preferences_cost SET ? WHERE id = ?`,
+                    [ insertData, user.id ],
+                    sendData
+                )
+                .end();
+        }
+    };
+
+    const isValidInput = ({
+        rentPriceRangeStart, rentPriceRangeEnd, utilitiesPriceRangeStart, utilitiesPriceRangeEnd
+    }) => {
+        if(rentPriceRangeEnd < rentPriceRangeStart || utilitiesPriceRangeEnd < utilitiesPriceRangeStart) {
+            return false;
+        }
+
+        return true;
+    };
+
+    const sendData = (err, result, args, lastQuery) => {
+        if(err) {
+            return next(errorTypes.validationError);
+        }
+
+        res.status(200)
+            .send({
+                status: 200,
+                message: 'Successfully updated utility cost',
+                user
+            });
+    };
+
+    start();
 }
 
 
@@ -221,13 +265,13 @@ export const get = (tableName) => {
 
             const start = () => {
                 mysql.use('master')
-                    .query(
-                        query, [id], sendResponse
-                    )
+                    .query(query, [id], sendResponse)
                     .end();
             };
 
             const sendResponse = (err, result, args, lastQuery) => {
+                delete result[0].password;
+
                 res.send({
                     result: result[0],
                     id
@@ -247,6 +291,7 @@ export const get = (tableName) => {
             NATURAL JOIN user_preferences_sex
             NATURAL JOIN user_preferences_utilities
             NATURAL JOIN user_preferences_when
+            NATURAL JOIN user_preferences_cost
             WHERE id = ?;
         `;
     return _getData(query);
