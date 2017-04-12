@@ -77,7 +77,7 @@ export function prefUtilities (req, res, next) {
 
 
 export function prefLifestyle (req, res, next) {
-       const { user, body } = req;
+    const { user, body } = req;
 
     const start = () => {
         let insertData = toSnakeCase(body);
@@ -110,19 +110,46 @@ export function prefLifestyle (req, res, next) {
             });
     }
 
-    start();}
+    start();
+}
 
 
 export function prefLocation (req, res, next) {
-    const { user } = req;
+    const { user, body } = req;
 
-    res.status(200)
-        .send({
-            status: 200,
-            message: 'Ang gwapo mo talaga',
-            path: req.path,
-            user
-        });
+    const start = () => {
+        let insertData = toSnakeCase(body);
+
+        /*
+            Cannot send a type Number with insomnia. This is the workaround.
+            Please keep it as a Number in the database for easier computation
+        */
+        insertData.travel_time_to_uplb = Number(insertData.travel_time_to_uplb);
+
+        mysql.use('master')
+            .query(
+                `UPDATE user_preferences_location SET ? WHERE id = ?`,
+                [ insertData, user.id ],
+                sendData
+            )
+            .end();
+    }
+
+    const sendData = (err, result, args, lastQuery) => {
+        if(err) {
+            console.error(err)
+            return next(errorTypes.validationError);
+        }
+
+        res.status(200)
+            .send({
+                status: 200,
+                message: 'Successfully updated utility location',
+                user
+            });
+    }
+
+    start();
 }
 
 
