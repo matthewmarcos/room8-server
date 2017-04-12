@@ -68,12 +68,12 @@ router.put('/preferences/organizations',
     pref.setOrganizations
 );
 
-// router.get('/preferences/interests', auth.loggedIn, pref.getInterests);
-// router.put('/preferences/interests',
-    // auth.loggedIn,
-    // validate(paramType.userInterests, 'body'),
-    // pref.setInterests
-// );
+router.get('/preferences/interests', auth.loggedIn, pref.getInterests);
+router.put('/preferences/interests',
+    auth.loggedIn,
+    validate(paramType.userInterests, 'body'),
+    pref.setInterests
+);
 
 export default router;
 

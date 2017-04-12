@@ -456,3 +456,81 @@ export const setOrganizations = (req, res, next) => {
     start();
 };
 
+export const getInterests = (req, res, next) => {
+    const { id } = req.user;
+    const { interests } = req.body
+
+    const start = () => {
+        mysql.use('master')
+            .query(
+                'SELECT * FROM user_interest WHERE id = ?',
+                [ id ],
+                sendData
+            )
+            .end();
+    };
+
+    const sendData = (err, result, args, lastQuery) => {
+        if(err) {
+            return next(errorTypes.validationError);
+        }
+
+        const myResult = result.map(x => x.interest);
+
+        res.status(200)
+            .send({
+                status: 200,
+                user: req.user,
+                result: myResult
+            });
+    };
+
+    start();
+};
+
+
+export const setInterests = (req, res, next) => {
+    const { id } = req.user;
+    const { interests } = req.body
+
+    const start = () => {
+        const insertData = interests.map((interest) => {
+            return [ id, interest ];
+        });
+
+        mysql.use('master')
+            .transaction()
+            .query('DELETE FROM user_interest WHERE id = ?', [ id ], checkErrors('Deleting existing interests'))
+            .query(
+                'INSERT INTO user_interest (id, interest) VALUES ?',
+                [ insertData ],
+                checkErrors('Updating new interests')
+            )
+            .commit(sendData);
+    };
+
+    const checkErrors = (type = 'delete') => {
+        return function(err, res, args, lastQuery) {
+            if(err) {
+                return next(errorTypes.tableInsertionError(type));
+            }
+        };
+    }
+
+    const sendData = (err, result, args, lastQuery) => {
+        if(err) {
+            return next(errorTypes.validationError);
+        }
+
+        res.status(200)
+            .send({
+                status: 200,
+                message: 'Successfully set interests',
+                user: req.user,
+                interests
+            });
+    };
+
+    start();
+};
+
