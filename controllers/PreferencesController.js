@@ -137,7 +137,6 @@ export function prefLocation (req, res, next) {
 
     const sendData = (err, result, args, lastQuery) => {
         if(err) {
-            console.error(err)
             return next(errorTypes.validationError);
         }
 
