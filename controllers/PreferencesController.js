@@ -153,15 +153,48 @@ export function prefLocation (req, res, next) {
 
 
 export function prefMisc (req, res, next) {
-    const { user } = req;
+    const { user, body } = req;
 
-    res.status(200)
-        .send({
-            status: 200,
-            message: 'Ang gwapo mo talaga',
-            path: req.path,
-            user
-        });
+    const start = () => {
+        /*
+            @TODO: Find the best way to represent a time object in javascript without the date.
+            Currently accepts Javascript Date object / Anything that can be used to instantiate
+            javascript date object
+        */
+        let curfew_time = Date.parse(body.curfewTime);
+
+        if(isNaN(curfew_time)) {
+            return next(errorTypes.validationError);
+        }
+        else {
+            let insertData = toSnakeCase(req.body);
+            insertData.curfew_time = new Date(insertData.curfew_time);
+
+            mysql.use('master')
+                .query(
+                    `UPDATE user_preferences_misc SET ? WHERE id=?`,
+                    [ insertData, user.id ],
+                    sendData
+                )
+                .end();
+        }
+    }
+
+    const sendData = (err, result, args, lastQuery) => {
+        if(err) {
+            return next(errorTypes.validationError)
+        }
+
+        res.status(200)
+            .send({
+                status: 200,
+                message: 'Successfully when preferences',
+                path: req.path,
+                user
+            });
+    }
+
+    start();
 }
 
 
