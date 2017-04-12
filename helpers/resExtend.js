@@ -1,4 +1,4 @@
-import { toCamelCase } from 'case-converter'
+import { toCamelCase } from 'case-converter';
 
 const ResponseExtender = () => {
     return (req, res, next) => {

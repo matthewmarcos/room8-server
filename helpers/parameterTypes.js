@@ -75,7 +75,7 @@ export const prefLifestyle = [
     'smokers',
     'studyTime',
     'guestsInRoom',
-    'guestsInStudyArea',
+    'guestsStudyArea',
     'pets',
     'org'
 ];

@@ -106,7 +106,7 @@ DROP TABLE IF EXISTS `user_preferences_lifestyle`;
 CREATE TABLE user_preferences_lifestyle (
     `id` VARCHAR(128) NOT NULL UNIQUE,
     `alcohol` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
-    `cleanliness` TINYINT,
+    `cleanliness` TINYINT DEFAULT 0,
     `smokers` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
     `study_time` ENUM('Morning', 'Evening', 'Both', 'Do not care') DEFAULT 'Do not care',
     `guests_in_room` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
