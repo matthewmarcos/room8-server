@@ -1,6 +1,7 @@
 import mysql from 'anytv-node-mysql';
 import * as errorTypes from '../helpers/errorTypes';
-import { toSnakeCase } from 'case-converter'
+import { toSnakeCase } from 'case-converter';
+import _ from 'lodash';
 
 
 export function prefWhen (req, res, next) {
@@ -274,6 +275,7 @@ export const get = (tableName) => {
 
                 res.send({
                     result: result[0],
+                    user: req.user,
                     id
                 });
             };
@@ -296,3 +298,239 @@ export const get = (tableName) => {
         `;
     return _getData(query);
 };
+
+
+export const getHobbies = (req, res, next) => {
+    const { id } = req.user;
+    const { hobbies } = req.body
+
+    const start = () => {
+        mysql.use('master')
+            .query(
+                'SELECT * FROM user_hobby WHERE id = ?',
+                [ id ],
+                sendData
+            )
+            .end();
+    };
+
+    const sendData = (err, result, args, lastQuery) => {
+        if(err) {
+            return next(errorTypes.validationError);
+        }
+
+        const myResult = result.map(x => x.hobby);
+
+        res.status(200)
+            .send({
+                status: 200,
+                user: req.user,
+                result: myResult
+            });
+    };
+
+    start();
+};
+
+
+export const setHobbies = (req, res, next) => {
+    const { id } = req.user;
+    const { hobbies } = req.body
+
+    const start = () => {
+        const insertData = hobbies.map((hobby) => {
+            return [ id, hobby ];
+        });
+
+        mysql.use('master')
+            .transaction()
+            .query('DELETE FROM user_hobby WHERE id = ?', [ id ], checkErrors('Deleting existing hobbies'))
+            .query(
+                'INSERT INTO user_hobby (id, hobby) VALUES ?',
+                [ insertData ],
+                checkErrors('Updating New Hobbies')
+            )
+            .commit(sendData);
+    };
+
+    const checkErrors = (type = 'delete') => {
+        return function(err, res, args, lastQuery) {
+            if(err) {
+                return next(errorTypes.tableInsertionError(type));
+            }
+        };
+    }
+
+    const sendData = (err, result, args, lastQuery) => {
+        if(err) {
+            return next(errorTypes.validationError);
+        }
+
+        res.status(200)
+            .send({
+                status: 200,
+                message: 'Successfully set hobbies',
+                user: req.user,
+                hobbies
+            });
+    };
+
+    start();
+};
+
+export const getOrganizations = (req, res, next) => {
+    const { id } = req.user;
+    const { hobbies } = req.body
+
+    const start = () => {
+        mysql.use('master')
+            .query(
+                'SELECT * FROM user_organization WHERE id = ?',
+                [ id ],
+                sendData
+            )
+            .end();
+    };
+
+    const sendData = (err, result, args, lastQuery) => {
+        if(err) {
+            return next(errorTypes.validationError);
+        }
+
+        const myResult = result.map(x => x.organization);
+
+        res.status(200)
+            .send({
+                status: 200,
+                user: req.user,
+                result: myResult
+            });
+    };
+
+    start();
+};
+
+
+export const setOrganizations = (req, res, next) => {
+    const { id } = req.user;
+    const { organizations } = req.body
+
+    const start = () => {
+        const insertData = organizations.map((organization) => {
+            return [ id, organization ];
+        });
+
+        mysql.use('master')
+            .transaction()
+            .query('DELETE FROM user_organization WHERE id = ?', [ id ], checkErrors('Deleting existing organizations'))
+            .query(
+                'INSERT INTO user_organization (id, organization) VALUES ?',
+                [ insertData ],
+                checkErrors('Updating New Organizations')
+            )
+            .commit(sendData);
+    };
+
+    const checkErrors = (type = 'delete') => {
+        return function(err, res, args, lastQuery) {
+            if(err) {
+                return next(errorTypes.tableInsertionError(type));
+            }
+        };
+    }
+
+    const sendData = (err, result, args, lastQuery) => {
+        if(err) {
+            return next(errorTypes.validationError);
+        }
+
+        res.status(200)
+            .send({
+                status: 200,
+                message: 'Successfully set organizations',
+                user: req.user,
+                organizations
+            });
+    };
+
+    start();
+};
+
+export const getInterests = (req, res, next) => {
+    const { id } = req.user;
+    const { interests } = req.body
+
+    const start = () => {
+        mysql.use('master')
+            .query(
+                'SELECT * FROM user_interest WHERE id = ?',
+                [ id ],
+                sendData
+            )
+            .end();
+    };
+
+    const sendData = (err, result, args, lastQuery) => {
+        if(err) {
+            return next(errorTypes.validationError);
+        }
+
+        const myResult = result.map(x => x.interest);
+
+        res.status(200)
+            .send({
+                status: 200,
+                user: req.user,
+                result: myResult
+            });
+    };
+
+    start();
+};
+
+
+export const setInterests = (req, res, next) => {
+    const { id } = req.user;
+    const { interests } = req.body
+
+    const start = () => {
+        const insertData = interests.map((interest) => {
+            return [ id, interest ];
+        });
+
+        mysql.use('master')
+            .transaction()
+            .query('DELETE FROM user_interest WHERE id = ?', [ id ], checkErrors('Deleting existing interests'))
+            .query(
+                'INSERT INTO user_interest (id, interest) VALUES ?',
+                [ insertData ],
+                checkErrors('Updating new interests')
+            )
+            .commit(sendData);
+    };
+
+    const checkErrors = (type = 'delete') => {
+        return function(err, res, args, lastQuery) {
+            if(err) {
+                return next(errorTypes.tableInsertionError(type));
+            }
+        };
+    }
+
+    const sendData = (err, result, args, lastQuery) => {
+        if(err) {
+            return next(errorTypes.validationError);
+        }
+
+        res.status(200)
+            .send({
+                status: 200,
+                message: 'Successfully set interests',
+                user: req.user,
+                interests
+            });
+    };
+
+    start();
+};
+

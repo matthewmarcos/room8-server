@@ -69,7 +69,6 @@ export const register = (req, res, next) =>  {
     const createAccount  = (err, hash) => {
         const user = { id, username, email, nickname, password: hash };
 
-        console.log('About to insert to database new user');
         mysql.use('master')
             .transaction()
             .query('INSERT INTO user SET ?', user, checkErrors('user'))

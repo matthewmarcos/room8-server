@@ -43,6 +43,6 @@ export const validationError = {
 export const tableInsertionError = (tableName) => {
     return {
         status: 500,
-        message: `unable to insert ${ type }`
+        message: `unable to insert ${ tableName }`
     }
 };
