@@ -16,6 +16,7 @@ export const login = ['username', 'password'];
  */
 // PUT /user/profile
 export const editProfile = [
+    // For user_profile table
     'fullName',
     'status',
     'cleanliness',
@@ -27,7 +28,10 @@ export const editProfile = [
     'batch',
     'birthday',
     'contactNumber',
-    'bio'
+    'bio',
+    // For user table
+    'nickname',
+    'email'
 ];
 
 //PUT /user/hobbies
