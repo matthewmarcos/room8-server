@@ -2,6 +2,7 @@ import express from 'express';
 
 import * as auth from '../controllers/AuthController';
 import * as pref from '../controllers/PreferencesController';
+import * as prof from '../controllers/ProfileController';
 import * as paramType from '../helpers/parameterTypes'
 import { validate } from '../helpers/validator';
 
@@ -73,6 +74,13 @@ router.put('/preferences/interests',
     auth.loggedIn,
     validate(paramType.userInterests, 'body'),
     pref.setInterests
+);
+
+router.get('/profile', auth.loggedIn, prof.getProfile);
+router.put('/profile',
+    auth.loggedIn,
+    validate(paramType.editProfile, 'body'),
+    prof.editProfile
 );
 
 export default router;

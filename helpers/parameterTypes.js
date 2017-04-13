@@ -10,8 +10,13 @@ export const register = ['username', 'password', 'email', 'nickname'];
 // POST /auth/login
 export const login = ['username', 'password'];
 
+/*
+ * API ROUTES
+ * Always prepend with /api =)
+ */
 // PUT /user/profile
 export const editProfile = [
+    // For user_profile table
     'fullName',
     'status',
     'cleanliness',
@@ -23,7 +28,10 @@ export const editProfile = [
     'batch',
     'birthday',
     'contactNumber',
-    'bio'
+    'bio',
+    // For user table
+    'nickname',
+    'email'
 ];
 
 //PUT /user/hobbies
