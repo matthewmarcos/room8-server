@@ -274,7 +274,7 @@ export const get = (tableName) => {
                 delete result[0].password;
 
                 res.send({
-                    result: result[0],
+                    preferences: result[0],
                     user: req.user,
                     id
                 });
