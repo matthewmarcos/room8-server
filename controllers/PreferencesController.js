@@ -325,7 +325,7 @@ export const getHobbies = (req, res, next) => {
             .send({
                 status: 200,
                 user: req.user,
-                result: myResult
+                hobbies: myResult
             });
     };
 
@@ -403,7 +403,7 @@ export const getOrganizations = (req, res, next) => {
             .send({
                 status: 200,
                 user: req.user,
-                result: myResult
+                organizations: myResult
             });
     };
 
@@ -481,7 +481,7 @@ export const getInterests = (req, res, next) => {
             .send({
                 status: 200,
                 user: req.user,
-                result: myResult
+                interests: myResult
             });
     };
 
