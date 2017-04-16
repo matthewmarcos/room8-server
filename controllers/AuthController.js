@@ -93,7 +93,6 @@ export const register = (req, res, next) =>  {
     }
 
     const sendData = (err, result, args, lastQuery) => {
-        console.log('Finished register, now sending data')
         if(err) {
             next(errorType.duplicateError);
         }
