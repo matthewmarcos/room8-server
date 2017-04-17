@@ -2,6 +2,8 @@
 -- Ubuntu 16.04.1
 -- Database: room8_dev
 -- Host: localhost
+--  drop database room8_dev; create database room8_dev; use room8_dev;
+
 
 -- user table
 DROP TABLE IF EXISTS `user`;

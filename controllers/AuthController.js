@@ -50,8 +50,8 @@ export const register = (req, res, next) =>  {
             .args(user)
             .query(
                 `SELECT COUNT(*) AS count FROM user
-                WHERE username = ? OR email = ? OR nickname = ?`,
-                [username, email, nickname],
+                WHERE username = ? OR email = ?`,
+                [username, email],
                 hashPassword
             )
             .end();
@@ -86,7 +86,6 @@ export const register = (req, res, next) =>  {
     const checkErrors = (type = 'user') => {
         return function(err, res, args, lastQuery) {
             if(err) {
-                console.log(`checkErrors type: ${type}`);
                 return next(errorType.tableInsertionError(type));
             }
         };
