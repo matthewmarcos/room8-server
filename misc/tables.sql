@@ -2,6 +2,8 @@
 -- Ubuntu 16.04.1
 -- Database: room8_dev
 -- Host: localhost
+--  drop database room8_dev; create database room8_dev; use room8_dev;
+
 
 -- user table
 DROP TABLE IF EXISTS `user`;
@@ -19,18 +21,18 @@ CREATE TABLE user (
 DROP TABLE IF EXISTS `user_profile`;
 CREATE TABLE user_profile (
     `id` VARCHAR(128) NOT NULL UNIQUE,
-    `full_name` VARCHAR(64),
+    `full_name` VARCHAR(64) DEFAULT '',
     `status` ENUM('I am looking for a room', 'I have a room') DEFAULT 'I am looking for a room',
-    `cleanliness` TINYINT DEFAULT 0, -- match with preferences
+    `cleanliness` TINYINT DEFAULT 1, -- match with preferences
     `sex` ENUM('Male', 'Female', 'Do not know') DEFAULT 'Do not know', -- match with preferences
     `smoker` ENUM('Yes', 'No') DEFAULT 'Yes', -- match with preferences
     `has_org` ENUM('Yes', 'No') DEFAULT 'Yes', -- match with preferences? -> Please check if you can just do a join instead
-    `gender` VARCHAR(64),
-    `course` VARCHAR(64),
-    `batch` VARCHAR(4),
-    `birthday` DATE,
-    `contact_number` VARCHAR(16),
-    `bio` VARCHAR(1024),
+    `gender` VARCHAR(64) DEFAULT '',
+    `course` VARCHAR(64) DEFAULT '',
+    `batch` VARCHAR(4) DEFAULT '',
+    `birthday` DATE DEFAULT '1000-01-01',
+    `contact_number` VARCHAR(16) DEFAULT '',
+    `bio` VARCHAR(1024) DEFAULT '',
     FOREIGN KEY(`id`) REFERENCES user(`id`)
 );
 
@@ -59,7 +61,7 @@ CREATE TABLE user_interest (
 DROP TABLE IF EXISTS `user_preferences_when`;
 CREATE TABLE user_preferences_when (
     `id` VARCHAR(128) NOT NULL UNIQUE,
-    `start_date` DATE,
+    `start_date` DATE DEFAULT '1000-01-01',
     `duration` ENUM('End of semester', 'Indefinitely') DEFAULT 'Indefinitely',
     FOREIGN KEY(`id`) REFERENCES user(`id`)
 );
@@ -82,7 +84,7 @@ CREATE TABLE user_preferences_location (
     `id` VARCHAR(128) NOT NULL UNIQUE,
     `nearby_restaurants` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
     `travel_time_to_uplb` INTEGER DEFAULT 120,
-    `general_location` VARCHAR(128),
+    `general_location` VARCHAR(128) DEFAULT '',
     FOREIGN KEY(`id`) REFERENCES user(`id`)
 );
 -- Utilities preferences
@@ -120,8 +122,8 @@ DROP TABLE IF EXISTS `user_preferences_misc`;
 CREATE TABLE user_preferences_misc (
     `id` VARCHAR(128) NOT NULL UNIQUE,
     `curfew` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
-    `curfew_time` TIME,
-    `message` VARCHAR(256),
+    `curfew_time` TIME DEFAULT '00:00:00',
+    `message` VARCHAR(256) DEFAULT '',
     FOREIGN KEY(`id`) REFERENCES user(`id`)
 );
 
