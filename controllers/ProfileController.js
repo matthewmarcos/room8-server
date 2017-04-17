@@ -83,7 +83,6 @@ export function editProfile(req, res, next) {
      */
     const start = () => {
 
-        console.log(toSnakeCase(insertUserProfile));
         mysql.use('master')
             .transaction()
             .query('UPDATE user SET ? WHERE id = ?', [ toSnakeCase(insertUser), id ], checkErrors('user'))
@@ -94,7 +93,6 @@ export function editProfile(req, res, next) {
     const checkErrors = (type = 'user') => {
         return function(err, res, args, lastQuery) {
             if(err) {
-                console.error(err);
                 return next(errorTypes.tableInsertionError(type));
             }
         };
@@ -102,7 +100,6 @@ export function editProfile(req, res, next) {
 
     const sendData = (err, result, args, lastQuery) => {
         if(err) {
-            console.error(err);
             return next(errorTypes.validationError);
         }
 
