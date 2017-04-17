@@ -37,14 +37,14 @@ CREATE TABLE user_profile (
 DROP TABLE IF EXISTS `user_organization`;
 CREATE TABLE user_organization (
     `id` VARCHAR(128) NOT NULL,
-    `organization` VARCHAR(128) NOT NULL DEFAULT '',
+    `organization` VARCHAR(128) NOT NULL,
     FOREIGN KEY(`id`) REFERENCES user(`id`)
 );
 
 DROP TABLE IF EXISTS `user_hobby`;
 CREATE TABLE user_hobby (
     `id` VARCHAR(128) NOT NULL,
-    `hobby` VARCHAR(128) NOT NULL DEFAULT '',
+    `hobby` VARCHAR(128) NOT NULL,
     FOREIGN KEY(`id`) REFERENCES user(`id`)
 );
 

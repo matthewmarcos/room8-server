@@ -342,15 +342,22 @@ export const setHobbies = (req, res, next) => {
             return [ id, hobby ];
         });
 
-        mysql.use('master')
-            .transaction()
-            .query('DELETE FROM user_hobby WHERE id = ?', [ id ], checkErrors('Deleting existing hobbies'))
-            .query(
-                'INSERT INTO user_hobby (id, hobby) VALUES ?',
-                [ insertData ],
-                checkErrors('Updating New Hobbies')
-            )
-            .commit(sendData);
+        if(insertData.length > 0) {
+            mysql.use('master')
+                .transaction()
+                .query('DELETE FROM user_hobby WHERE id = ?', [ id ], checkErrors('Deleting existing hobbies'))
+                .query(
+                    'INSERT INTO user_hobby (id, hobby) VALUES ?',
+                    [ insertData ],
+                    checkErrors('Updating New Hobbies')
+                )
+                .commit(sendData);
+        }
+        else {
+            mysql.use('master')
+                .query('DELETE FROM user_hobby WHERE id = ?', [ id ], sendData)
+                .end();
+        }
     };
 
     const checkErrors = (type = 'delete') => {
@@ -414,21 +421,27 @@ export const getOrganizations = (req, res, next) => {
 export const setOrganizations = (req, res, next) => {
     const { id } = req.user;
     const { organizations } = req.body
+    const insertData = organizations.map((organization) => {
+        return [ id, organization ];
+    });
 
     const start = () => {
-        const insertData = organizations.map((organization) => {
-            return [ id, organization ];
-        });
-
-        mysql.use('master')
-            .transaction()
-            .query('DELETE FROM user_organization WHERE id = ?', [ id ], checkErrors('Deleting existing organizations'))
-            .query(
-                'INSERT INTO user_organization (id, organization) VALUES ?',
-                [ insertData ],
-                checkErrors('Updating New Organizations')
-            )
-            .commit(sendData);
+        if(!!insertData.length) {
+            mysql.use('master')
+                .transaction()
+                .query('DELETE FROM user_organization WHERE id = ?', [ id  ], checkErrors('Deleting existing organizations'))
+                .query(
+                    'INSERT INTO user_organization (id, organization) VALUES ?',
+                    [ insertData  ],
+                    checkErrors('Updating new organizations')
+                )
+                .commit(sendData);
+        }
+        else {
+            mysql.use('master')
+                .query('DELETE FROM user_organization WHERE id = ?', [ id ], sendData)
+                .end();
+        }
     };
 
     const checkErrors = (type = 'delete') => {
@@ -449,11 +462,13 @@ export const setOrganizations = (req, res, next) => {
                 status: 200,
                 message: 'Successfully set organizations',
                 user: req.user,
-                organizations
+                organizations,
+                insertData
             });
     };
 
     start();
+    // res.send(req.body)
 };
 
 export const getInterests = (req, res, next) => {
@@ -498,15 +513,22 @@ export const setInterests = (req, res, next) => {
             return [ id, interest ];
         });
 
-        mysql.use('master')
-            .transaction()
-            .query('DELETE FROM user_interest WHERE id = ?', [ id ], checkErrors('Deleting existing interests'))
-            .query(
-                'INSERT INTO user_interest (id, interest) VALUES ?',
-                [ insertData ],
-                checkErrors('Updating new interests')
-            )
-            .commit(sendData);
+        if(insertData.length > 0) {
+            mysql.use('master')
+                .transaction()
+                .query('DELETE FROM user_interest WHERE id = ?', [ id ], checkErrors('Deleting existing interest'))
+                .query(
+                    'INSERT INTO user_interest (id, interest) VALUES ?',
+                    [ insertData ],
+                    checkErrors('Updating New Interests')
+                )
+                .commit(sendData);
+        }
+        else {
+            mysql.use('master')
+                .query('DELETE FROM user_interest WHERE id = ?', [ id ], sendData)
+                .end();
+        }
     };
 
     const checkErrors = (type = 'delete') => {

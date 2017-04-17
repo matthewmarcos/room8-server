@@ -13,9 +13,6 @@ import { missingFields } from './errorTypes';
         ], 'property'),
         callback
     )
-
-
-
 */
 
 export const validate = function(fields, method) {

@@ -5,6 +5,8 @@ import * as pref from '../controllers/PreferencesController';
 import * as prof from '../controllers/ProfileController';
 import * as paramType from '../helpers/parameterTypes'
 import { validate } from '../helpers/validator';
+import { missingFields } from '../helpers/errorTypes';
+
 
 const router = express.Router();
 
@@ -57,7 +59,14 @@ router.put('/preferences/cost',
 router.get('/preferences/hobbies', auth.loggedIn, pref.getHobbies);
 router.put('/preferences/hobbies',
     auth.loggedIn,
-    validate(paramType.userHobbies, 'body'),
+    function(req, res, next) {
+        if(!(req.body.hobbies)) {
+            return next(missingFields(['hobbies']));
+        }
+        else {
+            return next();
+        }
+    },
     pref.setHobbies
 );
 
@@ -65,14 +74,29 @@ router.put('/preferences/hobbies',
 router.get('/preferences/organizations', auth.loggedIn, pref.getOrganizations);
 router.put('/preferences/organizations',
     auth.loggedIn,
-    validate(paramType.userOrganizations, 'body'),
+    function(req, res, next) {
+        req.body = JSON.parse(JSON.stringify(req.body));
+        if(!(req.body.organizations)) {
+            return next(missingFields(['organizations']));
+        }
+        else {
+            return next();
+        }
+    },
     pref.setOrganizations
 );
 
 router.get('/preferences/interests', auth.loggedIn, pref.getInterests);
 router.put('/preferences/interests',
     auth.loggedIn,
-    validate(paramType.userInterests, 'body'),
+    function(req, res, next) {
+        if(!(req.body.interests)) {
+            return next(missingFields(['interests']));
+        }
+        else {
+            return next();
+        }
+    },
     pref.setInterests
 );
 
