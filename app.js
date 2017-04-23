@@ -73,6 +73,7 @@ app.use(function (req, res, next) {
 
 app.use(function (err, req, res, next) {
     if(!res.headersSent) {
+        console.error(err);
         return res.status(err.status || 500).send(err);;
     }
 });
@@ -80,6 +81,7 @@ app.use(function (err, req, res, next) {
 if (app.get('env') === 'development') {
     app.use(function (err, req, res, next) {
         if(!res.headersSent) {
+            console.error(err);
             return res.status(err.status || 500).send(err);;
         }
     });
