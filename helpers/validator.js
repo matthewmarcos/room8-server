@@ -25,7 +25,7 @@ export const validate = function(fields, method) {
                 req.checkParams(field, `Field "${field}" in params is required.`).notEmpty();
             }
             else if (method.toLowerCase() == 'body') {
-                req.checkBody(field, `Field "${field}" in body is required.`).notEmpty();
+                req.checkBody(field, `Field "${field}" in body is required.`);
             }
         });
 
