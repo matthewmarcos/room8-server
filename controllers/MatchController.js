@@ -4,6 +4,7 @@ import { toCamelCase } from 'case-converter';
 import _ from 'lodash';
 import async from 'async';
 import { resourceNotFound } from '../helpers/errorTypes'
+import makeArray from 'number-array-generator';
 
 
 export default function(req, res, next) {
@@ -66,6 +67,7 @@ export default function(req, res, next) {
     `;
     let needRoom = [];
     let hasRoom = [];
+    let cartesianCollection = [];
 
 
     function start() {
@@ -107,8 +109,11 @@ export default function(req, res, next) {
 
         needRoom = toCamelCase(result[0]);
         hasRoom = toCamelCase(result[1]);
-
-
+        // const arr1 = makeArray(1, 5);
+        // const arr2 = makeArray(6, 10);
+        // cartesianCollection = cartesian(arr1, arr2);
+        cartesianCollection = cartesian(needRoom, hasRoom);
+ 
         /*
          * IN MEMORY:
          * Brute force create the list of possible pairs
@@ -122,8 +127,9 @@ export default function(req, res, next) {
 
 
         res.send({
-            needRoom: result[0],
-            hasRoom: result[1],
+            cartesianCollection,
+            // needRoom: result[0],
+            // hasRoom: result[1],
             status: 200,
             message: 'Done'
         });
@@ -148,7 +154,40 @@ const scoreUsers = (user1, user2) => {
         guestsInRoomScore = 0,
         guestsStudyAreaScore = 0,
         orgScore = 0,
-        curfewTimeScore = 0;
+        curfewTimeScore = 0
+        overallScore = 0;
 
+    return {
+        user1,
+        user2,
+        scores: {
+            cleanlinessScore,
+            sexScore,
+            smokerScore,
+            startDateScore,
+            rentScore,
+            nearbyRestaurantsScore,
+            travelTimeToUplbScore,
+            locationScore,
+            utilitiesScore,
+            speedScore,
+            studyTimeScore,
+            guestsInRoomScore,
+            guestsStudyAreaScore,
+            orgScore,
+            curfewTimeScore
+        },
+        overallScore
+    };
+};
+
+function cartesian(...args) {
+    return _.reduce(args, function(a, b) {
+        return _.flatten(_.map(a, function(x) {
+            return _.map(b, function(y) {
+                return x.concat([y]);
+            });
+        }), false);
+    }, [[]]);
 
 };
