@@ -48,6 +48,13 @@ router.put('/preferences/misc',
     pref.prefMisc
 );
 
+router.get('/preferences/sex', auth.loggedIn, pref.get('sex'));
+router.put('/preferences/sex',
+    auth.loggedIn,
+    validate(paramType.prefSex, 'body'),
+    pref.prefSex
+);
+
 router.get('/preferences/cost', auth.loggedIn, pref.get('cost'));
 router.put('/preferences/cost',
     auth.loggedIn,

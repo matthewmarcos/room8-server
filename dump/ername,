@@ -1,0 +1,588 @@
+*************************** 1. row ***************************
+                         id: 778b2f24-f3e6-4bd4-bf4a-f5c54140e36a
+                   username: username1
+                      email: username1@email.com
+                   password: $2a$10$1Ulr/w4Zr82wpDyU8ZhFj.iOXy8Bh8Zp008pvq8Heah5V.hj.bB9S
+                   nickname: Matt
+            time_registered: 2017-04-18 03:38:45
+                        sex: Do not care
+            airconditioning: No
+                    laundry: Yes
+                    cooking: Yes
+                  gas_stove: Do not care
+             electric_stove: Yes
+                  microwave: Do not care
+               water_kettle: Yes
+                   internet: Yes
+                    torrent: No
+          speed_requirement: 4.13
+                 start_date: 2017-04-11
+                   duration: End of semester
+     rent_price_range_start: 123
+       rent_price_range_end: 124
+   should_include_utilities: Do not care
+utilities_price_range_start: 123
+  utilities_price_range_end: 124
+         nearby_restaurants: Yes
+        travel_time_to_uplb: 20
+           general_location: Demarces
+                    alcohol: Yes
+                cleanliness: 5
+                    smokers: No
+                 study_time: Morning
+             guests_in_room: Yes
+          guests_study_area: No
+                       pets: Yes
+                        org: No
+                         id: 778b2f24-f3e6-4bd4-bf4a-f5c54140e36a
+                  full_name: Joseph Matthew Marcos
+                     status: I have a room
+                cleanliness: 4
+                        sex: Male
+                     smoker: Yes
+                    has_org: Yes
+                     gender: Apache Helicopter
+                     course: BS Computer science
+                      batch: 2015
+                   birthday: 2017-04-13
+             contact_number: 09171234567
+                        bio: asdasd
+*************************** 2. row ***************************
+                         id: 904c2696-9bbc-45b6-88d6-70d4bc9e7f7a
+                   username: username2
+                      email: username2@email.com
+                   password: $2a$10$0hTbEPDi2GcKUvDGUDTMzOAMKuuaPZmvHA/1/hNblF6DSEn1q8Xmy
+                   nickname: Matteau
+            time_registered: 2017-04-18 03:39:01
+                        sex: Do not care
+            airconditioning: Do not care
+                    laundry: Do not care
+                    cooking: Do not care
+                  gas_stove: Do not care
+             electric_stove: Do not care
+                  microwave: Do not care
+               water_kettle: Do not care
+                   internet: Do not care
+                    torrent: Do not care
+          speed_requirement: 0.00
+                 start_date: 2017-12-14
+                   duration: End of semester
+     rent_price_range_start: 0
+       rent_price_range_end: 0
+   should_include_utilities: Do not care
+utilities_price_range_start: 0
+  utilities_price_range_end: 0
+         nearby_restaurants: Do not care
+        travel_time_to_uplb: 121
+           general_location: 
+                    alcohol: Do not care
+                cleanliness: 0
+                    smokers: Do not care
+                 study_time: Do not care
+             guests_in_room: Do not care
+          guests_study_area: Do not care
+                       pets: Do not care
+                        org: Do not care
+                         id: 904c2696-9bbc-45b6-88d6-70d4bc9e7f7a
+                  full_name: Dragosta tin vei
+                     status: I am looking for a room
+                cleanliness: 1
+                        sex: Do not know
+                     smoker: Yes
+                    has_org: Yes
+                     gender: Yugoslavian Apache Helicopter
+                     course: BS Dev Com
+                      batch: 0
+                   birthday: 1994-12-14
+             contact_number: 09123456789
+                        bio: I am a future biolo-genius.
+*************************** 3. row ***************************
+                         id: 4aa2b75e-dae0-4de5-802e-b8fd7354a23f
+                   username: username3
+                      email: username3@email.com
+                   password: $2a$10$Ubsfz0WSn/V28H0AGGd22./LJOoOO3skddKrlATBNWgOeG4OugNAa
+                   nickname: username2
+            time_registered: 2017-04-18 04:12:07
+                        sex: Do not care
+            airconditioning: Do not care
+                    laundry: Do not care
+                    cooking: Do not care
+                  gas_stove: Do not care
+             electric_stove: Do not care
+                  microwave: Do not care
+               water_kettle: Do not care
+                   internet: Do not care
+                    torrent: Do not care
+          speed_requirement: 1.00
+                 start_date: 1000-01-01
+                   duration: Indefinitely
+     rent_price_range_start: 0
+       rent_price_range_end: 0
+   should_include_utilities: Do not care
+utilities_price_range_start: 0
+  utilities_price_range_end: 0
+         nearby_restaurants: Do not care
+        travel_time_to_uplb: 120
+           general_location: 
+                    alcohol: Do not care
+                cleanliness: 0
+                    smokers: Do not care
+                 study_time: Do not care
+             guests_in_room: Do not care
+          guests_study_area: Do not care
+                       pets: Do not care
+                        org: Do not care
+                         id: 4aa2b75e-dae0-4de5-802e-b8fd7354a23f
+                  full_name: 
+                     status: I am looking for a room
+                cleanliness: 1
+                        sex: Do not know
+                     smoker: Yes
+                    has_org: Yes
+                     gender: 
+                     course: 
+                      batch: 
+                   birthday: 1000-01-01
+             contact_number: 
+                        bio: 
+*************************** 4. row ***************************
+                         id: dde85f2e-5a64-45bf-acbb-f0b9de25f7d8
+                   username: username4
+                      email: username4@email.com
+                   password: $2a$10$FlKWNJjQ9mM.s6Y97fhw2uIs27E.Tj8gn/dZeFr.zLnhMxfLYaXG6
+                   nickname: user4
+            time_registered: 2017-04-18 04:15:30
+                        sex: Do not care
+            airconditioning: Do not care
+                    laundry: Do not care
+                    cooking: Do not care
+                  gas_stove: Do not care
+             electric_stove: Do not care
+                  microwave: Do not care
+               water_kettle: Do not care
+                   internet: Do not care
+                    torrent: Do not care
+          speed_requirement: 1.00
+                 start_date: 1000-01-01
+                   duration: Indefinitely
+     rent_price_range_start: 0
+       rent_price_range_end: 0
+   should_include_utilities: Do not care
+utilities_price_range_start: 0
+  utilities_price_range_end: 0
+         nearby_restaurants: Do not care
+        travel_time_to_uplb: 120
+           general_location: 
+                    alcohol: Do not care
+                cleanliness: 0
+                    smokers: Do not care
+                 study_time: Do not care
+             guests_in_room: Do not care
+          guests_study_area: Do not care
+                       pets: Do not care
+                        org: Do not care
+                         id: dde85f2e-5a64-45bf-acbb-f0b9de25f7d8
+                  full_name: 
+                     status: I am looking for a room
+                cleanliness: 1
+                        sex: Do not know
+                     smoker: Yes
+                    has_org: Yes
+                     gender: 
+                     course: 
+                      batch: 
+                   birthday: 1000-01-01
+             contact_number: 
+                        bio: 
+*************************** 5. row ***************************
+                         id: f09e58fd-3710-4eea-9e5d-0c8365b4edf1
+                   username: username5
+                      email: username5@email.com
+                   password: $2a$10$J79eODXruDRR7R7sCUhHi.RXn/8rTIYwyHc7IQgRF.JPRR4k9PwhC
+                   nickname: user5
+            time_registered: 2017-04-18 04:16:29
+                        sex: Do not care
+            airconditioning: Do not care
+                    laundry: Do not care
+                    cooking: Do not care
+                  gas_stove: Do not care
+             electric_stove: Do not care
+                  microwave: Do not care
+               water_kettle: Do not care
+                   internet: Do not care
+                    torrent: Do not care
+          speed_requirement: 1.00
+                 start_date: 1000-01-01
+                   duration: Indefinitely
+     rent_price_range_start: 0
+       rent_price_range_end: 0
+   should_include_utilities: Do not care
+utilities_price_range_start: 0
+  utilities_price_range_end: 0
+         nearby_restaurants: Do not care
+        travel_time_to_uplb: 120
+           general_location: 
+                    alcohol: Do not care
+                cleanliness: 0
+                    smokers: Do not care
+                 study_time: Do not care
+             guests_in_room: Do not care
+          guests_study_area: Do not care
+                       pets: Do not care
+                        org: Do not care
+                         id: f09e58fd-3710-4eea-9e5d-0c8365b4edf1
+                  full_name: 
+                     status: I am looking for a room
+                cleanliness: 1
+                        sex: Do not know
+                     smoker: Yes
+                    has_org: Yes
+                     gender: 
+                     course: 
+                      batch: 
+                   birthday: 1000-01-01
+             contact_number: 
+                        bio: 
+*************************** 6. row ***************************
+                         id: c770f56d-98a2-4e67-8aee-124812b57818
+                   username: matthewmarcos
+                      email: matt@matt.matt
+                   password: $2a$10$idTlQjRxzibeR5rwPYy8HehuKvFyAQrfDDTmhe4OTp513RQw.1Tvm
+                   nickname: Matthew
+            time_registered: 2017-04-24 04:05:06
+                        sex: Do not care
+            airconditioning: No
+                    laundry: Yes
+                    cooking: No
+                  gas_stove: No
+             electric_stove: No
+                  microwave: No
+               water_kettle: No
+                   internet: Yes
+                    torrent: Yes
+          speed_requirement: 1.52
+                 start_date: 2017-08-07
+                   duration: Indefinitely
+     rent_price_range_start: 250
+       rent_price_range_end: 2500
+   should_include_utilities: Do not care
+utilities_price_range_start: 300
+  utilities_price_range_end: 301
+         nearby_restaurants: Yes
+        travel_time_to_uplb: 20
+           general_location: Demarces
+                    alcohol: Yes
+                cleanliness: 6
+                    smokers: No
+                 study_time: Both
+             guests_in_room: Yes
+          guests_study_area: Yes
+                       pets: Yes
+                        org: Yes
+                         id: c770f56d-98a2-4e67-8aee-124812b57818
+                  full_name: Matthew Marcos
+                     status: I am looking for a room
+                cleanliness: 8
+                        sex: Male
+                     smoker: No
+                    has_org: Yes
+                     gender: Male
+                     course: BS Computer Science
+                      batch: 2013
+                   birthday: 1996-12-14
+             contact_number: 09123456789
+                        bio: something just like this
+*************************** 1. row ***************************
+                         id: 778b2f24-f3e6-4bd4-bf4a-f5c54140e36a
+                   username: username1
+                      email: username1@email.com
+                   password: $2a$10$1Ulr/w4Zr82wpDyU8ZhFj.iOXy8Bh8Zp008pvq8Heah5V.hj.bB9S
+                   nickname: Matt
+            time_registered: 2017-04-18 03:38:45
+                        sex: Do not care
+            airconditioning: No
+                    laundry: Yes
+                    cooking: Yes
+                  gas_stove: Do not care
+             electric_stove: Yes
+                  microwave: Do not care
+               water_kettle: Yes
+                   internet: Yes
+                    torrent: No
+          speed_requirement: 4.13
+                 start_date: 2017-04-11
+                   duration: End of semester
+     rent_price_range_start: 123
+       rent_price_range_end: 124
+   should_include_utilities: Do not care
+utilities_price_range_start: 123
+  utilities_price_range_end: 124
+         nearby_restaurants: Yes
+        travel_time_to_uplb: 20
+           general_location: Demarces
+                    alcohol: Yes
+                cleanliness: 5
+                    smokers: No
+                 study_time: Morning
+             guests_in_room: Yes
+          guests_study_area: No
+                       pets: Yes
+                        org: No
+                         id: 778b2f24-f3e6-4bd4-bf4a-f5c54140e36a
+                  full_name: Joseph Matthew Marcos
+                     status: I have a room
+                cleanliness: 4
+                        sex: Male
+                     smoker: Yes
+                    has_org: Yes
+                     gender: Apache Helicopter
+                     course: BS Computer science
+                      batch: 2015
+                   birthday: 2017-04-13
+             contact_number: 09171234567
+                        bio: asdasd
+*************************** 2. row ***************************
+                         id: 904c2696-9bbc-45b6-88d6-70d4bc9e7f7a
+                   username: username2
+                      email: username2@email.com
+                   password: $2a$10$0hTbEPDi2GcKUvDGUDTMzOAMKuuaPZmvHA/1/hNblF6DSEn1q8Xmy
+                   nickname: Matteau
+            time_registered: 2017-04-18 03:39:01
+                        sex: Do not care
+            airconditioning: Do not care
+                    laundry: Do not care
+                    cooking: Do not care
+                  gas_stove: Do not care
+             electric_stove: Do not care
+                  microwave: Do not care
+               water_kettle: Do not care
+                   internet: Do not care
+                    torrent: Do not care
+          speed_requirement: 0.00
+                 start_date: 2017-12-14
+                   duration: End of semester
+     rent_price_range_start: 0
+       rent_price_range_end: 0
+   should_include_utilities: Do not care
+utilities_price_range_start: 0
+  utilities_price_range_end: 0
+         nearby_restaurants: Do not care
+        travel_time_to_uplb: 121
+           general_location: 
+                    alcohol: Do not care
+                cleanliness: 0
+                    smokers: Do not care
+                 study_time: Do not care
+             guests_in_room: Do not care
+          guests_study_area: Do not care
+                       pets: Do not care
+                        org: Do not care
+                         id: 904c2696-9bbc-45b6-88d6-70d4bc9e7f7a
+                  full_name: Dragosta tin vei
+                     status: I am looking for a room
+                cleanliness: 1
+                        sex: Do not know
+                     smoker: Yes
+                    has_org: Yes
+                     gender: Yugoslavian Apache Helicopter
+                     course: BS Dev Com
+                      batch: 0
+                   birthday: 1994-12-14
+             contact_number: 09123456789
+                        bio: I am a future biolo-genius.
+*************************** 3. row ***************************
+                         id: 4aa2b75e-dae0-4de5-802e-b8fd7354a23f
+                   username: username3
+                      email: username3@email.com
+                   password: $2a$10$Ubsfz0WSn/V28H0AGGd22./LJOoOO3skddKrlATBNWgOeG4OugNAa
+                   nickname: username2
+            time_registered: 2017-04-18 04:12:07
+                        sex: Do not care
+            airconditioning: Do not care
+                    laundry: Do not care
+                    cooking: Do not care
+                  gas_stove: Do not care
+             electric_stove: Do not care
+                  microwave: Do not care
+               water_kettle: Do not care
+                   internet: Do not care
+                    torrent: Do not care
+          speed_requirement: 1.00
+                 start_date: 1000-01-01
+                   duration: Indefinitely
+     rent_price_range_start: 0
+       rent_price_range_end: 0
+   should_include_utilities: Do not care
+utilities_price_range_start: 0
+  utilities_price_range_end: 0
+         nearby_restaurants: Do not care
+        travel_time_to_uplb: 120
+           general_location: 
+                    alcohol: Do not care
+                cleanliness: 0
+                    smokers: Do not care
+                 study_time: Do not care
+             guests_in_room: Do not care
+          guests_study_area: Do not care
+                       pets: Do not care
+                        org: Do not care
+                         id: 4aa2b75e-dae0-4de5-802e-b8fd7354a23f
+                  full_name: 
+                     status: I am looking for a room
+                cleanliness: 1
+                        sex: Do not know
+                     smoker: Yes
+                    has_org: Yes
+                     gender: 
+                     course: 
+                      batch: 
+                   birthday: 1000-01-01
+             contact_number: 
+                        bio: 
+*************************** 4. row ***************************
+                         id: dde85f2e-5a64-45bf-acbb-f0b9de25f7d8
+                   username: username4
+                      email: username4@email.com
+                   password: $2a$10$FlKWNJjQ9mM.s6Y97fhw2uIs27E.Tj8gn/dZeFr.zLnhMxfLYaXG6
+                   nickname: user4
+            time_registered: 2017-04-18 04:15:30
+                        sex: Do not care
+            airconditioning: Do not care
+                    laundry: Do not care
+                    cooking: Do not care
+                  gas_stove: Do not care
+             electric_stove: Do not care
+                  microwave: Do not care
+               water_kettle: Do not care
+                   internet: Do not care
+                    torrent: Do not care
+          speed_requirement: 1.00
+                 start_date: 1000-01-01
+                   duration: Indefinitely
+     rent_price_range_start: 0
+       rent_price_range_end: 0
+   should_include_utilities: Do not care
+utilities_price_range_start: 0
+  utilities_price_range_end: 0
+         nearby_restaurants: Do not care
+        travel_time_to_uplb: 120
+           general_location: 
+                    alcohol: Do not care
+                cleanliness: 0
+                    smokers: Do not care
+                 study_time: Do not care
+             guests_in_room: Do not care
+          guests_study_area: Do not care
+                       pets: Do not care
+                        org: Do not care
+                         id: dde85f2e-5a64-45bf-acbb-f0b9de25f7d8
+                  full_name: 
+                     status: I am looking for a room
+                cleanliness: 1
+                        sex: Do not know
+                     smoker: Yes
+                    has_org: Yes
+                     gender: 
+                     course: 
+                      batch: 
+                   birthday: 1000-01-01
+             contact_number: 
+                        bio: 
+*************************** 5. row ***************************
+                         id: f09e58fd-3710-4eea-9e5d-0c8365b4edf1
+                   username: username5
+                      email: username5@email.com
+                   password: $2a$10$J79eODXruDRR7R7sCUhHi.RXn/8rTIYwyHc7IQgRF.JPRR4k9PwhC
+                   nickname: user5
+            time_registered: 2017-04-18 04:16:29
+                        sex: Do not care
+            airconditioning: Do not care
+                    laundry: Do not care
+                    cooking: Do not care
+                  gas_stove: Do not care
+             electric_stove: Do not care
+                  microwave: Do not care
+               water_kettle: Do not care
+                   internet: Do not care
+                    torrent: Do not care
+          speed_requirement: 1.00
+                 start_date: 1000-01-01
+                   duration: Indefinitely
+     rent_price_range_start: 0
+       rent_price_range_end: 0
+   should_include_utilities: Do not care
+utilities_price_range_start: 0
+  utilities_price_range_end: 0
+         nearby_restaurants: Do not care
+        travel_time_to_uplb: 120
+           general_location: 
+                    alcohol: Do not care
+                cleanliness: 0
+                    smokers: Do not care
+                 study_time: Do not care
+             guests_in_room: Do not care
+          guests_study_area: Do not care
+                       pets: Do not care
+                        org: Do not care
+                         id: f09e58fd-3710-4eea-9e5d-0c8365b4edf1
+                  full_name: 
+                     status: I am looking for a room
+                cleanliness: 1
+                        sex: Do not know
+                     smoker: Yes
+                    has_org: Yes
+                     gender: 
+                     course: 
+                      batch: 
+                   birthday: 1000-01-01
+             contact_number: 
+                        bio: 
+*************************** 6. row ***************************
+                         id: c770f56d-98a2-4e67-8aee-124812b57818
+                   username: matthewmarcos
+                      email: matt@matt.matt
+                   password: $2a$10$idTlQjRxzibeR5rwPYy8HehuKvFyAQrfDDTmhe4OTp513RQw.1Tvm
+                   nickname: Matthew
+            time_registered: 2017-04-24 04:05:06
+                        sex: Do not care
+            airconditioning: No
+                    laundry: Yes
+                    cooking: No
+                  gas_stove: No
+             electric_stove: No
+                  microwave: No
+               water_kettle: No
+                   internet: Yes
+                    torrent: Yes
+          speed_requirement: 1.52
+                 start_date: 2017-08-07
+                   duration: Indefinitely
+     rent_price_range_start: 250
+       rent_price_range_end: 2500
+   should_include_utilities: Do not care
+utilities_price_range_start: 300
+  utilities_price_range_end: 301
+         nearby_restaurants: Yes
+        travel_time_to_uplb: 20
+           general_location: Demarces
+                    alcohol: Yes
+                cleanliness: 6
+                    smokers: No
+                 study_time: Both
+             guests_in_room: Yes
+          guests_study_area: Yes
+                       pets: Yes
+                        org: Yes
+                         id: c770f56d-98a2-4e67-8aee-124812b57818
+                  full_name: Matthew Marcos
+                     status: I am looking for a room
+                cleanliness: 8
+                        sex: Male
+                     smoker: No
+                    has_org: Yes
+                     gender: Male
+                     course: BS Computer Science
+                      batch: 2013
+                   birthday: 1996-12-14
+             contact_number: 09123456789
+                        bio: something just like this

@@ -16,6 +16,7 @@ import extendRes from './helpers/resExtend';
 import api from './config/apiRoutes';
 import auth from './config/authRoutes';
 import assets from './config/assetRoutes';
+import match from './controllers/MatchController';
 
 // Temporary helper for database cleaning
 import { clearDatabase } from './controllers/DatabaseControllers';
@@ -50,15 +51,7 @@ app.use(extendRes());
 app.use('/api', api);
 app.use('/auth', auth);
 app.use('/assets', assets);
-app.get('/get', (req, res) => { res.send({ 'status': 'success', 'body': req.body })});
-app.post('/post',
-    validate([
-        'field1',
-        'field2',
-        'field3'
-    ], 'body'),
-    (req, res) => { res.send({ 'status': 'success', 'body': req.body })});
-app.put('/put', (req, res) => { res.send({ 'status': 'success', 'body': req.body })});
+app.get('/match', match);
 
 if (app.get('env') === 'development') {
     app.post('/clear', clearDatabase); // Delete all elements in all tables

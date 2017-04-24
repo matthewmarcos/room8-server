@@ -106,7 +106,39 @@ export function prefLifestyle (req, res, next) {
         res.status(200)
             .send({
                 status: 200,
-                message: 'Successfully updated utility lifestyle',
+                message: 'Successfully updated lifestyle preferences',
+                user
+            });
+    }
+
+    start();
+}
+
+
+export function prefSex (req, res, next) {
+    const { user, body } = req;
+
+    const start = () => {
+        let insertData = toSnakeCase(body);
+
+        mysql.use('master')
+            .query(
+                `UPDATE user_preferences_sex SET ? WHERE id = ?`,
+                [ insertData, user.id ],
+                sendData
+            )
+            .end();
+    }
+
+    const sendData = (err, result, args, lastQuery) => {
+        if(err) {
+            return next(errorTypes.validationError);
+        }
+
+        res.status(200)
+            .send({
+                status: 200,
+                message: 'Successfully updated preferences sex',
                 user
             });
     }
