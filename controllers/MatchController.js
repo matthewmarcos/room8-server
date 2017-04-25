@@ -110,6 +110,8 @@ export default function(req, res, next) {
 
         needRoom = toCamelCase(result[0]);
         hasRoom = toCamelCase(result[1]);
+        console.log(needRoom.length)
+        console.log(hasRoom.length)
         cartesianCollection = cartesian(needRoom, hasRoom); // Create pair
  
         /*
@@ -176,6 +178,26 @@ function scoreUsers(user1, user2) {
     }
 
     cleanlinessScore = computeCleanliness(user1, user2);
+
+    function computeSex(user1, user2) {
+        let tempScore = 0;
+
+        if(user1['preferredSex'] === 'Do not care' && user2['preferredSex'] === 'Do not care') {
+            return 10;
+        }
+        else {
+            if(user1['preferredSex'] === user2['mySex'] || user1['preferredSex'] === 'Do not care') tempScore += 5;
+            if(user2['preferredSex'] === user1['mySex'] || user2['preferredSex'] === 'Do not care') tempScore += 5;
+
+            return tempScore;
+        }
+    }
+
+    sexScore = computeSex(user1, user2);
+
+    function apatheticNo(user1, user2) {
+        
+    }
 
     overallScore = cleanlinessScore + sexScore + smokerScore + startDateScore + 
             rentScore + nearbyRestaurantsScore + travelTimeToUplbScore + locationScore + 
