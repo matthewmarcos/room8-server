@@ -1,10 +1,11 @@
-import mysql from 'anytv-node-mysql';
-import * as errorTypes from '../helpers/errorTypes';
-import { toCamelCase } from 'case-converter';
 import _ from 'lodash';
 import async from 'async';
-import { resourceNotFound } from '../helpers/errorTypes'
+import mysql from 'anytv-node-mysql';
+import { toCamelCase } from 'case-converter';
 import makeArray from 'number-array-generator';
+
+import * as errorTypes from '../helpers/errorTypes';
+import { resourceNotFound } from '../helpers/errorTypes'
 
 
 export default function(req, res, next) {
@@ -109,10 +110,7 @@ export default function(req, res, next) {
 
         needRoom = toCamelCase(result[0]);
         hasRoom = toCamelCase(result[1]);
-        // const arr1 = makeArray(1, 5);
-        // const arr2 = makeArray(6, 10);
-        // cartesianCollection = cartesian(arr1, arr2);
-        cartesianCollection = cartesian(needRoom, hasRoom);
+        cartesianCollection = cartesian(needRoom, hasRoom); // Create pair
  
         /*
          * IN MEMORY:
@@ -123,11 +121,16 @@ export default function(req, res, next) {
          * 3. save the data
          */
 
+        const scores = cartesianCollection.map(function(pair, index) {
+            return scoreUsers(pair[0], pair[1]);
+        });
+
 
 
 
         res.send({
             cartesianCollection,
+            scores,
             // needRoom: result[0],
             // hasRoom: result[1],
             status: 200,
@@ -139,7 +142,10 @@ export default function(req, res, next) {
 }
 
 
-const scoreUsers = (user1, user2) => {
+/*
+ * Scores 2 users compatibility based on input
+ */
+function scoreUsers(user1, user2) {
     let cleanlinessScore = 0,
         sexScore = 0,
         smokerScore = 0,
@@ -154,12 +160,29 @@ const scoreUsers = (user1, user2) => {
         guestsInRoomScore = 0,
         guestsStudyAreaScore = 0,
         orgScore = 0,
-        curfewTimeScore = 0
+        curfewTimeScore = 0,
         overallScore = 0;
 
+    function computeCleanliness(user1, user2) {
+        let tempScore = 0;
+        const user1Magnetism = (user1.preferredCleanliness <= user2.myCleanliness) ? 10 :
+                                (10 - (user1.preferredCleanliness - user2.myCleanliness));
+        const user2Magnetism = (user2.preferredCleanliness <= user1.myCleanliness) ? 10 :
+                                (10 - (user2.preferredCleanliness - user1.myCleanliness));
+
+        tempScore = (user1Magnetism + user2Magnetism) / 2;
+
+        return tempScore;
+    }
+
+    cleanlinessScore = computeCleanliness(user1, user2);
+
+    overallScore = cleanlinessScore + sexScore + smokerScore + startDateScore + 
+            rentScore + nearbyRestaurantsScore + travelTimeToUplbScore + locationScore + 
+            utilitiesScore + speedScore + studyTimeScore + guestsInRoomScore + 
+            guestsStudyAreaScore + orgScore + curfewTimeScore;
+
     return {
-        user1,
-        user2,
         scores: {
             cleanlinessScore,
             sexScore,
@@ -181,6 +204,10 @@ const scoreUsers = (user1, user2) => {
     };
 };
 
+
+/*
+ * Get the cartesian product of the arrays entered as args
+ */
 function cartesian(...args) {
     return _.reduce(args, function(a, b) {
         return _.flatten(_.map(a, function(x) {
@@ -191,3 +218,12 @@ function cartesian(...args) {
     }, [[]]);
 
 };
+
+
+/*
+ * Check if a user has enough variables / is okay to start being paired
+ */
+function checkPermissions(user) {
+
+    return true;
+}
