@@ -212,6 +212,32 @@ function scoreUsers(user1, user2) {
 
     startDateScore = computeStartDate(user1, user2);
 
+    function computeRentScore(user1, user2) {
+        // user2 rent (I have a room) is stored on rentPriceRangeStart
+        if(user1.rentPriceRangeStart <= user2.rentPriceRangeStart &&
+           user1.rentPriceRangeEnd >= user2.rentPriceRangeStart) {
+            return 10;
+        }
+
+        return 0;
+    }
+
+    rentScore = computeRentScore(user1, user2);
+
+    function lazyNoEval(user1, user2, profField, prefField) {
+        // Treat do not care as a no
+        if(user1[prefField] === 'No' || user1[prefField] === 'Do not care') {
+            return 10;
+        }
+        else if(user1[prefField] === user2[prefField]) {
+            return 10;
+        }
+
+        return 0;
+    }
+
+    nearbyRestaurantsScore = lazyNoEval(user1, user2, '', 'nearbyRestaurants');
+
     overallScore = cleanlinessScore + sexScore + smokerScore + startDateScore +
             rentScore + nearbyRestaurantsScore + travelTimeToUplbScore + locationScore +
             utilitiesScore + speedScore + studyTimeScore + guestsInRoomScore +
