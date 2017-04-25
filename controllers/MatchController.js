@@ -247,8 +247,18 @@ function scoreUsers(user1, user2) {
 
     travelTimeToUplbScore = lazyNumberEval(user1, user2, 'travelTimeToUplb');
 
-    console.log('fuzzyMatch: ', fuzzyMatch(user1.generalLocation, user2.generalLocation));
     locationScore = fuzzyMatch(user1.generalLocation, user2.generalLocation);
+
+    utilitiesScore += lazyNoEval(user1, user2, 'airconditioning');
+    utilitiesScore += lazyNoEval(user1, user2, 'laundry');
+    utilitiesScore += lazyNoEval(user1, user2, 'cooking');
+    utilitiesScore += lazyNoEval(user1, user2, 'gasStove');
+    utilitiesScore += lazyNoEval(user1, user2, 'electricStove');
+    utilitiesScore += lazyNoEval(user1, user2, 'microwave');
+    utilitiesScore += lazyNoEval(user1, user2, 'waterKettle');
+    utilitiesScore += lazyNoEval(user1, user2, 'internet');
+    utilitiesScore += lazyNoEval(user1, user2, 'torrent');
+    speedScore = lazyNumberEval(user1, user2, 'speedRequirement');
 
     overallScore = cleanlinessScore + sexScore + smokerScore + startDateScore +
             rentScore + nearbyRestaurantsScore + travelTimeToUplbScore + locationScore +
