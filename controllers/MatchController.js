@@ -260,6 +260,20 @@ function scoreUsers(user1, user2) {
     utilitiesScore += lazyNoEval(user1, user2, 'torrent');
     speedScore = lazyNumberEval(user1, user2, 'speedRequirement');
 
+    studyTimeScore = (function() {
+        if(user1['studyTime'] === 'Do not care' ||
+           user2['studyTime'] === 'Do not care' ||
+           user1['studyTime'] === user2['studyTime']) {
+            return 10;
+        }
+
+        return 0;
+    })();
+
+
+    guestsInRoomScore = exactYesNo(user1, user2, 'guestsInRoom', 'guestsInRoom');
+    guestsStudyAreaScore = exactYesNo(user1, user2, 'guestsStudyArea', 'guestsStudyArea');
+
     overallScore = cleanlinessScore + sexScore + smokerScore + startDateScore +
             rentScore + nearbyRestaurantsScore + travelTimeToUplbScore + locationScore +
             utilitiesScore + speedScore + studyTimeScore + guestsInRoomScore +
