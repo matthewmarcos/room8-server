@@ -3,6 +3,7 @@ import async from 'async';
 import mysql from 'anytv-node-mysql';
 import { toCamelCase } from 'case-converter';
 import makeArray from 'number-array-generator';
+import * as fuzz from 'fuzzball';
 
 import * as errorTypes from '../helpers/errorTypes';
 import { resourceNotFound } from '../helpers/errorTypes'
@@ -110,8 +111,6 @@ export default function(req, res, next) {
 
         needRoom = toCamelCase(result[0]);
         hasRoom = toCamelCase(result[1]);
-        console.log(needRoom.length)
-        console.log(hasRoom.length)
         cartesianCollection = cartesian(needRoom, hasRoom); // Create pair
  
         /*
@@ -248,6 +247,9 @@ function scoreUsers(user1, user2) {
 
     travelTimeToUplbScore = lazyNumberEval(user1, user2, 'travelTimeToUplb');
 
+    console.log('fuzzyMatch: ', fuzzyMatch(user1.generalLocation, user2.generalLocation));
+    locationScore = fuzzyMatch(user1.generalLocation, user2.generalLocation);
+
     overallScore = cleanlinessScore + sexScore + smokerScore + startDateScore +
             rentScore + nearbyRestaurantsScore + travelTimeToUplbScore + locationScore +
             utilitiesScore + speedScore + studyTimeScore + guestsInRoomScore +
@@ -294,7 +296,14 @@ function cartesian(...args) {
 /*
  * Check if a user has enough variables / is okay to start being paired
  */
-function checkPermissions(user) {
+function fuzzyMatch(string1, string2) {
+    const scores = [
+        fuzz.ratio(string1, string2),
+        fuzz.partial_ratio(string1, string2),
+        fuzz.token_sort_ratio(string1, string2),
+        fuzz.token_set_ratio(string1, string2)
+    ];
 
-    return true;
+    return scores.sort()[0] / 10;
 }
+
