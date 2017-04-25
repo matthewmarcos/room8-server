@@ -224,7 +224,7 @@ function scoreUsers(user1, user2) {
 
     rentScore = computeRentScore(user1, user2);
 
-    function lazyNoEval(user1, user2, profField, prefField) {
+    function lazyNoEval(user1, user2, prefField) {
         // Treat do not care as a no
         if(user1[prefField] === 'No' || user1[prefField] === 'Do not care') {
             return 10;
@@ -237,6 +237,16 @@ function scoreUsers(user1, user2) {
     }
 
     nearbyRestaurantsScore = lazyNoEval(user1, user2, '', 'nearbyRestaurants');
+
+    function lazyNumberEval(user1, user2, prefField) {
+        if(user1[prefField] <= user2[prefField]) {
+            return 10;
+        }
+
+        return 0;
+    }
+
+    travelTimeToUplbScore = lazyNumberEval(user1, user2, 'travelTimeToUplb');
 
     overallScore = cleanlinessScore + sexScore + smokerScore + startDateScore +
             rentScore + nearbyRestaurantsScore + travelTimeToUplbScore + locationScore +
