@@ -195,7 +195,7 @@ function scoreUsers(user1, user2) {
 
     sexScore = computeSex(user1, user2);
 
-    function apatheticNo(user1, user2, profField, prefField) {
+    function exactYesNo(user1, user2, profField, prefField) {
         let tempScore = 0;
 
         if(user1[prefField] === user2[profField]) tempScore += 5;
@@ -204,7 +204,13 @@ function scoreUsers(user1, user2) {
         return tempScore;
     }
 
-    smokerScore = apatheticNo(user1, user2, 'mySmoker', 'preferredSmokers');
+    smokerScore = exactYesNo(user1, user2, 'mySmoker', 'preferredSmokers');
+
+    function computeStartDate(user1, user2) {
+        return (user1.startDate >= user2.startDate) ? 10 : 0;
+    }
+
+    startDateScore = computeStartDate(user1, user2);
 
     overallScore = cleanlinessScore + sexScore + smokerScore + startDateScore +
             rentScore + nearbyRestaurantsScore + travelTimeToUplbScore + locationScore +
