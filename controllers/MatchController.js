@@ -195,13 +195,20 @@ function scoreUsers(user1, user2) {
 
     sexScore = computeSex(user1, user2);
 
-    function apatheticNo(user1, user2) {
-        
+    function apatheticNo(user1, user2, profField, prefField) {
+        let tempScore = 0;
+
+        if(user1[prefField] === user2[profField]) tempScore += 5;
+        if(user2[prefField] === user1[profField]) tempScore += 5;
+
+        return tempScore;
     }
 
-    overallScore = cleanlinessScore + sexScore + smokerScore + startDateScore + 
-            rentScore + nearbyRestaurantsScore + travelTimeToUplbScore + locationScore + 
-            utilitiesScore + speedScore + studyTimeScore + guestsInRoomScore + 
+    smokerScore = apatheticNo(user1, user2, 'mySmoker', 'preferredSmokers');
+
+    overallScore = cleanlinessScore + sexScore + smokerScore + startDateScore +
+            rentScore + nearbyRestaurantsScore + travelTimeToUplbScore + locationScore +
+            utilitiesScore + speedScore + studyTimeScore + guestsInRoomScore +
             guestsStudyAreaScore + orgScore + curfewTimeScore;
 
     return {
