@@ -65,7 +65,7 @@ CREATE TABLE user_interest (
 DROP TABLE IF EXISTS `user_preferences_when`;
 CREATE TABLE user_preferences_when (
     `id` VARCHAR(128) NOT NULL UNIQUE,
-    `start_date` DATE DEFAULT '1000-01-01',
+    `start_date` DATE,
     `duration` ENUM('End of semester', 'Indefinitely') DEFAULT 'Indefinitely',
     FOREIGN KEY(`id`) REFERENCES user(`id`)
 );
@@ -126,7 +126,7 @@ DROP TABLE IF EXISTS `user_preferences_misc`;
 CREATE TABLE user_preferences_misc (
     `id` VARCHAR(128) NOT NULL UNIQUE,
     `curfew` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
-    `curfew_time` TIME DEFAULT '00:00:00',
+    `curfew_time` VARCHAR(40) DEFAULT '00:00:00',
     `message` VARCHAR(256) DEFAULT '',
     FOREIGN KEY(`id`) REFERENCES user(`id`)
 );
@@ -139,3 +139,9 @@ CREATE TABLE user_preferences_sex (
     FOREIGN KEY(`id`) REFERENCES user(`id`)
 );
 
+DELIMITER ;;
+CREATE TRIGGER `my_table_bi` BEFORE INSERT ON `user_preferences_when` FOR EACH ROW
+BEGIN
+    SET NEW.start_date = NOW();
+END;;
+DELIMITER ;

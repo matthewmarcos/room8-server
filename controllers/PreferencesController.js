@@ -194,27 +194,21 @@ export function prefMisc (req, res, next) {
             Currently accepts Javascript Date object / Anything that can be used to instantiate
             javascript date object
         */
-        let curfew_time = Date.parse(body.curfewTime);
+        const insertData = toSnakeCase(req.body);
 
-        if(isNaN(curfew_time)) {
-            return next(errorTypes.validationError);
-        }
-        else {
-            let insertData = toSnakeCase(req.body);
-            insertData.curfew_time = new Date(insertData.curfew_time);
-
-            mysql.use('master')
-                .query(
-                    `UPDATE user_preferences_misc SET ? WHERE id=?`,
-                    [ insertData, user.id ],
-                    sendData
-                )
-                .end();
-        }
+        mysql.use('master')
+            .query(
+                `UPDATE user_preferences_misc SET ? WHERE id=?`,
+                [ insertData, user.id ],
+                sendData
+            )
+            .end();
     }
 
     const sendData = (err, result, args, lastQuery) => {
         if(err) {
+            console.log('PRefMisc');
+            console.error(err);
             return next(errorTypes.validationError)
         }
 
