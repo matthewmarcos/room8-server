@@ -295,6 +295,7 @@ function scoreUsers(user1, user2) {
             guestsStudyAreaScore + orgScore + curfewTimeScore;
 
     return {
+        users: [user1.username, user2.username],
         scores: {
             cleanlinessScore,
             sexScore,
