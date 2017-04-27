@@ -245,7 +245,7 @@ function scoreUsers(user1, user2) {
         return 0;
     }
 
-    travelTimeToUplbScore = lazyNumberEval(user1, user2, 'travelTimeToUplb');
+    travelTimeToUplbScore = (lazyNumberEval(user1, user2, 'travelTimeToUplb') === 10 ? 0 : 10);
 
     locationScore = fuzzyMatch(user1.generalLocation, user2.generalLocation);
 
@@ -263,7 +263,9 @@ function scoreUsers(user1, user2) {
     studyTimeScore = (function() {
         if(user1['studyTime'] === 'Do not care' ||
            user2['studyTime'] === 'Do not care' ||
-           user1['studyTime'] === user2['studyTime']) {
+           user1['studyTime'] === 'Both' ||
+           user2['studyTime'] === 'Both' ||
+            user1['studyTime'] === user2['studyTime']) {
             return 10;
         }
 
@@ -273,6 +275,19 @@ function scoreUsers(user1, user2) {
 
     guestsInRoomScore = exactYesNo(user1, user2, 'guestsInRoom', 'guestsInRoom');
     guestsStudyAreaScore = exactYesNo(user1, user2, 'guestsStudyArea', 'guestsStudyArea');
+
+    curfewTimeScore = (function() {
+        if(user1.curfew === 'Yes' && user2.curfew === 'Yes') {
+            if(user1.curfewTime >= user2.curfewTime) {
+                return 10;
+            }
+            else {
+                return 0;
+            }
+        }
+
+        return exactYesNo(user1, user2, 'curfew', 'curfew');
+    })();
 
     overallScore = cleanlinessScore + sexScore + smokerScore + startDateScore +
             rentScore + nearbyRestaurantsScore + travelTimeToUplbScore + locationScore +
