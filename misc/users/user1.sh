@@ -34,7 +34,7 @@ printf "\nuser1: Shookt! Inserting Utilities\n";
     curl \
     --request PUT \
     --cookie ./cookies \
-    --data "airconditioning=No&laundry=No&cooking=No&gasStove=No&electricStove=No&microwave=No&waterKettle=No&internet=No&torrent=No&speedRequirement=0" \
+    --data "airconditioning=Yes&laundry=No&cooking=No&gasStove=No&electricStove=No&microwave=No&waterKettle=No&internet=No&torrent=No&speedRequirement=0" \
     http://localhost:5001/api/preferences/utilities
 sleep 0.5
 

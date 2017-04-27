@@ -238,19 +238,14 @@ export function prefCost (req, res, next) {
         insertData.utilitiesPriceRangeStart = Number(insertData.utilitiesPriceRangeStart);
         insertData.utilitiesPriceRangeEnd = Number(insertData.utilitiesPriceRangeEnd);
 
-        if(!isValidInput(insertData)) {
-            return next(errorTypes.validationError);
-        }
-        else {
-            insertData = toSnakeCase(insertData);
-            mysql.use('master')
-                .query(
-                    `UPDATE user_preferences_cost SET ? WHERE id = ?`,
-                    [ insertData, user.id ],
-                    sendData
-                )
-                .end();
-        }
+        insertData = toSnakeCase(insertData);
+        mysql.use('master')
+            .query(
+                `UPDATE user_preferences_cost SET ? WHERE id = ?`,
+                [ insertData, user.id ],
+                sendData
+            )
+            .end();
     };
 
     const isValidInput = ({

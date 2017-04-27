@@ -25,7 +25,7 @@ printf "\nusera: Shookt! Editing Profile\n";
     curl \
     --request PUT \
     --cookie ./cookies \
-    --data "fullName=Matthew%20Macos&status=I%20am%20looking%20for%20a%20room&cleanliness=5&sex=Male&smoker=No&hasOrg=No&gender=Yugoslavian%20Apache%20Helicopter&course=BS%20Computer%20Science&batch=2017&birthday=%7B%25%20now%20'ISO-8601'%20%25%7D&contactNumber=09123456789&bio=Friedrich%20Wilhelm%20Nietzsche%20was%20a%20German%20philosopher,%20cultural%20critic,%20poet,%20philologist,%20and%20Latin%20and%20Greek%20scholar%20whose%20work%20has%20exerted%20a%20profound%20influence%20on%20Western%20philosophy%20and%20modern%20intellectual%20history.asdasd&nickname=matthew&email=usera%40gmail.com" \
+    --data "fullName=Matthew%20Macos&status=I%20have%20a%20room&cleanliness=7&sex=Male&smoker=No&hasOrg=No&gender=Iron%20Wolf&course=BS%20Computer%20Science&batch=2013&birthday='12-14-1996'&contactNumber=09123456789&bio=Bio%20here&nickname=matthew&email=usera%40gmail.com" \
     http://localhost:5001/api/profile
 sleep 0.5
 
@@ -34,7 +34,7 @@ printf "\nusera: Shookt! Inserting Utilities\n";
     curl \
     --request PUT \
     --cookie ./cookies \
-    --data "airconditioning=No&laundry=No&cooking=No&gasStove=No&electricStove=No&microwave=No&waterKettle=No&internet=No&torrent=No&speedRequirement=0" \
+    --data "airconditioning=Yes&laundry=No&cooking=No&gasStove=No&electricStove=No&microwave=No&waterKettle=Yes&internet=Yes&torrent=Yes&speedRequirement=1.1" \
     http://localhost:5001/api/preferences/utilities
 sleep 0.5
 
@@ -42,7 +42,7 @@ printf "\nusera: Shookt! Inserting When\n";
     curl \
     --request PUT \
     --cookie ./cookies \
-    --data "duration=End%20of%20semester&startDate=2014-04-27" \
+    --data "startDate='2014-04-29'&duration=End%20of%20semester" \
     http://localhost:5001/api/preferences/when
 sleep 0.5
 
@@ -50,7 +50,7 @@ printf "\nusera: Shookt! Inserting Cost\n";
     curl \
     --request PUT \
     --cookie ./cookies \
-    --data "rentPriceRangeStart=1500&rentPriceRangeEnd=3500&shouldIncludeUtilities=No&utilitiesPriceRangeStart=0&utilitiesPriceRangeEnd=1500" \
+    --data "rentPriceRangeStart=3500&rentPriceRangeEnd=0&shouldIncludeUtilities=No&utilitiesPriceRangeStart=300&utilitiesPriceRangeEnd=1000" \
     http://localhost:5001/api/preferences/cost
 sleep 0.5
 
@@ -66,7 +66,7 @@ printf "\nusera: Shookt! Inserting Misc\n";
     curl \
     --request PUT \
     --cookie ./cookies \
-    --data "curfew=No&curfewTime=21:30:00&message=Some%20asdasdrandom%20message%20here%20makes%20these%20things%20awesome" \
+    --data "curfew=No&message=message%20here&curfewTime=23%3A00%3A00" \
     http://localhost:5001/api/preferences/misc
 sleep 0.5
 
@@ -75,7 +75,7 @@ printf "\nusera: Shookt! Inserting Location\n";
     curl \
     --request PUT \
     --cookie ./cookies \
-    --data "nearbyRestaurants=Yes&travelTimeToUplb=1&generalLocation=Demarces" \
+    --data "nearbyRestaurants=Yes&travelTimeToUplb=11&generalLocation=Demarces" \
     http://localhost:5001/api/preferences/location
 sleep 0.5
 
@@ -84,7 +84,7 @@ printf "\nusera: Shookt! Inserting Lifestyle\n";
     curl \
     --request PUT \
     --cookie ./cookies \
-    --data "alcohol=No&cleanliness=10&smokers=No&studyTime=Morning&guestsInRoom=Yes&guestsStudyArea=Yes&pets=Do%20not%20care&org=Do%20not%20care" \
+    --data "alcohol=No&cleanliness=10&smokers=No&studyTime=Both&guestsInRoom=No&guestsStudyArea=Yes&pets=Yes&org=Do%20not%20care" \
     http://localhost:5001/api/preferences/lifestyle
 sleep 0.5
 
