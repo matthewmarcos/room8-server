@@ -29,3 +29,4 @@ npm-debug.log
 # Custom
 *.swp
 config/config.js
+cookies

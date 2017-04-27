@@ -207,8 +207,6 @@ export function prefMisc (req, res, next) {
 
     const sendData = (err, result, args, lastQuery) => {
         if(err) {
-            console.log('PRefMisc');
-            console.error(err);
             return next(errorTypes.validationError)
         }
 

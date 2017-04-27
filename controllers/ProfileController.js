@@ -82,7 +82,6 @@ export function editProfile(req, res, next) {
      * 2) Update user_profile table
      */
     const start = () => {
-
         mysql.use('master')
             .transaction()
             .query('UPDATE user SET ? WHERE id = ?', [ toSnakeCase(insertUser), id ], checkErrors('user'))
