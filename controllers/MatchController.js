@@ -126,16 +126,10 @@ export default function(req, res, next) {
             return scoreUsers(pair[0], pair[1]);
         });
 
-
-
-
         res.send({
-            cartesianCollection,
+            // cartesianCollection,
             scores,
-            // needRoom: result[0],
-            // hasRoom: result[1],
-            status: 200,
-            message: 'Done'
+            status: 200
         });
     }
 
