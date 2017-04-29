@@ -3,6 +3,7 @@ import express from 'express';
 import * as auth from '../controllers/AuthController';
 import * as pref from '../controllers/PreferencesController';
 import * as prof from '../controllers/ProfileController';
+import * as match from '../controllers/MatchController';
 import * as paramType from '../helpers/parameterTypes'
 import { validate } from '../helpers/validator';
 import { missingFields } from '../helpers/errorTypes';
@@ -113,6 +114,10 @@ router.put('/profile',
     validate(paramType.editProfile, 'body'),
     prof.editProfile
 );
+
+router.get('/matches', auth.loggedIn, match.getMatches);
+router.post('/matches', auth.loggedIn, pref.getInterests); // Add match to final
+router.delete('/matches', auth.loggedIn, pref.getInterests); // Do not add match to final
 
 export default router;
 

@@ -1,3 +1,6 @@
+import _ from 'lodash';
+
+
 export const genericSuccessMessage = (message) => {
     return {
         status: 200,
@@ -46,3 +49,11 @@ export const tableInsertionError = (tableName) => {
         message: `unable to insert ${ tableName }`
     }
 };
+
+export const genericError = (message, append) => {
+    return _.assign({
+        status: 500,
+        message
+    }, append);
+};
+

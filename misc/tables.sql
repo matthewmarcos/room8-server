@@ -168,6 +168,7 @@ CREATE TABLE user_matches (
     `guests_study_area_score` TINYINT DEFAULT 0,
     `org_score` TINYINT DEFAULT 0,
     `curfew_time_score` TINYINT DEFAULT 0,
+    `total_score` SMALLINT DEFAULT 0,
     CONSTRAINT `roommate_fk`
         FOREIGN KEY(`need_room`)
         REFERENCES `user`(`id`)

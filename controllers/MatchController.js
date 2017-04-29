@@ -9,6 +9,60 @@ import * as errorTypes from '../helpers/errorTypes';
 import { resourceNotFound } from '../helpers/errorTypes'
 
 
+export function getMatches(req, res, next) {
+    //Get available matches for the user
+    const { id } = req.user;
+
+    function start() {
+        mysql.use('master')
+            .query('SELECT id, status FROM user_profile WHERE id = ?', [ id ], getStatus)
+            .end();
+    }
+
+    function getStatus(err, result, args, lastQuery) {
+        if(err) {
+            console.error(err);
+            return next(errorTypes.genericError('Error selecting status from user'));
+        }
+
+        const status = result[0].status;
+        const field = (status === 'I am looking for a room') ? 'need_room' : 'has_room';
+
+        mysql.use('master')
+            .args(result)
+            .query(`SELECT * FROM user_matches WHERE ${ field } = ? ORDER BY total_score DESC`, [ id ], sendData)
+            .end();
+    }
+
+    function sendData(err, results, args, lastQuery) {
+        if(err) {
+            console.error(err);
+            return next(errorTypes.genericError('Error selecting status from user'));
+        }
+
+        const userStatus = args[0];
+
+        res.send({
+            userStatus,
+            results
+        });
+    }
+
+    start();
+}
+
+
+export function acceptMatch(req, res, next) {
+    // Accept the match and put into final table
+}
+
+
+export function declineMatch(req, res, next) {
+    // Decline the match and delete from the matches table
+}
+
+
+//Generating Matches
 export default function(req, res, next) {
     const query = `
         SELECT
@@ -146,7 +200,8 @@ export default function(req, res, next) {
                 table.guestsInRoomScore,
                 table.guestsStudyAreaScore,
                 table.orgScore,
-                table.curfewTimeScore
+                table.curfewTimeScore,
+                table.totalScore
             ];
         });
 
@@ -174,7 +229,8 @@ export default function(req, res, next) {
                 guests_in_room_score,
                 guests_study_area_score,
                 org_score,
-                curfew_time_score
+                curfew_time_score,
+                total_score
             ) VALUES ?`, [ toInsert ], checkErrors('user_match_insert'))
             .commit(storeMatchResults);
     }
@@ -389,7 +445,8 @@ function scoreUsers(user1, user2, pairIndex) {
             guestsInRoomScore,
             guestsStudyAreaScore,
             orgScore,
-            curfewTimeScore
+            curfewTimeScore,
+            totalScore: overallScore
         },
         overallScore
     };
