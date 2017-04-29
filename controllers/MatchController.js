@@ -20,7 +20,9 @@ export default function(req, res, next) {
             me.sex as my_sex,
             b.sex as preferred_sex,
             smoker as my_smoker,
+            smokers as preferred_smokers,
             has_org,
+            org,
             gender,
             course,
             batch,
@@ -47,12 +49,10 @@ export default function(req, res, next) {
             torrent,
             speed_requirement,
             alcohol,
-            smokers as preferred_smokers,
             study_time,
             guests_in_room,
             guests_study_area,
             pets,
-            org,
             curfew,
             curfew_time
         FROM user
@@ -307,7 +307,9 @@ function scoreUsers(user1, user2, pairIndex) {
     return {
         index: `pairIndex${ pairIndex + 1 }`,
         users: [user1, user2],
-        scores: {
+        table: {
+            needRoom: user1.id,
+            hasRoom: user2.id,
             cleanlinessScore,
             sexScore,
             smokerScore,

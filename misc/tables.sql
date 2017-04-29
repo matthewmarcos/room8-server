@@ -70,6 +70,14 @@ CREATE TABLE user_preferences_when (
     FOREIGN KEY(`id`) REFERENCES user(`id`)
 );
 
+-- Trigger to insert current date
+DELIMITER ;;
+CREATE TRIGGER `my_table_bi` BEFORE INSERT ON `user_preferences_when` FOR EACH ROW
+BEGIN
+    SET NEW.start_date = NOW();
+END;;
+DELIMITER ;
+
 -- Cost Preference
 DROP TABLE IF EXISTS `user_preferences_cost`;
 CREATE TABLE user_preferences_cost (
@@ -91,6 +99,7 @@ CREATE TABLE user_preferences_location (
     `general_location` VARCHAR(128) DEFAULT '',
     FOREIGN KEY(`id`) REFERENCES user(`id`)
 );
+
 -- Utilities preferences
 DROP TABLE IF EXISTS `user_preferences_utilities`;
 CREATE TABLE user_preferences_utilities (
@@ -139,9 +148,33 @@ CREATE TABLE user_preferences_sex (
     FOREIGN KEY(`id`) REFERENCES user(`id`)
 );
 
-DELIMITER ;;
-CREATE TRIGGER `my_table_bi` BEFORE INSERT ON `user_preferences_when` FOR EACH ROW
-BEGIN
-    SET NEW.start_date = NOW();
-END;;
-DELIMITER ;
+-- List of sexes the user wants to be matched with -> One to many
+DROP TABLE IF EXISTS `user_matches`;
+CREATE TABLE user_matches (
+    `needRoom` VARCHAR(128) NOT NULL,
+    `hasRoom` VARCHAR(128) NOT NULL,
+    `cleanliness_score` TINYINT DEFAULT 0,
+    `sex_score` TINYINT DEFAULT 0,
+    `smoker_score` TINYINT DEFAULT 0,
+    `start_date_score` TINYINT DEFAULT 0,
+    `rent_score` TINYINT DEFAULT 0,
+    `nearby_restaurant_score` TINYINT DEFAULT 0,
+    `travel_time_to_uplb_score` TINYINT DEFAULT 0,
+    `location_score` TINYINT DEFAULT 0,
+    `utilities_score` TINYINT DEFAULT 0,
+    `speed_score` TINYINT DEFAULT 0,
+    `study_time_score` TINYINT DEFAULT 0,
+    `guests_in_room_score` TINYINT DEFAULT 0,
+    `guests_study_area_score` TINYINT DEFAULT 0,
+    `org_score` TINYINT DEFAULT 0,
+    `curfew_time_score` TINYINT DEFAULT 0,
+    CONSTRAINT `roommate_fk`
+        FOREIGN KEY(`needRoom`)
+        REFERENCES `user`(`id`)
+        ON DELETE CASCADE ON UPDATE NO ACTION,
+    CONSTRAINT `roommate_fk2`
+        FOREIGN KEY(`hasRoom`)
+        REFERENCES `user`(`id`)
+        ON DELETE CASCADE ON UPDATE NO ACTION
+);
+
