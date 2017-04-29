@@ -26,12 +26,95 @@ export function getMatches(req, res, next) {
         }
 
         const status = result[0].status;
-        const field = (status === 'I am looking for a room') ? 'need_room' : 'has_room';
-        const field2 = (status === 'I am looking for a room') ? '1accept2' : '2accept1';
+        let queryString;
+
+        if(status === 'I am looking for a room') {
+            //select where need_room and 1accept2, join on hasRoom
+            queryString = `
+                SELECT
+                    me.id,
+                    username,
+                    status,
+                    me.cleanliness as my_cleanliness,
+                    a.cleanliness as preferred_cleanliness,
+                    me.sex as my_sex,
+                    b.sex as preferred_sex,
+                    smoker as my_smoker,
+                    smokers as preferred_smokers,
+                    has_org,
+                    org,
+                    gender,
+                    course,
+                    batch,
+                    birthday,
+                    contact_number,
+                    start_date,
+                    duration,
+                    rent_price_range_start,
+                    rent_price_range_end,
+                    should_include_utilities,
+                    utilities_price_range_start,
+                    utilities_price_range_end,
+                    nearby_restaurants,
+                    travel_time_to_uplb,
+                    general_location,
+                    airconditioning,
+                    laundry,
+                    cooking,
+                    gas_stove,
+                    electric_stove,
+                    microwave,
+                    water_kettle,
+                    internet,
+                    torrent,
+                    speed_requirement,
+                    alcohol,
+                    study_time,
+                    guests_in_room,
+                    guests_study_area,
+                    pets,
+                    curfew,
+                    curfew_time,
+
+                    need_room,
+                    has_room,
+                    cleanliness_score,
+                    sex_score,
+                    smoker_score,
+                    start_date_score,
+                    rent_score,
+                    nearby_restaurants_score,
+                    travel_time_to_uplb_score,
+                    location_score,
+                    utilities_score,
+                    speed_score,
+                    study_time_score,
+                    guests_in_room_score,
+                    guests_study_area_score,
+                    org_score,
+                    curfew_time_score,
+                    1accept2,
+                    2accept1,
+                    total_score
+                FROM user
+                NATURAL JOIN user_preferences_sex b
+                NATURAL JOIN user_preferences_utilities
+                NATURAL JOIN user_preferences_when
+                NATURAL JOIN user_preferences_misc
+                NATURAL JOIN user_preferences_cost
+                NATURAL JOIN user_preferences_location
+                NATURAL JOIN user_preferences_lifestyle a
+                INNER JOIN user_profile me
+                ON me.id = a.id
+                INNER JOIN user_matches matches
+                ON matches.has_room = me.id
+                WHERE matches.need_room = ?
+            `;
+        }
 
         mysql.use('master')
             .args(result)
-            .query(`SELECT * FROM user_matches WHERE ${ field } = ? AND ${ field2 } = 'None' ORDER BY total_score DESC`, [ id ], sendData)
+            .query(queryString, [ id ], sendData)
             .end();
     }
 
@@ -55,11 +138,13 @@ export function getMatches(req, res, next) {
 
 export function acceptMatch(req, res, next) {
     // Accept the match and put into final table
+    const { targetId } = req.body;
 }
 
 
 export function declineMatch(req, res, next) {
     // Decline the match and delete from the matches table
+    const { targetId } = req.body;
 }
 
 

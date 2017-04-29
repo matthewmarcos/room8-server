@@ -115,9 +115,22 @@ router.put('/profile',
     prof.editProfile
 );
 
-router.get('/matches', auth.loggedIn, match.getMatches);
-router.post('/matches', auth.loggedIn, pref.getInterests); // Add match to final
-router.delete('/matches', auth.loggedIn, pref.getInterests); // Do not add match to final
+router.get('/matches',
+    auth.loggedIn,
+    match.getMatches
+);
+
+router.post('/matches',
+    auth.loggedIn,
+    validate(paramType.match, 'body'),
+    match.getMatches
+);
+
+router.delete('/matches',
+    auth.loggedIn,
+    validate(paramType.match, 'body'),
+    match.getMatches
+);
 
 export default router;
 
