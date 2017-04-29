@@ -169,13 +169,15 @@ CREATE TABLE user_matches (
     `org_score` TINYINT DEFAULT 0,
     `curfew_time_score` TINYINT DEFAULT 0,
     `total_score` SMALLINT DEFAULT 0,
+    `1accept2` ENUM('Accept', 'Reject', 'None') DEFAULT 'None', -- Flag that determines whether or not to send to user
+    `2accept1` ENUM('Accept', 'Reject', 'None') DEFAULT 'None', -- Flag that determines whether or not to send to user
     CONSTRAINT `roommate_fk`
         FOREIGN KEY(`need_room`)
         REFERENCES `user`(`id`)
-        ON DELETE CASCADE ON UPDATE NO ACTION,
+        ON DELETE NO ACTION ON UPDATE NO ACTION,
     CONSTRAINT `roommate_fk2`
         FOREIGN KEY(`has_room`)
         REFERENCES `user`(`id`)
-        ON DELETE CASCADE ON UPDATE NO ACTION
+        ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 

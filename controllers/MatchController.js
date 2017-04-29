@@ -27,10 +27,11 @@ export function getMatches(req, res, next) {
 
         const status = result[0].status;
         const field = (status === 'I am looking for a room') ? 'need_room' : 'has_room';
+        const field2 = (status === 'I am looking for a room') ? '1accept2' : '2accept1';
 
         mysql.use('master')
             .args(result)
-            .query(`SELECT * FROM user_matches WHERE ${ field } = ? ORDER BY total_score DESC`, [ id ], sendData)
+            .query(`SELECT * FROM user_matches WHERE ${ field } = ? AND ${ field2 } = 'None' ORDER BY total_score DESC`, [ id ], sendData)
             .end();
     }
 
