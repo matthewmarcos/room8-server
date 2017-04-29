@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import async from 'async';
 import mysql from 'anytv-node-mysql';
-import { toCamelCase } from 'case-converter';
+import { toCamelCase, toSnakeCase } from 'case-converter';
 import makeArray from 'number-array-generator';
 import * as fuzz from 'fuzzball';
 
@@ -126,12 +126,77 @@ export default function(req, res, next) {
             return scoreUsers(pair[0], pair[1], index);
         });
 
+        const toInsert = scores.map((x) => {
+            const table = x.table;
+
+            return [
+                table.needRoom,
+                table.hasRoom,
+                table.cleanlinessScore,
+                table.sexScore,
+                table.smokerScore,
+                table.startDateScore,
+                table.rentScore,
+                table.nearbyRestaurantsScore,
+                table.travelTimeToUplbScore,
+                table.locationScore,
+                table.utilitiesScore,
+                table.speedScore,
+                table.studyTimeScore,
+                table.guestsInRoomScore,
+                table.guestsStudyAreaScore,
+                table.orgScore,
+                table.curfewTimeScore
+            ];
+        });
+
         let cloneArray = [];
         cloneArray = cloneArray.concat(_.cloneDeep(needRoom), _.cloneDeep(hasRoom));
 
+        mysql.use('master')
+            .args(needRoom, hasRoom, cartesianCollection, scores, cloneArray)
+            .transaction()
+            .query('DELETE FROM user_matches', [], checkErrors('user_match_delete'))
+            .query(`INSERT INTO user_matches (
+                need_room,
+                has_room,
+                cleanliness_score,
+                sex_score,
+                smoker_score,
+                start_date_score,
+                rent_score,
+                nearby_restaurants_score,
+                travel_time_to_uplb_score,
+                location_score,
+                utilities_score,
+                speed_score,
+                study_time_score,
+                guests_in_room_score,
+                guests_study_area_score,
+                org_score,
+                curfew_time_score
+            ) VALUES ?`, [ toInsert ], checkErrors('user_match_insert'))
+            .commit(storeMatchResults);
+    }
+
+    const checkErrors = (type = 'user') => {
+        return function(err, res, args, lastQuery) {
+            if(err) {
+                return next(errorTypes.tableInsertionError(type));
+            }
+        };
+    }
+
+
+    function storeMatchResults(err, results, args, lastQuery) {
+        const scores = args[3];
+
+        if(err) {
+            console.error(err);
+            return next(errorTypes.tableInsertionError('user_match'));
+        }
+
         res.send({
-            // cartesianCollection,
-            // cloneArray,
             scores,
             status: 200
         });

@@ -448,7 +448,7 @@ export const setOrganizations = (req, res, next) => {
         if(!!insertData.length) {
             mysql.use('master')
                 .transaction()
-                .query('DELETE FROM user_organization WHERE id = ?', [ id  ], checkErrors('Deleting existing organizations'))
+                .query('DELETE FROM user_organization WHERE id = ?', [ id ], checkErrors('Deleting existing organizations'))
                 .query(
                     'INSERT INTO user_organization (id, organization) VALUES ?',
                     [ insertData  ],

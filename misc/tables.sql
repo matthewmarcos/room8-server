@@ -151,14 +151,14 @@ CREATE TABLE user_preferences_sex (
 -- List of sexes the user wants to be matched with -> One to many
 DROP TABLE IF EXISTS `user_matches`;
 CREATE TABLE user_matches (
-    `needRoom` VARCHAR(128) NOT NULL,
-    `hasRoom` VARCHAR(128) NOT NULL,
+    `need_room` VARCHAR(128) NOT NULL,
+    `has_room` VARCHAR(128) NOT NULL,
     `cleanliness_score` TINYINT DEFAULT 0,
     `sex_score` TINYINT DEFAULT 0,
     `smoker_score` TINYINT DEFAULT 0,
     `start_date_score` TINYINT DEFAULT 0,
     `rent_score` TINYINT DEFAULT 0,
-    `nearby_restaurant_score` TINYINT DEFAULT 0,
+    `nearby_restaurants_score` TINYINT DEFAULT 0,
     `travel_time_to_uplb_score` TINYINT DEFAULT 0,
     `location_score` TINYINT DEFAULT 0,
     `utilities_score` TINYINT DEFAULT 0,
@@ -169,11 +169,11 @@ CREATE TABLE user_matches (
     `org_score` TINYINT DEFAULT 0,
     `curfew_time_score` TINYINT DEFAULT 0,
     CONSTRAINT `roommate_fk`
-        FOREIGN KEY(`needRoom`)
+        FOREIGN KEY(`need_room`)
         REFERENCES `user`(`id`)
         ON DELETE CASCADE ON UPDATE NO ACTION,
     CONSTRAINT `roommate_fk2`
-        FOREIGN KEY(`hasRoom`)
+        FOREIGN KEY(`has_room`)
         REFERENCES `user`(`id`)
         ON DELETE CASCADE ON UPDATE NO ACTION
 );
