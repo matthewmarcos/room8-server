@@ -50,7 +50,7 @@ printf "\nuserb: Shookt! Inserting Cost\n";
     curl \
     --request PUT \
     --cookie ./cookies \
-    --data "rentPriceRangeStart=1000&rentPriceRangeEnd=5000&shouldIncludeUtilities=No&utilitiesPriceRangeStart=300&utilitiesPriceRangeEnd=600" \
+    --data "rentPriceRangeStart=1500&rentPriceRangeEnd=5000&shouldIncludeUtilities=No&utilitiesPriceRangeStart=300&utilitiesPriceRangeEnd=600" \
     http://localhost:5001/api/preferences/cost
 sleep 0.5
 
@@ -75,7 +75,7 @@ printf "\nuserb: Shookt! Inserting Location\n";
     curl \
     --request PUT \
     --cookie ./cookies \
-    --data "nearbyRestaurants=Do%20not%20care&travelTimeToUplb=5&generalLocation=Robinsons" \
+    --data "nearbyRestaurants=No&travelTimeToUplb=5&generalLocation=Robinsons" \
     http://localhost:5001/api/preferences/location
 sleep 0.5
 

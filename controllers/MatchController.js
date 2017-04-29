@@ -123,11 +123,15 @@ export default function(req, res, next) {
          */
 
         const scores = cartesianCollection.map(function(pair, index) {
-            return scoreUsers(pair[0], pair[1]);
+            return scoreUsers(pair[0], pair[1], index);
         });
+
+        let cloneArray = [];
+        cloneArray = cloneArray.concat(_.cloneDeep(needRoom), _.cloneDeep(hasRoom));
 
         res.send({
             // cartesianCollection,
+            // cloneArray,
             scores,
             status: 200
         });
@@ -140,7 +144,7 @@ export default function(req, res, next) {
 /*
  * Scores 2 users compatibility based on input
  */
-function scoreUsers(user1, user2) {
+function scoreUsers(user1, user2, pairIndex) {
     let cleanlinessScore = 0,
         sexScore = 0,
         smokerScore = 0,
@@ -229,7 +233,19 @@ function scoreUsers(user1, user2) {
         return 0;
     }
 
-    nearbyRestaurantsScore = lazyNoEval(user1, user2, '', 'nearbyRestaurants');
+    nearbyRestaurantsScore = (function() {
+        if(user1.nearbyRestaurants === 'No' ||
+           user1.nearbyRestaurants === 'Do not care') {
+            return 10;
+        }
+
+        if(user1.nearbyRestaurants ==='Yes' &&
+           user2.nearbyRestaurants !== 'Yes') {
+            return 0;
+        }
+
+        return 10;
+    })();
 
     function lazyNumberEval(user1, user2, prefField) {
         if(user1[prefField] <= user2[prefField]) {
@@ -289,7 +305,8 @@ function scoreUsers(user1, user2) {
             guestsStudyAreaScore + orgScore + curfewTimeScore;
 
     return {
-        users: [user1.username, user2.username],
+        index: `pairIndex${ pairIndex + 1 }`,
+        users: [user1, user2],
         scores: {
             cleanlinessScore,
             sexScore,
