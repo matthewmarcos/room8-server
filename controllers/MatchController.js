@@ -111,6 +111,88 @@ export function getMatches(req, res, next) {
                 WHERE matches.need_room = ?
             `;
         }
+        else {
+            queryString = `
+                SELECT
+                    me.id,
+                    username,
+                    status,
+                    me.cleanliness as my_cleanliness,
+                    a.cleanliness as preferred_cleanliness,
+                    me.sex as my_sex,
+                    b.sex as preferred_sex,
+                    smoker as my_smoker,
+                    smokers as preferred_smokers,
+                    has_org,
+                    org,
+                    gender,
+                    course,
+                    batch,
+                    birthday,
+                    contact_number,
+                    start_date,
+                    duration,
+                    rent_price_range_start,
+                    rent_price_range_end,
+                    should_include_utilities,
+                    utilities_price_range_start,
+                    utilities_price_range_end,
+                    nearby_restaurants,
+                    travel_time_to_uplb,
+                    general_location,
+                    airconditioning,
+                    laundry,
+                    cooking,
+                    gas_stove,
+                    electric_stove,
+                    microwave,
+                    water_kettle,
+                    internet,
+                    torrent,
+                    speed_requirement,
+                    alcohol,
+                    study_time,
+                    guests_in_room,
+                    guests_study_area,
+                    pets,
+                    curfew,
+                    curfew_time,
+
+                    need_room,
+                    has_room,
+                    cleanliness_score,
+                    sex_score,
+                    smoker_score,
+                    start_date_score,
+                    rent_score,
+                    nearby_restaurants_score,
+                    travel_time_to_uplb_score,
+                    location_score,
+                    utilities_score,
+                    speed_score,
+                    study_time_score,
+                    guests_in_room_score,
+                    guests_study_area_score,
+                    org_score,
+                    curfew_time_score,
+                    1accept2,
+                    2accept1,
+                    total_score
+                FROM user
+                NATURAL JOIN user_preferences_sex b
+                NATURAL JOIN user_preferences_utilities
+                NATURAL JOIN user_preferences_when
+                NATURAL JOIN user_preferences_misc
+                NATURAL JOIN user_preferences_cost
+                NATURAL JOIN user_preferences_location
+                NATURAL JOIN user_preferences_lifestyle a
+                INNER JOIN user_profile me
+                ON me.id = a.id
+                INNER JOIN user_matches matches
+                ON matches.need_room = me.id
+                WHERE matches.has_room = ?
+            `;
+        }
 
         mysql.use('master')
             .args(result)
