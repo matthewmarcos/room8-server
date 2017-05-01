@@ -82,11 +82,11 @@ DELIMITER ;
 DROP TABLE IF EXISTS `user_preferences_cost`;
 CREATE TABLE user_preferences_cost (
     `id` VARCHAR(128) NOT NULL UNIQUE,
-    `rent_price_range_start` INTEGER DEFAULT 0,
-    `rent_price_range_end` INTEGER DEFAULT 0,
+    `rent_price_range_start` DECIMAL(65, 20) DEFAULT 0,
+    `rent_price_range_end` DECIMAL(65, 20) DEFAULT 0,
     `should_include_utilities` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
-    `utilities_price_range_start` INTEGER DEFAULT 0,
-    `utilities_price_range_end` INTEGER DEFAULT 0,
+    `utilities_price_range_start` DECIMAL(65, 20) DEFAULT 0,
+    `utilities_price_range_end` DECIMAL(65, 20) DEFAULT 0,
     FOREIGN KEY(`id`) REFERENCES user(`id`)
 );
 
@@ -95,7 +95,7 @@ DROP TABLE IF EXISTS `user_preferences_location`;
 CREATE TABLE user_preferences_location (
     `id` VARCHAR(128) NOT NULL UNIQUE,
     `nearby_restaurants` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
-    `travel_time_to_uplb` INTEGER DEFAULT 120,
+    `travel_time_to_uplb` DECIMAL(65, 20) DEFAULT 120,
     `general_location` VARCHAR(128) DEFAULT '',
     FOREIGN KEY(`id`) REFERENCES user(`id`)
 );
@@ -113,7 +113,7 @@ CREATE TABLE user_preferences_utilities (
     `water_kettle` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
     `internet` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
     `torrent` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
-    `speed_requirement` DECIMAL(5,2) DEFAULT 1.0,
+    `speed_requirement` DECIMAL(50,20) DEFAULT 1.0,
     FOREIGN KEY(`id`) REFERENCES user(`id`)
 );
 
@@ -153,23 +153,23 @@ DROP TABLE IF EXISTS `user_matches`;
 CREATE TABLE user_matches (
     `need_room` VARCHAR(128) NOT NULL,
     `has_room` VARCHAR(128) NOT NULL,
-    `cleanliness_score` TINYINT DEFAULT 0,
-    `sex_score` TINYINT DEFAULT 0,
-    `smoker_score` TINYINT DEFAULT 0,
-    `start_date_score` TINYINT DEFAULT 0,
-    `rent_score` TINYINT DEFAULT 0,
-    `nearby_restaurants_score` TINYINT DEFAULT 0,
-    `travel_time_to_uplb_score` TINYINT DEFAULT 0,
-    `location_score` TINYINT DEFAULT 0,
-    `utilities_score` TINYINT DEFAULT 0,
-    `utilities_cost_score` TINYINT DEFAULT 0,
-    `speed_score` TINYINT DEFAULT 0,
-    `study_time_score` TINYINT DEFAULT 0,
-    `guests_in_room_score` TINYINT DEFAULT 0,
-    `guests_study_area_score` TINYINT DEFAULT 0,
-    `org_score` TINYINT DEFAULT 0,
-    `curfew_time_score` TINYINT DEFAULT 0,
-    `total_score` SMALLINT DEFAULT 0,
+    `cleanliness_score` DECIMAL(65, 4) DEFAULT 0,
+    `sex_score` DECIMAL(65, 4) DEFAULT 0,
+    `smoker_score` DECIMAL(65, 4) DEFAULT 0,
+    `start_date_score` DECIMAL(65, 4) DEFAULT 0,
+    `rent_score` DECIMAL(65, 4) DEFAULT 0,
+    `nearby_restaurants_score` DECIMAL(65, 4) DEFAULT 0,
+    `travel_time_to_uplb_score` DECIMAL(65, 4) DEFAULT 0,
+    `location_score` DECIMAL(65, 4) DEFAULT 0,
+    `utilities_score` DECIMAL(65, 4) DEFAULT 0,
+    `utilities_cost_score` DECIMAL(65, 4) DEFAULT 0,
+    `speed_score` DECIMAL(65, 4) DEFAULT 0,
+    `study_time_score` DECIMAL(65, 4) DEFAULT 0,
+    `guests_in_room_score` DECIMAL(65, 4) DEFAULT 0,
+    `guests_study_area_score` DECIMAL(65, 4) DEFAULT 0,
+    `org_score` DECIMAL(65, 4) DEFAULT 0,
+    `curfew_time_score` DECIMAL(65, 4) DEFAULT 0,
+    `total_score` DECIMAL(65, 4) DEFAULT 0,
     `1accept2` ENUM('Accept', 'Reject', 'None') DEFAULT 'None', -- Flag that determines whether or not to send to user
     `2accept1` ENUM('Accept', 'Reject', 'None') DEFAULT 'None', -- Flag that determines whether or not to send to user
     CONSTRAINT `roommate_fk`

@@ -376,6 +376,10 @@ export default function(req, res, next) {
             ];
         });
 
+        console.log(scores.map(function(x, index) {
+            return `sexScore${ index + 1 } : ${ x.table.sexScore }`;
+        }))
+
         let cloneArray = [];
         cloneArray = cloneArray.concat(_.cloneDeep(needRoom), _.cloneDeep(hasRoom));
 
@@ -471,6 +475,7 @@ function scoreUsers(user1, user2, pairIndex) {
     cleanlinessScore = computeCleanliness(user1, user2);
 
     function computeSex(user1, user2) {
+        // To depracate
         let tempScore = 0;
 
         if(user1['preferredSex'] === 'Do not care' && user2['preferredSex'] === 'Do not care') {
@@ -484,18 +489,31 @@ function scoreUsers(user1, user2, pairIndex) {
         }
     }
 
-    sexScore = computeSex(user1, user2);
 
     function exactYesNo(user1, user2, profField, prefField) {
         let tempScore = 0;
 
-        if(user1[prefField] === user2[profField]) tempScore += 5;
-        if(user2[prefField] === user1[profField]) tempScore += 5;
+        if(!prefField) {
+            prefField = profField;
+        }
+
+        if( user1[prefField] === user2[profField] ||
+            user1[prefField] === 'Do not care' ||
+            user2[profField] === 'Do not care') {
+            tempScore += 5;
+        }
+
+        if( user2[prefField] === user1[profField] ||
+            user1[profField] === 'Do not care' ||
+            user2[prefField] === 'Do not care') {
+            tempScore += 5;
+        }
 
         return tempScore;
     }
 
     smokerScore = exactYesNo(user1, user2, 'mySmoker', 'preferredSmokers');
+    sexScore = exactYesNo(user1, user2, 'mySex', 'preferredSex');
 
     function computeStartDate(user1, user2) {
         return (user1.startDate >= user2.startDate) ? 10 : 0;
@@ -527,19 +545,7 @@ function scoreUsers(user1, user2, pairIndex) {
         return 0;
     }
 
-    nearbyRestaurantsScore = (function() {
-        if(user1.nearbyRestaurants === 'No' ||
-           user1.nearbyRestaurants === 'Do not care') {
-            return 10;
-        }
-
-        if(user1.nearbyRestaurants ==='Yes' &&
-           user2.nearbyRestaurants !== 'Yes') {
-            return 0;
-        }
-
-        return 10;
-    })();
+    nearbyRestaurantsScore = lazyNoEval(user1, user2, 'nearbyRestaurants');
 
     function lazyNumberEval(user1, user2, prefField) {
         if(user1[prefField] <= user2[prefField]) {
@@ -553,35 +559,37 @@ function scoreUsers(user1, user2, pairIndex) {
 
     locationScore = fuzzyMatch(user1.generalLocation, user2.generalLocation);
 
-    utilitiesScore += lazyNoEval(user1, user2, 'airconditioning');
-    utilitiesScore += lazyNoEval(user1, user2, 'laundry');
-    utilitiesScore += lazyNoEval(user1, user2, 'cooking');
-    utilitiesScore += lazyNoEval(user1, user2, 'gasStove');
-    utilitiesScore += lazyNoEval(user1, user2, 'electricStove');
-    utilitiesScore += lazyNoEval(user1, user2, 'microwave');
-    utilitiesScore += lazyNoEval(user1, user2, 'waterKettle');
-    utilitiesScore += lazyNoEval(user1, user2, 'internet');
-    utilitiesScore += lazyNoEval(user1, user2, 'torrent');
-
-    // If internet, take speedRequirement into account for the score
-    if(user1.internet === 'Yes' && user2.internet === 'Yes') {
-        speedScore = lazyNumberEval(user1, user2, 'speedRequirement');
-    }
-
     utilitiesCostScore = (function() {
         // Just check the range
-        if((user1.shouldIncludeUtilities === 'Yes') &&
-           (user2.shouldIncludeUtilities === 'No')) {
-            return 0;
+        if(user1.shouldIncludeUtilities === 'Yes' &&
+           user2.shouldIncludeUtilities === 'Yes' &&
+           user1.utilitiesPriceRangeStart <= user2.utilitiesPriceRangeStart &&
+           user1.utilitiesPriceRangeEnd >= user2.utilitiesPriceRangeStart) {
+            return 10;
         }
 
-        if(user1.utilitiesPriceRangeStart <= user2.utilitiesPriceRangeStart &&
-           user1.utilitiesPriceRangeEnd >= user2.utilitiesPriceRangeStart) {
+        if(user2.shouldIncludeUtilities === 'No') {
             return 10;
         }
 
         return 0;
     })();
+
+    utilitiesScore += exactYesNo(user1, user2, 'airconditioning');
+    utilitiesScore += exactYesNo(user1, user2, 'laundry');
+    utilitiesScore += exactYesNo(user1, user2, 'cooking');
+    utilitiesScore += exactYesNo(user1, user2, 'gasStove');
+    utilitiesScore += exactYesNo(user1, user2, 'electricStove');
+    utilitiesScore += exactYesNo(user1, user2, 'microwave');
+    utilitiesScore += exactYesNo(user1, user2, 'waterKettle');
+    utilitiesScore += exactYesNo(user1, user2, 'internet');
+    utilitiesScore += exactYesNo(user1, user2, 'torrent');
+
+    if(user1.internet === 'Yes' && user2.internet === 'Yes') {
+        // If internet, take speedRequirement into account for the score
+        speedScore = lazyNumberEval(user1, user2, 'speedRequirement');
+    }
+
 
     studyTimeScore = (function() {
         if(user1['studyTime'] === 'Do not care' ||
@@ -597,7 +605,8 @@ function scoreUsers(user1, user2, pairIndex) {
 
 
     guestsInRoomScore = exactYesNo(user1, user2, 'guestsInRoom', 'guestsInRoom');
-    guestsStudyAreaScore = exactYesNo(user1, user2, 'guestsStudyArea', 'guestsStudyArea');
+    guestsStudyAreaScore = lazyNoEval(user1, user2, 'guestsStudyArea', 'guestsStudyArea');
+    orgScore = exactYesNo(user1, user2, 'hasOrg', 'org');
 
     curfewTimeScore = (function() {
         if(user1.curfew === 'Yes' && user2.curfew === 'Yes') {
