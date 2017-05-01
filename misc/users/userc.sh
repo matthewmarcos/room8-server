@@ -50,7 +50,7 @@ printf "\nuserc: Shookt! Inserting Cost\n";
     curl \
     --request PUT \
     --cookie ./cookies \
-    --data "rentPriceRangeStart=3500&rentPriceRangeEnd=5000&shouldIncludeUtilities=No&utilitiesPriceRangeStart=0&utilitiesPriceRangeEnd=1500" \
+    --data "rentPriceRangeStart=3500&rentPriceRangeEnd=5000&shouldIncludeUtilities=Yes&utilitiesPriceRangeStart=0&utilitiesPriceRangeEnd=1500" \
     http://localhost:5001/api/preferences/cost
 sleep 0.5
 

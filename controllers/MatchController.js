@@ -110,6 +110,7 @@ export function getMatches(req, res, next) {
                 INNER JOIN user_matches matches
                 ON matches.has_room = me.id
                 WHERE matches.need_room = ?
+                AND 1accept2 = 'None'
             `;
         }
         else {
@@ -193,6 +194,7 @@ export function getMatches(req, res, next) {
                 INNER JOIN user_matches matches
                 ON matches.need_room = me.id
                 WHERE matches.has_room = ?
+                AND 2Accept1 = 'None'
             `;
         }
 
