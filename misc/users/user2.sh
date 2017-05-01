@@ -66,7 +66,7 @@ printf "\nuser2: Shookt! Inserting Misc\n";
     curl \
     --request PUT \
     --cookie ./cookies \
-    --data "curfew=No&curfewTime=22:00:00&message=Some%20asdasdrandom%20message%20here%20makes%20these%20things%20awesome" \
+    --data "curfew=Yes&curfewTime=22:00:00&message=Some%20asdasdrandom%20message%20here%20makes%20these%20things%20awesome" \
     http://localhost:5001/api/preferences/misc
 sleep 0.5
 

@@ -562,7 +562,11 @@ function scoreUsers(user1, user2, pairIndex) {
     utilitiesScore += lazyNoEval(user1, user2, 'waterKettle');
     utilitiesScore += lazyNoEval(user1, user2, 'internet');
     utilitiesScore += lazyNoEval(user1, user2, 'torrent');
-    speedScore = lazyNumberEval(user1, user2, 'speedRequirement');
+
+    // If internet, take speedRequirement into account for the score
+    if(user1.internet === 'Yes' && user2.internet === 'Yes') {
+        speedScore = lazyNumberEval(user1, user2, 'speedRequirement');
+    }
 
     utilitiesCostScore = (function() {
         // Just check the range
@@ -597,7 +601,7 @@ function scoreUsers(user1, user2, pairIndex) {
 
     curfewTimeScore = (function() {
         if(user1.curfew === 'Yes' && user2.curfew === 'Yes') {
-            if(user1.curfewTime >= user2.curfewTime) {
+            if(user1.curfewTime <= user2.curfewTime) {
                 return 10;
             }
             else {
