@@ -75,7 +75,7 @@ printf "\nuserc: Shookt! Inserting Location\n";
     curl \
     --request PUT \
     --cookie ./cookies \
-    --data "nearbyRestaurants=Yes&travelTimeToUpl=15&generalLocation=Raymundo" \
+    --data "nearbyRestaurants=Yes&travelTimeToUplb=15&generalLocation=Raymundo" \
     http://localhost:5001/api/preferences/location
 sleep 0.5
 

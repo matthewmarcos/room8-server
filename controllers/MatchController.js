@@ -87,6 +87,7 @@ export function getMatches(req, res, next) {
                     travel_time_to_uplb_score,
                     location_score,
                     utilities_score,
+                    utilities_cost_score,
                     speed_score,
                     study_time_score,
                     guests_in_room_score,
@@ -169,6 +170,7 @@ export function getMatches(req, res, next) {
                     travel_time_to_uplb_score,
                     location_score,
                     utilities_score,
+                    utilities_cost_score,
                     speed_score,
                     study_time_score,
                     guests_in_room_score,
@@ -363,6 +365,7 @@ export default function(req, res, next) {
                 table.travelTimeToUplbScore,
                 table.locationScore,
                 table.utilitiesScore,
+                table.utilitiesCostScore,
                 table.speedScore,
                 table.studyTimeScore,
                 table.guestsInRoomScore,
@@ -392,6 +395,7 @@ export default function(req, res, next) {
                 travel_time_to_uplb_score,
                 location_score,
                 utilities_score,
+                utilities_cost_score,
                 speed_score,
                 study_time_score,
                 guests_in_room_score,
@@ -442,6 +446,7 @@ function scoreUsers(user1, user2, pairIndex) {
         nearbyRestaurantsScore = 0,
         travelTimeToUplbScore = 0,
         locationScore = 0,
+        utilitiesCostScore = 0,
         utilitiesScore = 0,
         speedScore = 0,
         studyTimeScore = 0,
@@ -559,12 +564,27 @@ function scoreUsers(user1, user2, pairIndex) {
     utilitiesScore += lazyNoEval(user1, user2, 'torrent');
     speedScore = lazyNumberEval(user1, user2, 'speedRequirement');
 
+    utilitiesCostScore = (function() {
+        // Just check the range
+        if((user1.shouldIncludeUtilities === 'Yes') &&
+           (user2.shouldIncludeUtilities === 'No')) {
+            return 0;
+        }
+
+        if(user1.utilitiesPriceRangeStart <= user2.utilitiesPriceRangeStart &&
+           user1.utilitiesPriceRangeEnd >= user2.utilitiesPriceRangeStart) {
+            return 10;
+        }
+
+        return 0;
+    })();
+
     studyTimeScore = (function() {
         if(user1['studyTime'] === 'Do not care' ||
            user2['studyTime'] === 'Do not care' ||
            user1['studyTime'] === 'Both' ||
            user2['studyTime'] === 'Both' ||
-            user1['studyTime'] === user2['studyTime']) {
+           user1['studyTime'] === user2['studyTime']) {
             return 10;
         }
 
@@ -590,8 +610,8 @@ function scoreUsers(user1, user2, pairIndex) {
 
     overallScore = cleanlinessScore + sexScore + smokerScore + startDateScore +
             rentScore + nearbyRestaurantsScore + travelTimeToUplbScore + locationScore +
-            utilitiesScore + speedScore + studyTimeScore + guestsInRoomScore +
-            guestsStudyAreaScore + orgScore + curfewTimeScore;
+            utilitiesScore + utilitiesCostScore +  speedScore + studyTimeScore +
+            guestsInRoomScore + guestsStudyAreaScore + orgScore + curfewTimeScore;
 
     return {
         index: `pairIndex${ pairIndex + 1 }`,
@@ -608,6 +628,7 @@ function scoreUsers(user1, user2, pairIndex) {
             travelTimeToUplbScore,
             locationScore,
             utilitiesScore,
+            utilitiesCostScore,
             speedScore,
             studyTimeScore,
             guestsInRoomScore,

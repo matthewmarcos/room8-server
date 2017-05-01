@@ -162,6 +162,7 @@ CREATE TABLE user_matches (
     `travel_time_to_uplb_score` TINYINT DEFAULT 0,
     `location_score` TINYINT DEFAULT 0,
     `utilities_score` TINYINT DEFAULT 0,
+    `utilities_cost_score` TINYINT DEFAULT 0,
     `speed_score` TINYINT DEFAULT 0,
     `study_time_score` TINYINT DEFAULT 0,
     `guests_in_room_score` TINYINT DEFAULT 0,
