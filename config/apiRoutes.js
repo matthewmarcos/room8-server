@@ -123,13 +123,13 @@ router.get('/matches',
 router.post('/matches',
     auth.loggedIn,
     validate(paramType.match, 'body'),
-    match.getMatches
+    match.acceptMatch
 );
 
 router.delete('/matches',
     auth.loggedIn,
     validate(paramType.match, 'body'),
-    match.getMatches
+    match.declineMatch
 );
 
 export default router;

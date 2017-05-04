@@ -206,7 +206,6 @@ export function getMatches(req, res, next) {
 
     function sendData(err, results, args, lastQuery) {
         if(err) {
-            console.error(err);
             return next(errorTypes.genericError('Error selecting status from user'));
         }
 
@@ -225,12 +224,88 @@ export function getMatches(req, res, next) {
 export function acceptMatch(req, res, next) {
     // Accept the match and put into final table
     const { targetId } = req.body;
+    const { user } = req;
+    const { id } = user;
+
+    /*
+     * 1. Determine user status
+     * 2. Depending on user status, flag the appropriate column
+     * 3. Return remaining set of matches.
+     */
+
+    function start() {
+        const queryString = `
+            SELECT status FROM user_profile WHERE id = ?
+        `;
+
+        mysql.use('master')
+            .args(targetId)
+            .query(queryString, [ id ], determineUserStatus)
+            .end();
+    }
+
+    function determineUserStatus(err, results, args, lastQuery) {
+        if(err) {
+            console.error(err);
+            return next(errorTypes.genericError('Error selecting status from user when accepting a match'));
+        }
+
+        const status = results[0].status;
+        let queryString;
+
+        if(status === 'I am looking for a room') {
+            // 1Accept2 = 'Accept'
+            console.log('user1', id);
+            console.log('user2', targetId);
+            queryString = `UPDATE user_matches SET 1accept2=? WHERE need_room=? AND has_room=?`;
+        }
+        else if(status === 'I have a room') {
+            // 2Accept1 = 'Accept'
+            queryString = `UPDATE user_matches SET 2accept1=? WHERE has_room=? AND need_room=?`;
+        }
+
+        mysql.use('master')
+            .query(queryString, [ 'Accept', id, targetId ], flagAppropriateColumn)
+            .end();
+    }
+
+
+    function flagAppropriateColumn(err, results, args, lastQuery) {
+        if(err) {
+            console.error(err);
+            return next(errorTypes.genericError('Error selecting status from user when accepting a match'));
+        }
+
+        res.send({
+            user,
+            results,
+            lastQuery
+        });
+
+    }
+
+    function sendData(err, results, args, lastQuery) {
+
+    }
+
+    start();
 }
 
 
 export function declineMatch(req, res, next) {
     // Decline the match and delete from the matches table
     const { targetId } = req.body;
+    const { user } = req;
+
+    function start() {
+        res.send({
+            user,
+            targetId
+        });
+    }
+
+
+    start();
 }
 
 
