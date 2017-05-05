@@ -126,7 +126,7 @@ router.post('/matches',
     match.acceptMatch
 );
 
-router.delete('/matches',
+router.put('/matches',
     auth.loggedIn,
     validate(paramType.match, 'body'),
     match.declineMatch

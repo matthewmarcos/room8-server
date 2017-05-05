@@ -246,7 +246,6 @@ export function acceptMatch(req, res, next) {
 
     function determineUserStatus(err, results, args, lastQuery) {
         if(err) {
-            console.error(err);
             return next(errorTypes.genericError('Error selecting status from user when accepting a match'));
         }
 
@@ -255,8 +254,6 @@ export function acceptMatch(req, res, next) {
 
         if(status === 'I am looking for a room') {
             // 1Accept2 = 'Accept'
-            console.log('user1', id);
-            console.log('user2', targetId);
             queryString = `UPDATE user_matches SET 1accept2=? WHERE need_room=? AND has_room=?`;
         }
         else if(status === 'I have a room') {
@@ -284,26 +281,75 @@ export function acceptMatch(req, res, next) {
 
     }
 
-    function sendData(err, results, args, lastQuery) {
-
-    }
-
     start();
 }
 
 
 export function declineMatch(req, res, next) {
-    // Decline the match and delete from the matches table
+
+    // Decline the match and put into final table
     const { targetId } = req.body;
     const { user } = req;
+    const { id } = user;
+
+    /*
+     * 1. Determine user status
+     * 2. Depending on user status, flag the appropriate column
+     * 3. Return remaining set of matches.
+     */
 
     function start() {
-        res.send({
-            user,
-            targetId
-        });
+        console.log('decline Match')
+        console.log('user1', id);
+        console.log('user2', targetId);
+        console.log(req.body)
+
+        const queryString = `
+            SELECT status FROM user_profile WHERE id = ?
+        `;
+
+        mysql.use('master')
+            .args(targetId)
+            .query(queryString, [ id ], determineUserStatus)
+            .end();
     }
 
+    function determineUserStatus(err, results, args, lastQuery) {
+        if(err) {
+            return next(errorTypes.genericError('Error selecting status from user when accepting a match'));
+        }
+
+        const status = results[0].status;
+        let queryString;
+
+        if(status === 'I am looking for a room') {
+            // 1Accept2 = 'Accept'
+            queryString = `UPDATE user_matches SET 1accept2=? WHERE need_room=? AND has_room=?`;
+        }
+        else if(status === 'I have a room') {
+            // 2Accept1 = 'Accept'
+            queryString = `UPDATE user_matches SET 2accept1=? WHERE has_room=? AND need_room=?`;
+        }
+
+        mysql.use('master')
+            .query(queryString, [ 'Reject', id, targetId ], flagAppropriateColumn)
+            .end();
+    }
+
+
+    function flagAppropriateColumn(err, results, args, lastQuery) {
+        if(err) {
+            console.error(err);
+            return next(errorTypes.genericError('Error selecting status from user when accepting a match'));
+        }
+
+        res.send({
+            user,
+            results,
+            lastQuery
+        });
+
+    }
 
     start();
 }
@@ -452,10 +498,6 @@ export default function(req, res, next) {
                 table.totalScore
             ];
         });
-
-        console.log(scores.map(function(x, index) {
-            return `sexScore${ index + 1 } : ${ x.table.sexScore }`;
-        }))
 
         let cloneArray = [];
         cloneArray = cloneArray.concat(_.cloneDeep(needRoom), _.cloneDeep(hasRoom));
