@@ -17,6 +17,8 @@ import api from './config/apiRoutes';
 import auth from './config/authRoutes';
 import assets from './config/assetRoutes';
 import match from './controllers/MatchController';
+import pair from './controllers/PairingController';
+import { makeAccept } from './controllers/PairingController';
 
 // Temporary helper for database cleaning
 import { clearDatabase } from './controllers/DatabaseControllers';
@@ -52,6 +54,8 @@ app.use('/api', api);
 app.use('/auth', auth);
 app.use('/assets', assets);
 app.get('/match', match);
+app.get('/pair', pair);
+app.get('/acceptall', makeAccept);
 
 if (app.get('env') === 'development') {
     app.post('/clear', clearDatabase); // Delete all elements in all tables
