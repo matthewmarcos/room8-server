@@ -92,8 +92,8 @@ export default function galeShapely(req, res, next) {
         needRoom = toCamelCase(result[0]);
         hasRoom = toCamelCase(result[1]);
 
-        const needRoomById = _.chain(needRoom).groupBy('id1').mapValues(x => _.sortBy(x, 'totalScore').reverse()).value();
-        const hasRoomById = _.chain(hasRoom).groupBy('id1').mapValues(x => _.sortBy(x, 'totalScore').reverse()).value();
+        const needRoomById = _.chain(needRoom).groupBy('username1').mapValues(x => _.sortBy(x, 'totalScore').reverse()).value();
+        const hasRoomById = _.chain(hasRoom).groupBy('username1').mapValues(x => _.sortBy(x, 'totalScore').reverse()).value();
         // const hasRoomById = _.groupBy(hasRoom, 'id1');
 
         res.send({
