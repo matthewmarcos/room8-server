@@ -13,32 +13,56 @@ export default function galeShapely(req, res, next) {
 
     let needRoom = [];
     let hasRoom = [];
+
+    function getQuery(column) { 
+
+        let col1, col2;
+        if(column === 'need_room') {
+            col1 = 'need_room';
+            col2 = 'has_room';
+        }
+        else if(column === 'has_room') {
+            col1 = 'has_room';
+            col2 = 'need_room';
+        }
+        return `
+            SELECT
+                a.id AS id1,
+                c.id AS id2,
+                a.username AS username1,
+                c.username AS username2,
+                total_score,
+                1accept2,
+                2accept1
+            FROM user AS a
+            INNER JOIN user_matches 
+            ON a.id=${ col1 }
+            INNER JOIN user AS c 
+            ON c.id=${ col2 }
+            WHERE 1accept2='Accept'
+            AND 2accept1='Accept' `.replace(/\n/g, "").replace(/[ ]+/g, " ");
+    }
+
+    function start() {
     /*
      * 1. Get all the pairs
      * 2. Separate users who want room from those who have a room
      * 3. Map the scores and userids (and usernames for easy debugging)
      * 4. Get resulting pairs
      */
-
-    function start() {
-        const query = `
-            SELECT id, username, status
-            FROM user NATURAL JOIN user_matches
-
-        `;
         async.parallel([
             function(callback) {
                 // 'I am looking for a room'
                 mysql.use('master')
                     .args(callback)
-                    .query(query, [ 'I am looking for a room' ], collectArray)
+                    .query(getQuery('need_room'), collectArray)
                     .end();
             },
             function(callback) {
                 // 'I have a room'
                 mysql.use('master')
                     .args(callback)
-                    .query(query, [ 'I have a room' ], collectArray)
+                    .query(getQuery('has_room'), collectArray)
                     .end();
             }
         ], loopData);
@@ -49,7 +73,11 @@ export default function galeShapely(req, res, next) {
         const callback = args[0];
 
         if(err) {
-            return callback(resourceNotFound, null);
+            console.error(err)
+            return next(errorTypes.genericError('Making Accept', {
+                lastQuery,
+                err
+            }));
         }
 
         callback(null, results);
@@ -64,10 +92,15 @@ export default function galeShapely(req, res, next) {
         needRoom = toCamelCase(result[0]);
         hasRoom = toCamelCase(result[1]);
 
+        const needRoomById = _.chain(needRoom).groupBy('id1').mapValues(x => _.sortBy(x, 'totalScore').reverse()).value();
+        const hasRoomById = _.chain(hasRoom).groupBy('id1').mapValues(x => _.sortBy(x, 'totalScore').reverse()).value();
+        // const hasRoomById = _.groupBy(hasRoom, 'id1');
+
         res.send({
             message: 'Gale-Shapelys algo gonna execute here',
-            hasRoom, needRoom
+            needRoomById, hasRoomById
         });
+
     }
 
 
