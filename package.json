@@ -32,6 +32,7 @@
     "passport-http": "^0.3.0",
     "passport-local": "^1.0.0",
     "serve-favicon": "~2.3.0",
+    "typechecker": "^4.4.1",
     "uuid-v4": "^0.1.0",
     "winston": "^2.3.1"
   },

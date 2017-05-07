@@ -4,6 +4,7 @@ import mysql from 'anytv-node-mysql';
 import { toCamelCase, toSnakeCase } from 'case-converter';
 import makeArray from 'number-array-generator';
 import * as fuzz from 'fuzzball';
+import { isArray } from 'typechecker';
 
 import * as errorTypes from '../helpers/errorTypes';
 import { resourceNotFound } from '../helpers/errorTypes'
@@ -65,7 +66,7 @@ export default function galeShapely(req, res, next) {
                     .query(getQuery('has_room'), collectArray)
                     .end();
             }
-        ], loopData);
+        ], processData);
     }
 
 
@@ -84,27 +85,118 @@ export default function galeShapely(req, res, next) {
     }
 
 
-    function loopData(err, result) {
+    function processData(err, result) {
         if(err) {
-            return next(err);
+            console.error(err)
+            return next(errorTypes.genericError('Looping data', {
+                lastQuery,
+                err
+            }));
         }
 
         needRoom = toCamelCase(result[0]);
         hasRoom = toCamelCase(result[1]);
 
-        const needRoomById = _.chain(needRoom).groupBy('username1').mapValues(x => _.sortBy(x, 'totalScore').reverse()).value();
-        const hasRoomById = _.chain(hasRoom).groupBy('username1').mapValues(x => _.sortBy(x, 'totalScore').reverse()).value();
-        // const hasRoomById = _.groupBy(hasRoom, 'id1');
+
+        const needRoomByUsername = _.chain(needRoom).groupBy('username1').mapValues(x => _.sortBy(x, 'totalScore').reverse()).value();
+        const hasRoomByUsername = _.chain(hasRoom).groupBy('username1').mapValues(x => _.sortBy(x, 'totalScore').reverse()).value();
+
+        const usersNeedRoom = Object.keys(needRoomByUsername);
+        const usersHaveRoom = Object.keys(hasRoomByUsername);
+        const scores = _.mapValues(needRoomByUsername, (user) => {
+            return _.chain(user)
+                .groupBy(potentialPartner => potentialPartner.username2)
+                .mapValues(x => x[0].totalScore)
+                .value();
+        });
+
+        // const pairs = stablePairs(needRoomByUsername, hasRoomByUsername, usersNeedRoom, usersHaveRoom);
 
         res.send({
-            message: 'Gale-Shapelys algo gonna execute here',
-            needRoomById, hasRoomById
+            // needRoomByUsername,
+            // hasRoomByUsername,
+            // usersHaveRoom,
+            // usersNeedRoom,
+            scores
         });
 
     }
 
 
     start();
+}
+
+
+function stablePairs(needRoomObject, hasRoomObject, needRoomUsernames, hasRoomUsernames) {
+
+    const needRoom = _.mapValues(hasRoomObject, function(user, index) {
+        return _.assign(user, {
+                status: 'Free',
+                partner: null
+            }
+        );
+    });
+
+    const hasRoom = _.mapValues(hasRoomObject, function(user, index) {
+        return _.assign(user, {
+                status: 'Free',
+                partner: null
+            }
+        );
+    });
+
+
+
+
+    let potentialPair;
+    function getIndexOfSomeoneToPropose(userDataObject) {
+        // For each user looking for a room
+        for(var needRoomUsername in userDataObject) {
+            // find a hasRoom that he has not yet proposed to
+            const hasRoomIndex =  _.findIndex(userDataObject[needRoomUsername], x => x.partner === null);
+            if(hasRoomIndex !== -1) {
+                const score = userDataObject[needRoomUsername][hasRoomIndex].totalScore;
+                potentialPair = [needRoomUsername, hasRoomIndex];
+                return;
+            }
+        }
+
+        potentialPair = null;
+        return;
+    }
+
+    getIndexOfSomeoneToPropose(needRoom)
+    while(isArray(potentialPair)) {
+        // potentialPair is an array containing the information we need
+        // Get the username of the needRoom
+        // Get the username of the hasRoom
+        // Get the score of potentialPair
+        const usernameOfNeedRoom = potentialPair[0];
+        const userNameOfHasRoom = needRoom[userNameOfNeedRoom][potentialPair[1]].username2;
+        const score = potentialPair[2];
+
+
+
+
+        getIndexOfSomeoneToPropose(needRoom)
+    }
+
+   /*
+    * function stableMatching {
+    *     Initialize all m ∈ M and w ∈ W to free
+    *     while ∃ free man m who still has a woman w to propose to {
+    *         w = first woman on m’s list to whom m has not yet proposed
+    *             if w is free
+    *                (m, w) become engaged
+    *             else some pair (m', w) already exists
+    *                 if w prefers m to m'
+    *                     m' becomes free
+    *                     (m, w) become engaged
+    *                 else
+    *                     (m', w) remain engaged
+    *    }
+    * }
+    */
 }
 
 
@@ -140,3 +232,4 @@ export function makeAccept(req, res, next) {
 
     start();
 }
+
