@@ -10,6 +10,18 @@ import * as errorTypes from '../helpers/errorTypes';
 import { resourceNotFound } from '../helpers/errorTypes'
 
 
+export function getPairs(req, res, next) {
+    const { user } = req;
+    const { id } = user;
+
+    function start() {
+
+    }
+
+    start();
+}
+
+
 export default function galeShapely(req, res, next) {
 
     let needRoom = [];
@@ -100,12 +112,67 @@ export default function galeShapely(req, res, next) {
 
         const needRoomByUsername = _.chain(needRoom).groupBy('username1').mapValues(x => _.sortBy(x, 'totalScore').reverse()).value();
         const hasRoomByUsername = _.chain(hasRoom).groupBy('username1').mapValues(x => _.sortBy(x, 'totalScore').reverse()).value();
+        const needRoomUsernames = Object.keys(needRoomByUsername);
+        const hasRoomUsernames = Object.keys(hasRoomByUsername);
 
 
         const pairs = stablePairs(needRoomByUsername, hasRoomByUsername);
 
+        const { needs } = pairs;
+        const merged = _.assign({}, needRoomByUsername, hasRoomByUsername);
+
+        // for(const key in needRoomUsernames) {
+            // _.assign(pairs[key], {
+                // id: needRoomByUsername[key].id1
+            // })
+        // }
+
+        // for(const key in hasRoomUsernames) {
+            // _.assign(pairs[key], {
+                // id: hasRoomByUsername[key].id1
+            // })
+        // }
+        const mergedUsers = _.assign({}, needRoomByUsername, hasRoomByUsername);
+        const idMaps = _.mapValues(mergedUsers, x => x[0].id1);
+        const { proposals } = pairs;
+        const finalPairs = Object.keys(mergedUsers).map((user, index) => {
+            return [
+                user,
+                proposals[user].partner
+            ];
+        });
+        const finalPairsId = Object.keys(mergedUsers).map((user, index) => {
+            return [
+                idMaps[user],
+                idMaps[proposals[user].partner]
+            ];
+        })
+
+        // res.send({
+            // finalPairsId
+        // });
+        mysql.use('master')
+            .args(idMaps, finalPairs, finalPairsId)
+            .query(`INSERT INTO user_pairs (id1, id2) VALUES ?`, [ finalPairsId ], sendData)
+            .end();
+    }
+
+
+    function sendData(err, response, args, lastQuery) {
+        const idMaps = args[0];
+        const finalPairs = args[1];
+        const finalPairsId = args[2];
+
+        if(err) {
+            console.error(err);
+            return next(errorTypes.genericError('Error inserting to user_pairs'));
+        }
+
         res.send({
-            pairs
+            response,
+            idMaps,
+            finalPairs,
+            finalPairsId
         });
 
     }
@@ -149,7 +216,7 @@ function stablePairs(needRoomObject, hasRoomObject) {
                         .mapValues((value, key, object) => {
                             return {
                                 username: key,
-                                partner: null,
+                                partner: '',
                                 list: merged[key].map(x => x.username2)
                             }
                         })
@@ -161,7 +228,7 @@ function stablePairs(needRoomObject, hasRoomObject) {
         let singleMale = null;
 
         _(proposingNames).forEach(function(name) {
-            if(proposals[name].partner === null) {
+            if(proposals[name].partner === '' && proposals[name].list.length > 0) {
                 singleMale = name;
             }
         });
@@ -174,7 +241,7 @@ function stablePairs(needRoomObject, hasRoomObject) {
         const nextChoice = proposals[currentMale].list[0];
         proposals[currentMale].list = _.tail(proposals[currentMale].list); // Remove nextChjoice from the list
 
-        if(proposals[nextChoice].partner === null) {
+        if(proposals[nextChoice].partner === '') {
             proposals[nextChoice].partner = currentMale;
             proposals[currentMale].partner = nextChoice;
         }
@@ -184,7 +251,7 @@ function stablePairs(needRoomObject, hasRoomObject) {
             const currentMaleScore = scores[currentMale][nextChoice];
 
             if(currentMaleScore > scorePrime) {
-                proposals[malePrime].partner = null;
+                proposals[malePrime].partner = '';
                 proposals[nextChoice].partner = currentMale;
                 proposals[currentMale].partner = nextChoice;
             }
@@ -196,6 +263,7 @@ function stablePairs(needRoomObject, hasRoomObject) {
     return {
         scores, //needRoom, hasRoom
         proposals,
+        needs
     };
 
 

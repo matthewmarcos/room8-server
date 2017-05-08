@@ -182,3 +182,17 @@ CREATE TABLE user_matches (
         ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
+DROP TABLE IF EXISTS `user_pairs`;
+CREATE TABLE user_pairs (
+    `id1` VARCHAR(128) NOT NULL,
+    `id2` VARCHAR(128) NOT NULL,
+    CONSTRAINT `roommate_fk3`
+        FOREIGN KEY(`id1`)
+        REFERENCES `user`(`id`)
+        ON DELETE NO ACTION ON UPDATE NO ACTION,
+    CONSTRAINT `roommate_fk4`
+        FOREIGN KEY(`id2`)
+        REFERENCES `user`(`id`)
+        ON DELETE NO ACTION ON UPDATE NO ACTION
+);
+
