@@ -101,23 +101,11 @@ export default function galeShapely(req, res, next) {
         const needRoomByUsername = _.chain(needRoom).groupBy('username1').mapValues(x => _.sortBy(x, 'totalScore').reverse()).value();
         const hasRoomByUsername = _.chain(hasRoom).groupBy('username1').mapValues(x => _.sortBy(x, 'totalScore').reverse()).value();
 
-        const usersNeedRoom = Object.keys(needRoomByUsername);
-        const usersHaveRoom = Object.keys(hasRoomByUsername);
-        const scores = _.mapValues(needRoomByUsername, (user) => {
-            return _.chain(user)
-                .groupBy(potentialPartner => potentialPartner.username2)
-                .mapValues(x => x[0].totalScore)
-                .value();
-        });
 
-        // const pairs = stablePairs(needRoomByUsername, hasRoomByUsername, usersNeedRoom, usersHaveRoom);
+        const pairs = stablePairs(needRoomByUsername, hasRoomByUsername);
 
         res.send({
-            // needRoomByUsername,
-            // hasRoomByUsername,
-            // usersHaveRoom,
-            // usersNeedRoom,
-            scores
+            pairs
         });
 
     }
@@ -127,59 +115,89 @@ export default function galeShapely(req, res, next) {
 }
 
 
-function stablePairs(needRoomObject, hasRoomObject, needRoomUsernames, hasRoomUsernames) {
+function stablePairs(needRoomObject, hasRoomObject) {
+    const merged = _.assign({}, needRoomObject, hasRoomObject);
 
-    const needRoom = _.mapValues(hasRoomObject, function(user, index) {
+    const scores = _.mapValues(needRoomObject, (user) => {
+        return _.chain(user)
+                .groupBy(potentialPartner => potentialPartner.username2)
+                .mapValues(x => x[0].totalScore)
+                .value();
+    });
+
+    const needRoom = _.mapValues(needRoomObject, function(user, index) {
         return _.assign(user, {
-                status: 'Free',
-                partner: null
-            }
-        );
+                    status: 'Free',
+                    partner: null
+                });
     });
 
     const hasRoom = _.mapValues(hasRoomObject, function(user, index) {
         return _.assign(user, {
                 status: 'Free',
                 partner: null
-            }
-        );
+            });
     });
 
+    const proposingNames = Object.keys(needRoomObject); // names of the group that will propose
 
+    const needs = proposingNames.concat(Object.keys(hasRoomObject));
 
+    let proposals = _(needs)
+                        .zip(_.times(needs.length, x => { return {} }))
+                        .groupBy(x => x[0])
+                        .mapValues((value, key, object) => {
+                            return {
+                                username: key,
+                                partner: null,
+                                list: merged[key].map(x => x.username2)
+                            }
+                        })
+                        .value();
 
-    let potentialPair;
-    function getIndexOfSomeoneToPropose(userDataObject) {
-        // For each user looking for a room
-        for(var needRoomUsername in userDataObject) {
-            // find a hasRoom that he has not yet proposed to
-            const hasRoomIndex =  _.findIndex(userDataObject[needRoomUsername], x => x.partner === null);
-            if(hasRoomIndex !== -1) {
-                const score = userDataObject[needRoomUsername][hasRoomIndex].totalScore;
-                potentialPair = [needRoomUsername, hasRoomIndex];
-                return;
+    function getSingleMale(proposals, proposingNames) {
+        // return the username of the needRoom person who has no pair yet
+
+        let singleMale = null;
+
+        _(proposingNames).forEach(function(name) {
+            if(proposals[name].partner === null) {
+                singleMale = name;
+            }
+        });
+
+        return singleMale;
+    }
+
+    let currentMale = getSingleMale(proposals, proposingNames); // username of current unpaired male
+    while(currentMale !== null) {
+        const nextChoice = proposals[currentMale].list[0];
+        proposals[currentMale].list = _.tail(proposals[currentMale].list); // Remove nextChjoice from the list
+
+        if(proposals[nextChoice].partner === null) {
+            proposals[nextChoice].partner = currentMale;
+            proposals[currentMale].partner = nextChoice;
+        }
+        else {
+            const malePrime = proposals[nextChoice].partner;
+            const scorePrime = scores[malePrime][nextChoice];
+            const currentMaleScore = scores[currentMale][nextChoice];
+
+            if(currentMaleScore > scorePrime) {
+                proposals[malePrime].partner = null;
+                proposals[nextChoice].partner = currentMale;
+                proposals[currentMale].partner = nextChoice;
             }
         }
 
-        potentialPair = null;
-        return;
+        currentMale = getSingleMale(proposals, proposingNames);
     }
 
-    getIndexOfSomeoneToPropose(needRoom)
-    while(isArray(potentialPair)) {
-        // potentialPair is an array containing the information we need
-        // Get the username of the needRoom
-        // Get the username of the hasRoom
-        // Get the score of potentialPair
-        const usernameOfNeedRoom = potentialPair[0];
-        const userNameOfHasRoom = needRoom[userNameOfNeedRoom][potentialPair[1]].username2;
-        const score = potentialPair[2];
+    return {
+        scores, //needRoom, hasRoom
+        proposals,
+    };
 
-
-
-
-        getIndexOfSomeoneToPropose(needRoom)
-    }
 
    /*
     * function stableMatching {
