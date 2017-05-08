@@ -4,6 +4,7 @@ import * as auth from '../controllers/AuthController';
 import * as pref from '../controllers/PreferencesController';
 import * as prof from '../controllers/ProfileController';
 import * as match from '../controllers/MatchController';
+import * as pair from '../controllers/PairingController';
 import * as paramType from '../helpers/parameterTypes'
 import { validate } from '../helpers/validator';
 import { missingFields } from '../helpers/errorTypes';
@@ -113,6 +114,11 @@ router.put('/profile',
     auth.loggedIn,
     validate(paramType.editProfile, 'body'),
     prof.editProfile
+);
+
+router.get('/pair',
+    auth.loggedIn,
+    pair.getPair
 );
 
 router.get('/matches',

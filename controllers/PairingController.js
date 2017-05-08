@@ -10,12 +10,48 @@ import * as errorTypes from '../helpers/errorTypes';
 import { resourceNotFound } from '../helpers/errorTypes'
 
 
-export function getPairs(req, res, next) {
+export function getPair(req, res, next) {
+    // Get the entire user profile of your pair
+
     const { user } = req;
     const { id } = user;
+    const queryString = `
+        SELECT
+            them.id, username, status, them.cleanliness as cleanliness, a.cleanliness as preferred_cleanliness,
+            them.sex as sex, b.sex as preferred_sex, smoker as smoker, smokers as preferred_smokers, org, gender,
+            course, batch, birthday, contact_number, start_date, duration, rent_price_range_start, rent_price_range_end,
+            should_include_utilities, utilities_price_range_start, utilities_price_range_end, nearby_restaurants,
+            travel_time_to_uplb, general_location, airconditioning, laundry, cooking, gas_stove, electric_stove, microwave,
+            water_kettle, internet, torrent, speed_requirement, alcohol, study_time, guests_in_room,
+            guests_study_area, pets, curfew, curfew_time
+        FROM user NATURAL JOIN user_preferences_sex b NATURAL JOIN user_preferences_utilities NATURAL JOIN user_preferences_when
+        NATURAL JOIN user_preferences_misc NATURAL JOIN user_preferences_cost NATURAL JOIN user_preferences_location
+        NATURAL JOIN user_preferences_lifestyle a INNER JOIN user_profile them ON them.id = a.id INNER JOIN user_pairs pairs
+        ON pairs.id2 = them.id WHERE pairs.id1 = ?
+    `.replace(/\n/g, '').replace(/[  ]+/g, ' ');
 
     function start() {
 
+        mysql.use('master')
+            .query(queryString, [ id ], sendData)
+            .end();
+
+    }
+
+
+    function sendData(err, response, args, lastQuery) {
+        if(err) {
+            console.errors(err);
+            return next(errorTypes.genericError('getPairs error at selecting data', { err, response, lastQuery }));
+        }
+
+        const newResponse = _.mapKeys(response[0], (value, key, object) => {
+            return 'pair_' + key;
+        })
+
+        res.send({
+            pair: newResponse
+        });
     }
 
     start();
