@@ -45,6 +45,11 @@ export function getPair(req, res, next) {
             return next(errorTypes.genericError('getPairs error at selecting data', { err, response, lastQuery }));
         }
 
+        if(response.length === 0) {
+            // No pair found
+            return next(resourceNotFound);
+        }
+
         const newResponse = _.mapKeys(response[0], (value, key, object) => {
             return 'pair_' + key;
         })
@@ -152,45 +157,70 @@ export default function galeShapely(req, res, next) {
         const hasRoomUsernames = Object.keys(hasRoomByUsername);
 
 
+        // Generate pairs with gale-shapley
         const pairs = stablePairs(needRoomByUsername, hasRoomByUsername);
 
         const { needs } = pairs;
         const merged = _.assign({}, needRoomByUsername, hasRoomByUsername);
 
-        // for(const key in needRoomUsernames) {
-            // _.assign(pairs[key], {
-                // id: needRoomByUsername[key].id1
-            // })
-        // }
-
-        // for(const key in hasRoomUsernames) {
-            // _.assign(pairs[key], {
-                // id: hasRoomByUsername[key].id1
-            // })
-        // }
         const mergedUsers = _.assign({}, needRoomByUsername, hasRoomByUsername);
         const idMaps = _.mapValues(mergedUsers, x => x[0].id1);
-        const { proposals } = pairs;
-        const finalPairs = Object.keys(mergedUsers).map((user, index) => {
-            return [
-                user,
-                proposals[user].partner
-            ];
-        });
-        const finalPairsId = Object.keys(mergedUsers).map((user, index) => {
-            return [
-                idMaps[user],
-                idMaps[proposals[user].partner]
-            ];
-        })
 
-        // res.send({
-            // finalPairsId
-        // });
+        // get finalized pairings from gale-shapley
+        const { proposals } = pairs;
+        const finalPairsWithNull = Object.keys(mergedUsers).map((user, index) => {
+            const user1 = user;
+            const user2 = proposals[user].partner;
+
+            if(!user1 || !user2) {
+                return null;
+            }
+
+            return [ user1, user2 ];
+        });
+        const finalPairsIdWithNull = Object.keys(mergedUsers).map((user, index) => {
+
+            const user1 = idMaps[user];
+            const user2 = idMaps[proposals[user].partner];
+
+            if(!user1 || !user2) {
+                return null;
+            }
+
+            return [ user1, user2 ];
+        });
+        const finalPairs = finalPairsWithNull.filter(x => x !== null);
+        const finalPairsId = finalPairsIdWithNull.filter(x => x !== null);
+
+        // console.log('value: ', value);
+        // console.log('proposals: ', proposals);
+        // console.log('finalPairsWithNull: ', finalPairsWithNull);
+        // console.log('finalPairsIdWithNull: ', finalPairsIdWithNull);
+        // console.log('finalPairs: ', finalPairs);
+        // console.log('finalPairsId: ', finalPairsId);
+
+        if(finalPairsId.length === 0) {
+            return res.send({
+                message: 'No pairs made'
+            });
+        }
+
         mysql.use('master')
             .args(idMaps, finalPairs, finalPairsId)
-            .query(`INSERT INTO user_pairs (id1, id2) VALUES ?`, [ finalPairsId ], sendData)
-            .end();
+            .transaction()
+            .query('DELETE from user_pairs', checkErrors('Error deleting user_pairs'))
+            .query(`INSERT INTO user_pairs (id1, id2) VALUES ?`, [ finalPairsId ], checkErrors('Error inserting data'))
+            .commit(sendData);
+    }
+
+
+    const checkErrors = (type = 'user') => {
+        return function(err, res, args, lastQuery) {
+            if(err) {
+                console.error(err);
+                return next(errorTypes.tableInsertionError(type));
+            }
+        };
     }
 
 
@@ -201,7 +231,9 @@ export default function galeShapely(req, res, next) {
 
         if(err) {
             console.error(err);
-            return next(errorTypes.genericError('Error inserting to user_pairs'));
+            return next(errorTypes.genericError('Error inserting to user_pairs', {
+                err, response, finalPairs, finalPairsId, lastQuery
+            }));
         }
 
         res.send({
