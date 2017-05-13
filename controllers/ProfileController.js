@@ -114,3 +114,50 @@ export function editProfile(req, res, next) {
     start();
 }
 
+
+export default function toggleDiscover(req, res, next) {
+    /*
+     * Toggle the match_me field in user_profile
+     */
+
+    const { id } = req.user;
+
+    function start() {
+        mysql.use('master')
+            .query('SELECT match_me FROM user_profile WHERE id=?', [ id ], setMatchMe)
+            .end();
+    }
+
+    function setMatchMe(err, result, args, lastQuery) {
+        if(err) {
+            console.error(err);
+            return next(errorTypes.genericError('Error getting current user\'s match_me', {
+                err, 
+                lastQuery
+            }));
+        }
+
+        const matchMe = result[0]['match_me'];
+
+        mysql.use('master')
+            .query('UPDATE user_profile SET ? WHERE id=?', [ { match_me: !matchMe }, id ], setMatchMe)
+            .end();
+    }
+
+    function setMatchMe(err, result, args, lastQuery) {
+        if(err) {
+            console.error(err);
+            return next(errorTypes.genericError('Error setting matchMe', {
+                err, 
+                lastQuery
+            }));
+        }
+
+        res.send({
+            message: 'Successfully toggled match_me',
+            user: req.user
+        });
+    }
+
+    start();
+}

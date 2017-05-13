@@ -37,6 +37,7 @@ CREATE TABLE user_profile (
     `birthday` DATE DEFAULT '1000-01-01',
     `contact_number` VARCHAR(16) DEFAULT '',
     `bio` VARCHAR(1024) DEFAULT '',
+    `match_me` TINYINT(1) DEFAULT 0,
     FOREIGN KEY(`id`) REFERENCES user(`id`)
 );
 
@@ -121,7 +122,7 @@ DROP TABLE IF EXISTS `user_preferences_lifestyle`;
 CREATE TABLE user_preferences_lifestyle (
     `id` VARCHAR(128) NOT NULL UNIQUE,
     `alcohol` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
-    `cleanliness` TINYINT DEFAULT 0,
+    `cleanliness` TINYINT DEFAULT 1,
     `smokers` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
     `study_time` ENUM('Morning', 'Evening', 'Both', 'Do not care') DEFAULT 'Do not care',
     `guests_in_room` ENUM('Yes', 'No', 'Do not care') DEFAULT 'Do not care',
