@@ -138,5 +138,11 @@ router.put('/matches',
     match.declineMatch
 );
 
+// Toggle Match
+router.put('/discover/match',
+    auth.loggedIn,
+    prof.toggleDiscover
+);
+
 export default router;
 

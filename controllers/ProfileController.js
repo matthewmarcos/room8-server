@@ -115,7 +115,7 @@ export function editProfile(req, res, next) {
 }
 
 
-export default function toggleDiscover(req, res, next) {
+export function toggleDiscover(req, res, next) {
     /*
      * Toggle the match_me field in user_profile
      */
@@ -130,6 +130,7 @@ export default function toggleDiscover(req, res, next) {
 
     function setMatchMe(err, result, args, lastQuery) {
         if(err) {
+            console.log('errr')
             console.error(err);
             return next(errorTypes.genericError('Error getting current user\'s match_me', {
                 err, 
@@ -137,14 +138,16 @@ export default function toggleDiscover(req, res, next) {
             }));
         }
 
+        console.log('notErr')
         const matchMe = result[0]['match_me'];
+        console.log('matchMe: ', matchMe)
 
         mysql.use('master')
-            .query('UPDATE user_profile SET ? WHERE id=?', [ { match_me: !matchMe }, id ], setMatchMe)
+            .query('UPDATE user_profile SET ? WHERE id=?', [ { match_me: !matchMe }, id ], sendData)
             .end();
     }
 
-    function setMatchMe(err, result, args, lastQuery) {
+    function sendData(err, result, args, lastQuery) {
         if(err) {
             console.error(err);
             return next(errorTypes.genericError('Error setting matchMe', {
