@@ -377,6 +377,7 @@ export default function(req, res, next) {
             contact_number,
             start_date,
             duration,
+            match_me,
             rent_price_range_start,
             rent_price_range_end,
             should_include_utilities,
@@ -413,6 +414,7 @@ export default function(req, res, next) {
         INNER JOIN user_profile me
         ON me.id = a.id
         WHERE status = ?
+        AND match_me = true
     `;
     let needRoom = [];
     let hasRoom = [];
@@ -501,6 +503,10 @@ export default function(req, res, next) {
 
         let cloneArray = [];
         cloneArray = cloneArray.concat(_.cloneDeep(needRoom), _.cloneDeep(hasRoom));
+
+        if(toInsert.length === 0) {
+            console.log('No matches generated');
+        }
 
         mysql.use('master')
             .args(needRoom, hasRoom, cartesianCollection, scores, cloneArray)

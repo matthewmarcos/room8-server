@@ -99,4 +99,5 @@ export const userHobbies = ['hobbies'];
 export const userOrganizations = ['organizations'];
 export const userInterests = ['interests'];
 export const match = ['targetId'];
+export const toggleDiscovery = ['discoverySetting'];
 

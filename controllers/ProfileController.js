@@ -121,6 +121,7 @@ export function toggleDiscover(req, res, next) {
      */
 
     const { id } = req.user;
+    const { discoverySetting } = req.body;
 
     function start() {
         mysql.use('master')
@@ -138,11 +139,11 @@ export function toggleDiscover(req, res, next) {
             }));
         }
 
-        console.log('notErr')
         const matchMe = result[0]['match_me'];
         console.log('matchMe: ', matchMe)
 
         mysql.use('master')
+            .args(!matchMe)
             .query('UPDATE user_profile SET ? WHERE id=?', [ { match_me: !matchMe }, id ], sendData)
             .end();
     }
@@ -158,7 +159,8 @@ export function toggleDiscover(req, res, next) {
 
         res.send({
             message: 'Successfully toggled match_me',
-            user: req.user
+            user: req.user,
+            matchMe: args[0]
         });
     }
 

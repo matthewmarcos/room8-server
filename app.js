@@ -19,6 +19,7 @@ import assets from './config/assetRoutes';
 import match from './controllers/MatchController';
 import pair from './controllers/PairingController';
 import { makeAccept } from './controllers/PairingController';
+import { toggleDiscoveryYes } from './controllers/UtilsController';
 
 // Temporary helper for database cleaning
 import { clearDatabase } from './controllers/DatabaseControllers';
@@ -56,6 +57,7 @@ app.use('/assets', assets);
 app.get('/match', match);
 app.get('/pair', pair);
 app.get('/acceptall', makeAccept);
+app.get('/togglediscovery', toggleDiscoveryYes);
 
 if (app.get('env') === 'development') {
     app.post('/clear', clearDatabase); // Delete all elements in all tables

@@ -35,7 +35,6 @@ export function getPair(req, res, next) {
         mysql.use('master')
             .query(queryString, [ id ], sendData)
             .end();
-
     }
 
 
@@ -47,7 +46,9 @@ export function getPair(req, res, next) {
 
         if(response.length === 0) {
             // No pair found
-            return next(resourceNotFound);
+            return res.send({
+                pair: {}
+            });
         }
 
         const newResponse = _.mapKeys(response[0], (value, key, object) => {
