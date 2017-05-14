@@ -47,7 +47,7 @@ export function getPair(req, res, next) {
         if(response.length === 0) {
             // No pair found
             return res.send({
-                pair: {}
+                pair: false
             });
         }
 
