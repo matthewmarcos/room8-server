@@ -17,13 +17,13 @@ export function getPair(req, res, next) {
     const { id } = user;
     const queryString = `
         SELECT
-            them.id, username, status, them.cleanliness as cleanliness, a.cleanliness as preferred_cleanliness,
+            them.id, username, email, status, them.cleanliness as cleanliness, a.cleanliness as preferred_cleanliness,
             them.sex as sex, b.sex as preferred_sex, smoker as smoker, smokers as preferred_smokers, org, gender,
             course, batch, birthday, contact_number, start_date, duration, rent_price_range_start, rent_price_range_end,
             should_include_utilities, utilities_price_range_start, utilities_price_range_end, nearby_restaurants,
             travel_time_to_uplb, general_location, airconditioning, laundry, cooking, gas_stove, electric_stove, microwave,
             water_kettle, internet, torrent, speed_requirement, alcohol, study_time, guests_in_room,
-            guests_study_area, pets, curfew, curfew_time
+            guests_study_area, pets, curfew, curfew_time, contact_number
         FROM user NATURAL JOIN user_preferences_sex b NATURAL JOIN user_preferences_utilities NATURAL JOIN user_preferences_when
         NATURAL JOIN user_preferences_misc NATURAL JOIN user_preferences_cost NATURAL JOIN user_preferences_location
         NATURAL JOIN user_preferences_lifestyle a INNER JOIN user_profile them ON them.id = a.id INNER JOIN user_pairs pairs
@@ -40,7 +40,7 @@ export function getPair(req, res, next) {
 
     function sendData(err, response, args, lastQuery) {
         if(err) {
-            console.errors(err);
+            console.error(err);
             return next(errorTypes.genericError('getPairs error at selecting data', { err, response, lastQuery }));
         }
 
