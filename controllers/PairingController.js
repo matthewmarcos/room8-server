@@ -23,7 +23,7 @@ export function getPair(req, res, next) {
             should_include_utilities, utilities_price_range_start, utilities_price_range_end, nearby_restaurants,
             travel_time_to_uplb, general_location, airconditioning, laundry, cooking, gas_stove, electric_stove, microwave,
             water_kettle, internet, torrent, speed_requirement, alcohol, study_time, guests_in_room,
-            guests_study_area, pets, curfew, curfew_time, contact_number
+            guests_study_area, pets, curfew, curfew_time, contact_number, nickname, full_name, bio, gender, course, birthday
         FROM user NATURAL JOIN user_preferences_sex b NATURAL JOIN user_preferences_utilities NATURAL JOIN user_preferences_when
         NATURAL JOIN user_preferences_misc NATURAL JOIN user_preferences_cost NATURAL JOIN user_preferences_location
         NATURAL JOIN user_preferences_lifestyle a INNER JOIN user_profile them ON them.id = a.id INNER JOIN user_pairs pairs
