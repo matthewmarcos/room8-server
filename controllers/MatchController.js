@@ -753,7 +753,7 @@ function scoreUsers(user1, user2, pairIndex) {
 
     return {
         index: `pairIndex${ pairIndex + 1 }`,
-        users: [user1, user2],
+        users: [user1.username, user2.username],
         table: {
             needRoom: user1.id,
             hasRoom: user2.id,
